@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Category>
+
+@{
+    ViewData["Title"] = "List of Category";
+}
+
+@*Write Code*@
+<div class="row">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.cate_name)</th>
+                <th>@Html.DisplayNameFor(model => model.cate_status)</th>
+                <th>@Html.DisplayNameFor(model => model.sub_cate)</th>
+                <th>Action</th>
+            </tr>
+
+        <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td class="align-middle">@Html.DisplayFor(m => item.cate_name)</td>
+                    <td class="align-middle">@Html.DisplayFor(m => item.cate_status)</td>
+                    <td class="align-middle">@Html.DisplayFor(m => item.sub_cate)</td>
+                    <td class="align-middle">
+                        <a class="btn btn-outline-primary"><i class="bi bi-pencil-square"></i>Edit</a>
+                        <a class="btn btn-outline-info"><i class="fa-thin fa-square-info"></i>Detail</a>
+                    </td>
+                </tr>
+                }
+        </tbody>
+
+        </thead>
+    </table>
+</div>
+
