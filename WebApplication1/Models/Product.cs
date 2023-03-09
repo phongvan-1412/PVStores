@@ -50,6 +50,5 @@ namespace WebApplication1.Models
 
         } 
 
-        public List<Producer> Producer { get; set; }
     }
 }

@@ -15,7 +15,7 @@ namespace WebApplication1.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<BillDetail>().HasKey(bid => new { bid.Id, bid.BillId, bid.ProductId });
+            modelBuilder.Entity<BillDetail>().HasKey(bid => new { bid.bid_id, bid.b_id, bid.p_id});
             base.OnModelCreating(modelBuilder);
         }
         public virtual DbSet<Account> Account { get; set; }
