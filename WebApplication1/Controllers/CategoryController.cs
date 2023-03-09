@@ -1,18 +1,14 @@
-﻿using WebApplication1.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using WebApplication1.ModelPattern.Services;
+using WebApplication1.Models.ModelPattern;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using WebApplication1.ModelPattern;
+using WebApplication1.Models.entities;
 
 namespace DemoASP.Controllers
 {
     public class CategoryController : Controller
     {
 
-        public CategoryController()
-        {
-        }
         private readonly PVStoresContext _context;
         public CategoryController(PVStoresContext context)
         {
@@ -22,7 +18,8 @@ namespace DemoASP.Controllers
         public IActionResult Index()
         {
             //var service = new CategoryService();
-            ViewData["Category"] = _context.Category.ToList();
+            //ViewData["Category"] = _context.Categories.ToList();
+            ViewData["Category"] = FacadeMaker.Instance.GetAllCategories();
             return View();
         }
 
@@ -33,16 +30,21 @@ namespace DemoASP.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("cate_name, cate_status, sub_cate")] Category category)
+        public IActionResult Create([Bind("Name, Status, SubCate")] Category category)
         {
-            //if (ModelState.IsValid)
-            //{
-
-            //}
-            _context.Category.Add(category);
+            //PVStoresContext context = new();
+            //_context.Categories.Add(category);
+            //_context.SaveChanges();
+            FacadeMaker.Instance.CreateCategory(category);
             return RedirectToAction(nameof(Index));
 
             //return View(category);
+        }
+
+        public IActionResult Update()
+        {
+            //ViewData["Category"] = _context.Category.ToList();
+            return View();
         }
     }
 }

@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using WebApplication1.Models;
+using WebApplication1.Models.entities;
 using Microsoft.Data.SqlClient;
 
 namespace WebApplication1.Controllers

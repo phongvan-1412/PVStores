@@ -1,14 +1,14 @@
-using WebApplication1.Models;
 using Microsoft.EntityFrameworkCore;
-using WebApplication1.ModelPattern.Services;
-using WebApplication1.ModelPattern;
+using WebApplication1.Models.ModelPattern;
+using WebApplication1.Models.entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-var config = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", optional: false);
+var config = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 IConfiguration configuration = config.Build();
 string constring = configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
 
@@ -17,9 +17,10 @@ builder.Services.AddDbContext<PVStoresContext>(options =>
             builder.Configuration.GetConnectionString("DefaultConnection")
     ));
 
-//builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddMvc();
 
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
