@@ -11,6 +11,7 @@ namespace WebApplication1.Models
 
         public PVStoresContext()
         {
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

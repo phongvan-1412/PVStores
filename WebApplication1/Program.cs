@@ -1,5 +1,7 @@
 using WebApplication1.Models;
 using Microsoft.EntityFrameworkCore;
+using WebApplication1.ModelPattern.Services;
+using WebApplication1.ModelPattern;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,8 @@ builder.Services.AddDbContext<PVStoresContext>(options =>
     options.UseSqlServer(constring, options =>
             builder.Configuration.GetConnectionString("DefaultConnection")
     ));
+
+//builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 var app = builder.Build();
 

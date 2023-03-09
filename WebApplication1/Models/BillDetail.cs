@@ -8,7 +8,7 @@ namespace WebApplication1.Models
         public int bid_id { get; set; }
         public int bid_amount { get; set; }
         public decimal bid_payment { get; set; }
-        
+
         //Bill
         public int b_id { get; set; }
         [ForeignKey("BillId")]

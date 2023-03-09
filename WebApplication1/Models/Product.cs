@@ -43,12 +43,12 @@ namespace WebApplication1.Models
         //Producer
         public int pro_id { get; set; }
         [ForeignKey("ProId")]
-        public Producer Producer { get; set; }  
+        public Producer Producer { get; set; }
 
         public Product()
         {
 
-        } 
+        }
 
     }
 }

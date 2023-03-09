@@ -9,7 +9,7 @@ namespace WebApplication1.Models
         public string pro_name { get; set; }
         public string pro_description { get; set; }
         public int pro_status { get; set; }
-        
+
         public Producer() { }
 
     }

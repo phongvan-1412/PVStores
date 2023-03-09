@@ -15,7 +15,7 @@ namespace WebApplication1.Models
         public int acc_id { get; set; }
         [ForeignKey("AccId")]
         public Account Account { get; set; }
-        
+
         //Relationships
         public List<BillDetail> BillDetail { get; set; }
 
