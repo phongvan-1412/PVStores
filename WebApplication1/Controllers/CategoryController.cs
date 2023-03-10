@@ -29,7 +29,6 @@ namespace DemoASP.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("Name, Status, SubCate")] Category category)
         {
             //PVStoresContext context = new();
@@ -41,9 +40,16 @@ namespace DemoASP.Controllers
             //return View(category);
         }
 
-        public IActionResult Update()
+        [HttpPost]
+        public IActionResult Update(int id, [Bind("ID, Name, Status, SubCate")]  Category category)
         {
-            //ViewData["Category"] = _context.Category.ToList();
+            FacadeMaker.Instance.UpdateCategory(id, category);
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Update(int id)
+        {
+            ViewBag.CateUpdate = FacadeMaker.Instance.GetCategoryById(id);
             return View();
         }
     }

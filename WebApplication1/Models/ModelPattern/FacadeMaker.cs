@@ -6,12 +6,11 @@ namespace WebApplication1.Models.ModelPattern
     public sealed class FacadeMaker
     {
         private static FacadeMaker _instance = null;
-        private PVStoresContext _context = new PVStoresContext();
         private CategoryMgr _categoryMgr;
 
         private FacadeMaker()
         {
-            _categoryMgr = new CategoryMgr(_context);
+            _categoryMgr = new CategoryMgr();
         }
 
         public static FacadeMaker Instance
@@ -32,9 +31,18 @@ namespace WebApplication1.Models.ModelPattern
             _categoryMgr.Create(category);
             return category;
         }
+        public Category UpdateCategory(int id, Category category)
+        {
+            _categoryMgr.Update(id, category);
+            return category;
+        }
         public List<Category> GetAllCategories()
         {
             return _categoryMgr.GetAll();
+        }
+        public Category GetCategoryById(int id)
+        {
+            return _categoryMgr.GetById(id);
         }
     }
 }

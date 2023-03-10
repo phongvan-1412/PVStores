@@ -5,23 +5,35 @@ namespace WebApplication1.Models.ModelPattern
 {
     public class CategoryMgr : IFacade<Category>
     {
-        private readonly PVStoresContext _context;
-
-        public CategoryMgr(PVStoresContext context)
+        public CategoryMgr()
         {
-            _context = context;
         }
 
         public Category Create(Category category)
         {
-            _context.Add(category);
-            _context.SaveChanges();
+            PVStoresContext context = new PVStoresContext();
+            context.Categories.Add(category);
+            context.SaveChanges();
+            return category;
+        }
+        public Category Update(int id, Category category)
+        {
+            PVStoresContext context = new PVStoresContext();
+            context.Categories.Update(category);
+            context.SaveChanges();
             return category;
         }
 
         public List<Category> GetAll()
         {
-            return _context.Categories.ToList();
+            PVStoresContext context = new PVStoresContext();
+            return context.Categories.ToList();
+        }
+
+        public Category GetById(int id)
+        {
+            PVStoresContext context = new PVStoresContext();
+            return context.Categories.FirstOrDefault(c => c.ID == id);
         }
     }
 }

@@ -23,15 +23,14 @@ namespace WebApplication1.Models.entities
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<BillDetail>().HasKey(bid => new { bid.bid_id, bid.b_id, bid.p_id });
+            modelBuilder.Entity<BillDetail>().HasKey(bid => new { bid.ID, bid.BillID, bid.ProductID });
             base.OnModelCreating(modelBuilder);
         }
-        public DbSet<Account> Account { get; set; }
-        public DbSet<Bill> Bill { get; set; }
-        public DbSet<BillDetail> BillDetail { get; set; }
+        public DbSet<Account> Accounts { get; set; }
+        public DbSet<Bill> Bills { get; set; }
+        public DbSet<BillDetail> BillDetails { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<Comments> Comment { get; set; }
-        public DbSet<Product> Product { get; set; }
-        public DbSet<Producer> Producer { get; set; }
+        public DbSet<Feedback> Feedbacks { get; set; }
+        public DbSet<Product> Products { get; set; }
     }
 }
