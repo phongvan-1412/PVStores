@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "List of Category";
+    var cateList = (List<Category>)ViewData["Category"];
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
@@ -19,7 +20,7 @@
             </tr>
 
         <tbody>
-                @foreach (var item in ViewData["Category"] as IEnumerable<Category>)
+                @foreach (var item in cateList)
                 {
                 <tr>
                     <td class="align-middle">@Html.DisplayFor(m => item.ID)</td>

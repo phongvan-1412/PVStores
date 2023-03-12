@@ -29,7 +29,7 @@ namespace WebApplication1.Areas.Admin.Controllers
         {
             return View();
         }
-
+         
         [HttpPost]
         [Route("Add")]
         public IActionResult Create([Bind("Name, Status, SubCate")] Category category)
