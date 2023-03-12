@@ -7,10 +7,12 @@ namespace WebApplication1.Models.ModelPattern
     {
         private static FacadeMaker _instance = null;
         private CategoryMgr _categoryMgr;
+        private ProductMgr _productMgr;
 
         private FacadeMaker()
         {
             _categoryMgr = new CategoryMgr();
+            _productMgr = new ProductMgr(); 
         }
 
         public static FacadeMaker Instance
@@ -43,6 +45,26 @@ namespace WebApplication1.Models.ModelPattern
         public Category GetCategoryById(int id)
         {
             return _categoryMgr.GetById(id);
+        }
+
+        //Product
+        public Product CreateProduct(Product product)
+        {
+            _productMgr.Create(product);
+            return product;
+        }
+        public Product UpdateProduct(int id, Product product)
+        {
+            _productMgr.Update(id, product);
+            return product;
+        }
+        public List<Product> GetAllProducts()
+        {
+            return _productMgr.GetAll();
+        }
+        public Product GetProductById(int id)
+        {
+            return _productMgr.GetById(id);
         }
     }
 }
