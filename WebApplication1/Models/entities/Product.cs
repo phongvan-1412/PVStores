@@ -29,15 +29,12 @@ namespace WebApplication1.Models.entities
         [Column("p_image_base64", TypeName = "ntext")]
         public string ImageBase64 { get; set; }
 
-        //Category
-        [ForeignKey("CateId")]
-        [Column("cate_id", TypeName = "int")]
+        ////Category
+        //[ForeignKey("CateId")]
+        //[Column("cate_id", TypeName = "int")]
         public int CateId { get; set; }
-        public Category Category { get; set; }
+        public Category Categories { get; set; }
 
-        //Account
-        [ForeignKey("AccId")]
-        [Column("acc_id", TypeName = "int")]
         public int AccId { get; set; }
         public Account Account { get; set; }
 
