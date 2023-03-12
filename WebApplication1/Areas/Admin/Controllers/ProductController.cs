@@ -19,10 +19,10 @@ namespace WebApplication1.Areas.Admin.Controllers
         public IActionResult Index()
         {
             ProductIndexViewModels productView = new ProductIndexViewModels();
+            ConvertEnum p = new ConvertEnum();
             productView.Categories = _context.Categories.ToList();
             productView.Products = FacadeMaker.Instance.GetAllProducts();
-            //ViewData["Product"] = FacadeMaker.Instance.GetAllProducts();
-            //ViewData["CateID"] = _context.Categories.ToList();
+            productView.productStatus = p;
             return View(productView);
         }
 
