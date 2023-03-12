@@ -66,5 +66,6 @@ namespace WebApplication1.Models.ModelPattern
         {
             return _productMgr.GetById(id);
         }
+        
     }
 }

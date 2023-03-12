@@ -14,7 +14,7 @@ namespace WebApplication1.Models.entities
         public int ID { get; set; }
 
         [Column("cate_name", TypeName = "nvarchar")]
-        [Display(Name = "Name")]
+        [Display(Name = "Category Name")]
         [Required(ErrorMessage = "Category Name is required")]
         [StringLength(255, MinimumLength = 3, ErrorMessage = "Category name must be between 3 and 255 chars")]
         public string Name { get; set; }

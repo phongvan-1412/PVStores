@@ -30,13 +30,10 @@ namespace WebApplication1.Models.entities
         public string ImageBase64 { get; set; }
 
         ////Category
-        //[ForeignKey("CateId")]
-        //[Column("cate_id", TypeName = "int")]
-        public int CateId { get; set; }
-        public Category Categories { get; set; }
-
-        public int AccId { get; set; }
-        public Account Account { get; set; }
+        [ForeignKey("FK__Product__cate_id__5070F446")]
+        [Column("cate_id", TypeName = "int")]
+        [Required(ErrorMessage = "You must choose category")]
+        public int CategoryId { get; set; }
 
         public Product()
         {

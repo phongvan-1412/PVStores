@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models.entities;
 using WebApplication1.Models.ModelPattern;
+using WebApplication1.ViewModels;
 
 namespace WebApplication1.Areas.Admin.Controllers
 {
@@ -17,13 +18,18 @@ namespace WebApplication1.Areas.Admin.Controllers
         [Route("")]
         public IActionResult Index()
         {
-            ViewData["Product"] = FacadeMaker.Instance.GetAllProducts();
-            return View();
+            ProductIndexViewModels productView = new ProductIndexViewModels();
+            productView.Categories = _context.Categories.ToList();
+            productView.Products = FacadeMaker.Instance.GetAllProducts();
+            //ViewData["Product"] = FacadeMaker.Instance.GetAllProducts();
+            //ViewData["CateID"] = _context.Categories.ToList();
+            return View(productView);
         }
 
         [Route("Add")]
         public IActionResult Create()
         {
+            ViewData["CateID"] = _context.Categories.ToList();
             return View();
         }
 

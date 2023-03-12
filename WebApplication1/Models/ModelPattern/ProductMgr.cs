@@ -4,6 +4,7 @@ namespace WebApplication1.Models.ModelPattern
 {
     public class ProductMgr : IFacade<Product>
     {
+        public ProductMgr() { }
         public Product Create(Product product)
         {
             PVStoresContext context = new PVStoresContext();
@@ -30,7 +31,6 @@ namespace WebApplication1.Models.ModelPattern
             PVStoresContext context = new PVStoresContext();
             return context.Products.FirstOrDefault(p => p.ID == id);
         }
-
 
     }
 }
