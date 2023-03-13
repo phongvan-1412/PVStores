@@ -29,7 +29,7 @@ namespace WebApplication1.Models.ModelPattern
         public Product GetById(int id)
         {
             PVStoresContext context = new PVStoresContext();
-            return context.Products.FirstOrDefault(p => p.ID == id);
+            return context.Products.Where(p => p.ID == id).FirstOrDefault();
         }
 
     }

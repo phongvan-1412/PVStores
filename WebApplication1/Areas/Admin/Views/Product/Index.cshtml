@@ -1,55 +1,56 @@
-﻿@model ProductIndexViewModels
+﻿@model List<ProductViewModels>
 @{
-    ViewData["Title"] = "List of Category";
+    ViewData["Title"] = "List of Product";
+    var cateList = ViewBag.Category;
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
 @*Write Code*@
-<div class="row">
-    <table class="table">
-        <thead>
-            <tr>
-                <th></th>
-                <th>Product Name</th>
-                <th>Category Name</th>
-                <th>Price</th>
-                <th>Status</th>
-                <th>Image</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            @foreach (var item in Model.Products)
-            {
-                <tr>
-                    <td class="align-middle">@item.ID</td>
-                    <td class="align-middle">@item.Name</td>
-
-                    @foreach (var cateId in Model.Categories)
-                    {
-                        if (cateId.ID == item.ID)
-                        {
-                            <td>@cateId.Name</td>
-                        }
-                    }
-
-                    <td class="align-middle">$@item.Price</td>
-                    <td class="align-middle text-danger">@Model.productStatus.Convert(item.Status)</td>
-                    <td class="align-middle">@item.Image</td>
-
-                    <td class="align-middle">
-                        <a class="btn btn-outline-primary" asp-area="Admin" asp-controller="Category" asp-action="Update" asp-route-id="@item.ID">Edit</a>
-                        <a class="btn btn-outline-info"><i class="fa-thin fa-square-info"></i>Detail</a>
-                    </td>
+<div class="row mt-5">
+    <div class="col-md-10 offset-1">
+        <table class="table">
+            <thead>
+                <tr class="table-primary">
+                    <th></th>
+                    <th>Product Name</th>
+                    <th>Category Name</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                    <th>Image</th>
+                    <th>Action</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="align-middle">@item.ProductID</td>
+                        <td class="align-middle">@item.ProductName</td>
+
+                        <td class="align-middle">@item.CateName</td>
+
+                        <td class="align-middle">$@item.ProductPrice</td>
+                        <td class="align-middle">
+                            <input checked="@item.ProductStatus" asp-for="@item.ProductStatus" />
+                        </td>
+                        <td class="align-middle">@item.ProductImage</td>
+
+                        <td class="align-middle">
+                            @*<a class="btn btn-outline-primary" asp-area="Admin" asp-controller="Product" asp-action="Update" asp-route-id="@item.ProductID">Edit</a>*@
+                            @Html.Partial("~/Areas/Admin/Views/Partials/_UpdateProductPartial.cshtml", item, new ViewDataDictionary(ViewData) {{"Categories", cateList}})
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 
-<div class="text-white">
+<div class="col-md-10 offset-1 text-white">
     <a asp-area="Admin" asp-controller="Product" asp-action="Create" class="btn btn-success">
         Add New
     </a>
 </div>
+
+

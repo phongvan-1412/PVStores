@@ -2,10 +2,10 @@
 {
     public class ConvertEnum
     {
-        protected string stt;
-
-        public string Convert(int status)
+        public static string Convert(int status)
         {
+            string stt = "";
+
             switch (status)
             {
                 case 0:
@@ -23,5 +23,27 @@
             }
             return stt;
         }
+
+        public static int ConvertToString(string stt)
+        {
+            int status = 0;
+            switch (stt)
+            {
+                case "Inactive":
+                    status = 0;
+                    break;
+                case "Active":
+                    status = 1;
+                    break;
+                case "Admin":
+                    status = 2;
+                    break;
+                case "Customer":
+                    status = 3;
+                    break;
+            }
+            return status;
+        }
+
     }
 }

@@ -18,11 +18,8 @@ namespace WebApplication1.Areas.Admin.Controllers
         [Route("")]
         public IActionResult Index()
         {
-            ProductIndexViewModels productView = new ProductIndexViewModels();
-            ConvertEnum p = new ConvertEnum();
-            productView.Categories = _context.Categories.ToList();
-            productView.Products = FacadeMaker.Instance.GetAllProducts();
-            productView.productStatus = p;
+            List<ProductViewModels> productView = FacadeMaker.Instance.GetAllProducts().Select(i => new ProductViewModels(i)).ToList();
+            ViewBag.Category = _context.Categories.Where(c => c.Status == true).ToList();
             return View(productView);
         }
 
@@ -41,17 +38,11 @@ namespace WebApplication1.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Route("Update")]
-        public IActionResult Update(int id)
-        {
-            ViewBag.ProductUpdate = FacadeMaker.Instance.GetProductById(id);
-            return View();
-        }
-
         [HttpPost]
         [Route("Update")]
-        public IActionResult Update(int id, [Bind("ID, Name, Description, Price, Status, Image")] Product product)
+        public IActionResult Update(int id, ProductViewModels productView)
         {
+            Product product = new Product(productView);
             FacadeMaker.Instance.UpdateProduct(id, product);
             return RedirectToAction(nameof(Index));
         }

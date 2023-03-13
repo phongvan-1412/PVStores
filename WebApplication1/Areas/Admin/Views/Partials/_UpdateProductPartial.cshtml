@@ -1,0 +1,84 @@
+﻿@model ProductViewModels
+@{
+    var modelName = Model.ProductName.Replace(" ", "_");
+}
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#@modelName">
+    Edit
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="@modelName" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+            </div>
+            <div class="modal-body">
+                <form asp-action="Update" class="mt-5">
+                    <div class="form-group mb-3" hidden>
+                        <label asp-for="ProductID" class="form-label fw-semibold"></label>
+                        <input asp-for="ProductID" class="form-control" />
+                        <span asp-validation-for="ProductID" class=" text-danger"></span>
+                    </div>
+
+                    <div class="d-flex form-group mb-3">
+                        <div class="col-md-5">
+                            <label asp-for="ProductName" class="form-label fw-semibold">Product Name</label>
+                            <input asp-for="ProductName" value="@Model.ProductName" class="form-control" />
+                            <span asp-validation-for="ProductName" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-2"></div>
+                        <div class="col-md-5">
+                            <label class="form-label fw-semibold">Category</label>
+                            <select asp-for="CateID" class="form-select">
+                                <option value="@Model.CateID" selected>@Model.CateName</option>
+                                @foreach (var item in ViewData["Categories"] as List<Category>)
+                                {
+                                    <option value="@item.ID">@item.Name</option>
+                                }
+                            </select>
+
+                            <span asp-validation-for="CateID" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="ProductDescription" class="form-label fw-semibold">Description</label>
+                        <input value="@Model.ProductDescription" asp-for="ProductDescription" class="form-control" style="height: 100px" />
+                        <span asp-validation-for="ProductDescription" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex form-group mb-3">
+                        <div class="col-md-5 ">
+                            <label asp-for="ProductPrice" class="form-label fw-semibold">Price</label>
+                            <input asp-for="ProductPrice" value="@Model.ProductPrice" class="form-control" />
+                            <span asp-validation-for="ProductPrice" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-2"></div>
+                        <div class="col-md-5">
+                            <label asp-for="ProductStatus" class="form-label fw-semibold"></label>
+                            <input type="checkbox" asp-for="ProductStatus" checked="@Model.ProductStatus" />
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="ProductImage" class="form-label fw-semibold">Image</label>
+                        <input type="file" asp-for="ProductImage" class="form-control" />
+                        <span asp-validation-for="ProductImage" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3" hidden>
+                        <label asp-for="ProductImageBase64" class="form-label fw-semibold">Image</label>
+                        <input asp-for="ProductImageBase64" value="user.png" class="form-control" />
+                        <span asp-validation-for="ProductImageBase64" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between form-group">
+                        <input type="submit" value="Update" asp-area="Admin" asp-controller="Product" asp-action="Update" class="btn btn-outline-success" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

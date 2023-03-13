@@ -38,13 +38,6 @@ namespace WebApplication1.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Route("Update")]
-        public IActionResult Update(int id)
-        {
-            ViewBag.CateUpdate = FacadeMaker.Instance.GetCategoryById(id);
-            return View();
-        }
-
         [HttpPost]
         [Route("Update")]
         public IActionResult Update(int id, [Bind("ID, Name, Status, SubCate")] Category category)

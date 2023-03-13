@@ -1,29 +1,33 @@
 ﻿@model Category
-@{
-    ViewData["Title"] = "Update Category";
-    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
-}
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#@Model.Name">
+    Edit
+</button>
 
-<div class="row text">
-    <div class="col-md-8 offset-2">
-        <div class="row">
-            <div class="col-md-8 offset-2">
+<!-- Modal -->
+<div class="modal fade" id="@Model.Name" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+            </div>
+            <div class="modal-body">
                 <form asp-action="Update">
                     <div class="form-group mb-3" hidden>
                         <label asp-for="ID" class="form-label"></label>
-                        <input asp-for="ID" class="form-control" value="@ViewBag.CateUpdate.ID" />
+                        <input asp-for="ID" class="form-control" value="@Model.ID" />
                         <span asp-validation-for="ID" class="text-danger"></span>
                     </div>
 
                     <div class="form-group mb-3">
                         <label asp-for="Name" class="form-label"></label>
-                        <input asp-for="Name" class="form-control" value="@ViewBag.CateUpdate.Name" />
+                        <input asp-for="Name" class="form-control" value="@Model.Name" />
                         <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
 
                     <div class="form-group mb-3">
                         <label asp-for="Status" class="form-label"></label>
-                        <input type="checkbox" asp-for="Status" checked="@ViewBag.CateUpdate.Status" />
+                        <input type="checkbox" asp-for="Status" checked="@Model.Status" />
                         <span asp-validation-for="Status" class="text-danger"></span>
                     </div>
 
@@ -32,11 +36,11 @@
                         @*<select asp-for="sub_cate">
                         <option></option>
                         </select>*@
-                        <input asp-for="SubCate" class="form-control" value="@ViewBag.CateUpdate.SubCate" />
+                        <input asp-for="SubCate" class="form-control" value="@Model.SubCate" />
                         <span asp-validation-for="SubCate" class="text-danger"></span>
                     </div>
                     <div class="d-flex justify-content-between form-group">
-                        <input type="submit" value="Update" asp-area="Admin" asp-controller="Category" asp-action="Update" class="btn btn-outline-success" />
+                        <input type="submit" value="Update" asp-area="Admin" asp-controller="Category" asp-action="Update" class="btn btn-outline-primary" />
                         <a class="btn btn-outline-secondary" asp-action="Index">Show All</a>
                     </div>
                 </form>
