@@ -3,7 +3,7 @@
     var modelName = Model.ProductName.Replace(" ", "_");
 }
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#@modelName">
+<button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#@modelName">
     Edit
 </button>
 
@@ -64,13 +64,17 @@
 
                     <div class="form-group mb-3">
                         <label asp-for="ProductImage" class="form-label fw-semibold">Image</label>
-                        <input type="file" asp-for="ProductImage" class="form-control" />
+                        <input type="file" asp-for="ProductImage" id="updateProductImg" class="form-control" />
                         <span asp-validation-for="ProductImage" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3 text-center">
+                        <img id="updateImgUrl" style="width: 12.5rem; height: 12.5rem; object-position: center" />
                     </div>
 
                     <div class="form-group mb-3" hidden>
                         <label asp-for="ProductImageBase64" class="form-label fw-semibold">Image</label>
-                        <input asp-for="ProductImageBase64" value="user.png" class="form-control" />
+                        <input asp-for="ProductImageBase64" value="@Model.ProductImageBase64" id="updateProductImg64" class="form-control" />
                         <span asp-validation-for="ProductImageBase64" class="text-danger"></span>
                     </div>
 
@@ -82,3 +86,23 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    //Preview Image
+    const updateFileInput = document.getElementById('updateProductImg');
+    var updateImg64 = document.getElementById('updateProductImg64');
+    var updateOutput = document.getElementById('updateImgUrl')
+
+    updateFileInput.addEventListener("change", e => {
+        const file = updateFileInput.files[0];
+        const reader = new FileReader();
+
+        reader.addEventListener("load", () => {
+            console.log(reader.result);
+            updateOutput.src = reader.result;
+            updateImg64.value = reader.result;
+        });
+
+        reader.readAsDataURL(file);
+    })
+</script>                        

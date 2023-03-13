@@ -1,0 +1,102 @@
+﻿@model ProductViewModels
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createProduct">
+    Create
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="createProduct" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create Product</h5>
+            </div>
+            <div class="modal-body">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group mb-3">
+                        <label asp-for="ProductName" class="form-label"></label>
+                        <input asp-for="ProductName" class="form-control" />
+                        <span asp-validation-for="ProductName" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label class="form-label">Category</label>
+                        <select class="form-select">
+                            <option value="0" selected>Open this select menu</option>
+                            @foreach (var item in ViewData["ProCategories"] as List<Category>)
+                            {
+                                <option value="@item.ID">@item.Name</option>
+                            }
+                        </select>
+                        <span asp-validation-for="CateID" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="ProductDescription" class="form-label"></label>
+                        <input asp-for="ProductDescription" id="productDes" class="form-control"/>
+                        <span asp-validation-for="ProductDescription" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex form-group mb-3">
+                        <div class="col-md-5 ">
+                            <label asp-for="ProductPrice" class="form-label fw-semibold">Price</label>
+                            <input asp-for="ProductPrice" value="@Model.ProductPrice" class="form-control" />
+                            <span asp-validation-for="ProductPrice" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-2"></div>
+                        <div class="col-md-5">
+                            <label asp-for="ProductStatus" class="form-label fw-semibold"></label>
+                            <input type="checkbox" asp-for="ProductStatus" checked="@Model.ProductStatus" />
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="ProductImage" class="form-label"></label>
+                        <input type="file" asp-for="ProductImage" id="productImg" class="form-control" />
+                        <span asp-validation-for="ProductImage" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3 text-center">
+                        <img id="imgUrl" style="width: 12.5rem; height: 12.5rem; object-position: center" />
+                    </div>
+
+                    <div class="form-group mb-3" hidden>
+                        <label asp-for="ProductImageBase64" class="form-label"></label>
+                        <input asp-for="ProductImageBase64" value="@Model.ProductImageBase64" id="productImg64" class="form-control" />
+                        <span asp-validation-for="ProductImage" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between form-group">
+                        <input type="submit" value="Create" asp-area="Admin" asp-controller="Product" asp-action="Create" class="btn btn-outline-success" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    //Intergrate CKEditor
+        //$(document).ready(function () =>{
+        //    CKEDITOR.replace('#productDes');
+        //});
+
+    //Preview Image
+    const fileInput = document.getElementById('productImg');
+    var img64 = document.getElementById('productImg64');
+    var output = document.getElementById('imgUrl')
+
+    fileInput.addEventListener("change", e => {
+        const file = fileInput.files[0];
+        const reader = new FileReader();
+
+        reader.addEventListener("load", () => {
+            output.src = reader.result;
+            img64.value = reader.result;
+        });
+
+        reader.readAsDataURL(file);
+    })
+</script>

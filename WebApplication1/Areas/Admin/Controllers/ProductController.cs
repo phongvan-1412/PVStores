@@ -19,7 +19,9 @@ namespace WebApplication1.Areas.Admin.Controllers
         public IActionResult Index()
         {
             List<ProductViewModels> productView = FacadeMaker.Instance.GetAllProducts().Select(i => new ProductViewModels(i)).ToList();
+            ProductViewModels singleProductView = new ProductViewModels();
             ViewBag.Category = _context.Categories.Where(c => c.Status == true).ToList();
+            ViewBag.Product = singleProductView;
             return View(productView);
         }
 
@@ -32,8 +34,9 @@ namespace WebApplication1.Areas.Admin.Controllers
 
         [HttpPost]
         [Route("Add")]
-        public IActionResult Create([Bind("Name, Description, Price, Status, Image")] Product product)
+        public IActionResult Create(ProductViewModels productView)
         {
+            Product product = new Product(productView);
             FacadeMaker.Instance.CreateProduct(product);
             return RedirectToAction(nameof(Index));
         }
