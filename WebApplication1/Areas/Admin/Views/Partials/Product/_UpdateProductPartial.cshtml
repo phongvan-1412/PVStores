@@ -12,10 +12,10 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Update Product</h5>
             </div>
             <div class="modal-body">
-                <form asp-action="Update" class="mt-5">
+                <form asp-action="Update">
                     <div class="form-group mb-3" hidden>
                         <label asp-for="ProductID" class="form-label fw-semibold"></label>
                         <input asp-for="ProductID" class="form-control" />
@@ -33,7 +33,7 @@
                             <label class="form-label fw-semibold">Category</label>
                             <select asp-for="CateID" class="form-select">
                                 <option value="@Model.CateID" selected>@Model.CateName</option>
-                                @foreach (var item in ViewData["Categories"] as List<Category>)
+                                @foreach (var item in ViewData["ProCategories"] as List<Category>)
                                 {
                                     <option value="@item.ID">@item.Name</option>
                                 }

@@ -1,0 +1,36 @@
+﻿@model Category
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createCate">
+    Create
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="createCate" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create Category</h5>
+            </div>
+            <div class="modal-body">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group mb-3">
+                        <label asp-for="Name" class="form-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Status" class="form-label"></label>
+                        <input type="checkbox" asp-for="Status" checked="@Model.Status"/>
+                        <span asp-validation-for="Status" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between form-group">
+                        <input type="submit" value="Create" asp-area="Admin" asp-controller="Category" asp-action="Create" class="btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

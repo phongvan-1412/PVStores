@@ -20,16 +20,12 @@ namespace WebApplication1.Areas.Admin.Controllers
         [Route("")]
         public IActionResult Index()
         {
-            ViewData["Category"] = FacadeMaker.Instance.GetAllCategories();
+            Category category = new Category();
+            ViewData["Categories"] = FacadeMaker.Instance.GetAllCategories();
+            ViewData["Cate"] = category;
             return View();
         }
 
-        [Route("Add")]
-        public IActionResult Create()
-        {
-            return View();
-        }
-         
         [HttpPost]
         [Route("Add")]
         public IActionResult Create([Bind("Name, Status, SubCate")] Category category)
