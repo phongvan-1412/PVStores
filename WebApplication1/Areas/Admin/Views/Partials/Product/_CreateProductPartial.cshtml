@@ -7,7 +7,7 @@
 
 <!-- Modal -->
 <div class="modal fade" id="createProduct" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Create Product</h5>
@@ -23,8 +23,7 @@
 
                     <div class="form-group mb-3">
                         <label class="form-label">Category</label>
-                        <select class="form-select">
-                            <option value="0" selected>Open this select menu</option>
+                        <select asp-for ="CateID" class="form-select">
                             @foreach (var item in ViewData["ProCategories"] as List<Category>)
                             {
                                 <option value="@item.ID">@item.Name</option>
@@ -35,7 +34,7 @@
 
                     <div class="form-group mb-3">
                         <label asp-for="ProductDescription" class="form-label"></label>
-                        <input asp-for="ProductDescription" id="productDes" class="form-control"/>
+                        <textarea asp-for="ProductDescription" id="editor" placeholder="Enter Product Description" class="form-control"></textarea>
                         <span asp-validation-for="ProductDescription" class="text-danger"></span>
                     </div>
 
@@ -59,7 +58,7 @@
                     </div>
 
                     <div class="form-group mb-3 text-center">
-                        <img id="imgUrl" style="width: 12.5rem; height: 12.5rem; object-position: center" />
+                        <img id="imgUrl" style="width: 12.5rem; height: 12.5rem; object-position: center; border: none" />
                     </div>
 
                     <div class="form-group mb-3" hidden>
@@ -69,7 +68,7 @@
                     </div>
 
                     <div class="d-flex justify-content-between form-group">
-                        <input type="submit" value="Create" asp-area="Admin" asp-controller="Product" asp-action="Create" class="btn btn-outline-success" />
+                        <input type="submit" value="Create" onclick="alert(editor.getData())" asp-area="Admin" asp-controller="Product" asp-action="Create" class="btn btn-outline-success" />
                     </div>
                 </form>
             </div>
@@ -79,9 +78,9 @@
 
 <script type="text/javascript">
     //Intergrate CKEditor
-        //$(document).ready(function () =>{
-        //    CKEDITOR.replace('#productDes');
-        //});
+    CKEDITOR.replace('editor', {
+        height: 220
+    });
 
     //Preview Image
     const fileInput = document.getElementById('productImg');

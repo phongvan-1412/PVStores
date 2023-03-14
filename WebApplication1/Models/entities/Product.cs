@@ -39,8 +39,6 @@ namespace WebApplication1.Models.entities
         [ForeignKey("cate_id")]
         public int CategoryId { get; set; }
 
-        public Category Category { get; set; }
-
         public Product()
         {
 
@@ -59,7 +57,7 @@ namespace WebApplication1.Models.entities
                 ? FacadeMaker.Instance.GetProductById(productView.ProductID).ImageBase64
                 : productView.ProductImageBase64;
             this.CategoryId = productView.CateID;
-            this.Category = FacadeMaker.Instance.GetCategoryById(CategoryId);
+            //this.Category = FacadeMaker.Instance.GetCategoryById(CategoryId);
         }
 
     }
