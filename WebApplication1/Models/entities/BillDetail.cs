@@ -8,7 +8,7 @@ namespace WebApplication1.Models.entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column("bid_id", TypeName = "int", Order = 1)]
+        [Column("bid_id", TypeName = "int")]
         public int ID { get; set; }
 
         [Column("bid_quantity", TypeName = "int")]
@@ -17,22 +17,12 @@ namespace WebApplication1.Models.entities
         [Column("bid_payment", TypeName = "decimal")]
         public decimal Total { get; set; }
 
-        [Key]
-        [ForeignKey("ProductId")]
-        [Column("p_id", TypeName = "int", Order = 4)]
+        [Column("p_id", TypeName = "int")]
         public int ProductID { get; set; }
 
-        [Key]
-        [ForeignKey("BillId")]
-        [Column("b_id", TypeName = "int", Order = 5)]
+        [Column("b_id", TypeName = "int")]
         public int BillID { get; set; }
 
-
-        //Bill
-        public Bill Bill { get; set; }
-
-        //Product
-        public Product Product { get; set; }
 
         public BillDetail()
         {

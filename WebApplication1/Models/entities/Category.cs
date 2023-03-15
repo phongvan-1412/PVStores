@@ -28,7 +28,5 @@ namespace WebApplication1.Models.entities
         [Required(ErrorMessage = "Sub Cate is required")]
         public int SubCate { get; set; }
 
-        //Relationships
-        public List<Product> Products { get; set; }
     }
 }

@@ -29,12 +29,8 @@ namespace WebApplication1.Models.entities
 
         //Account
         [Column("acc_id", TypeName = "int")]
-        [ForeignKey("AccId")]
         public int AccId { get; set; }
-        public Account Account { get; set; }
 
-        //Relationships
-        public List<BillDetail> BillDetail { get; set; }
 
         public Bill()
         {

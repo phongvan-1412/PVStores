@@ -15,10 +15,8 @@ namespace WebApplication1.Models.entities
         public string Content { get; set; }
 
         //Account
-        [ForeignKey("AccId")]
         [Column("acc_id", TypeName = "int")]
         public int AccID { get; set; }
-        public Account Account { get; set; }
 
         [Column("cmt_status", TypeName = "bit")]
         public bool Status { get; set; }
