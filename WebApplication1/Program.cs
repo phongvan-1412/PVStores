@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Models.ModelPattern;
 using WebApplication1.Models.entities;
+using Microsoft.AspNetCore.Mvc.Razor;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,8 +18,8 @@ builder.Services.AddDbContext<PVStoresContext>(options =>
             builder.Configuration.GetConnectionString("DefaultConnection")
     ));
 
-builder.Services.AddMvc();
 
+builder.Services.AddMvc();
 var app = builder.Build();
 
 
@@ -39,28 +40,15 @@ app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
 {
-    endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}");
-});
+    endpoints.MapRazorPages();
+    endpoints.MapAreaControllerRoute(
+        "Admin",
+        "Admin",
+        "Admin/{controller=Home}/{action=Index}/{id?}");
 
-app.UseEndpoints(endpoints =>
-{
     endpoints.MapControllerRoute(
-      name: "areas",
-      pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-    );
+         name: "default",
+         pattern: "{controller=Home}/{action=Index}/{id?}");
 });
-//app.UseMvc(routes =>
-//{
-//    routes.MapRoute(
-//        name: "default",
-//        template: "{controller=Home}/{action=Index}/{id?}");
-//});
-
-//app.UseMvc(routes =>
-//{
-//    routes.MapRoute(
-//        name: "areas",
-//      template: "{areas:exists}/{controller=Home}/{action=Index}/{id?}");
-//});
 
 app.Run();

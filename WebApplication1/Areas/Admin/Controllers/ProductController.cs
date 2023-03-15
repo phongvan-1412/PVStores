@@ -15,7 +15,6 @@ namespace WebApplication1.Areas.Admin.Controllers
             _context = context;
         }
 
-        [Route("")]
         public IActionResult Index()
         {
             List<ProductViewModels> productView = FacadeMaker.Instance.GetAllProducts().Select(i => new ProductViewModels(i)).ToList();
@@ -24,13 +23,6 @@ namespace WebApplication1.Areas.Admin.Controllers
             ViewBag.Product = singleProductView;
             return View(productView);
         }
-
-        //[Route("Add")]
-        //public IActionResult Create()
-        //{
-        //    ViewData["CateID"] = _context.Categories.ToList();
-        //    return View();
-        //}
 
         [HttpPost]
         [Route("Create")]

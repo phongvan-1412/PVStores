@@ -27,7 +27,7 @@ namespace WebApplication1.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        [Route("Add")]
+        [Route("Create")]
         public IActionResult Create([Bind("Name, Status, SubCate")] Category category)
         {
             FacadeMaker.Instance.CreateCategory(category);
