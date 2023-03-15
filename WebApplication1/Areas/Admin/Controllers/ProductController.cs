@@ -25,15 +25,15 @@ namespace WebApplication1.Areas.Admin.Controllers
             return View(productView);
         }
 
-        [Route("Add")]
-        public IActionResult Create()
-        {
-            ViewData["CateID"] = _context.Categories.ToList();
-            return View();
-        }
+        //[Route("Add")]
+        //public IActionResult Create()
+        //{
+        //    ViewData["CateID"] = _context.Categories.ToList();
+        //    return View();
+        //}
 
         [HttpPost]
-        [Route("Add")]
+        [Route("Create")]
         public IActionResult Create(ProductViewModels productView)
         {
             Product product = new Product(productView);

@@ -28,27 +28,31 @@
             <ul>
                 <li><a class="nav-link scrollto " href="#hero">Home</a></li>
                 <li class="dropdown">
-                    <a asp-controller="Category" asp-action="Index"><span>Category</span> <i class="bi bi-chevron-down"></i></a>
+                    <a href="/Category/Index">Category<i class="bi bi-chevron-down"></i></a>
                     <ul>
-                        <li><a href="#">Burger</a></li>
+                        <li><a href="#">Breakfast</a></li>
                         <li class="dropdown">
-                            <a href="#"><span>Deep Drop Down</span> <i class="bi bi-chevron-right"></i></a>
-                            <ul>
-                                <li><a href="#">Deep Drop Down 1</a></li>
-                                <li><a href="#">Deep Drop Down 2</a></li>
-                                <li><a href="#">Deep Drop Down 3</a></li>
-                                <li><a href="#">Deep Drop Down 4</a></li>
-                                <li><a href="#">Deep Drop Down 5</a></li>
-                            </ul>
+                            <a href="#">Burgers
+                                @*<span>Deep Drop Down</span>*@
+                                @*<i class="bi bi-chevron-right"></i>*@
+                            </a>
+                            @*<ul>
+                            <li><a href="#">Deep Drop Down 1</a></li>
+                            <li><a href="#">Deep Drop Down 2</a></li>
+                            <li><a href="#">Deep Drop Down 3</a></li>
+                            <li><a href="#">Deep Drop Down 4</a></li>
+                            <li><a href="#">Deep Drop Down 5</a></li>
+                            </ul>*@
                         </li>
-                        <li><a href="#">Fries</a></li>
-                        <li><a href="#">Pizza</a></li>
-                        <li><a href="#">Pasta</a></li>
-                        <li><a href="#">Noodles</a></li>
-                        <li><a href="#">Drinks</a></li>
+                        <li><a href="#">Burgers</a></li>
+                        <li><a href="#">Chicken & Fish Sandwiches</a></li>
+                        <li><a href="#">Fries & Sides</a></li>
+                        <li><a href="#">PvCafé® Coffees</a></li>
+                        <li><a href="#">Sweets & Treats</a></li>
+                        <li><a href="#">Beverages</a></li>
                     </ul>
                 </li>
-                <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+                <li><a href="/Cart/Index"><i class="bi bi-cart"></i>&nbsp; Cart</a></li>
             </ul>
             <i class="bi bi-list mobile-nav-toggle"></i>
         </nav><!-- .navbar -->

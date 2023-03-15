@@ -13,48 +13,36 @@
                 <h5 class="modal-title">Create Product</h5>
             </div>
             <div class="modal-body">
-                <form asp-action="Create">
+                <form action="/Admin/Product/Create/" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group mb-3">
-                        <label asp-for="ProductName" class="form-label"></label>
-                        <input asp-for="ProductName" class="form-control" />
-                        <span asp-validation-for="ProductName" class="text-danger"></span>
+                        <label class="form-label">Product Name</label>
+                        <input name="Name" class="form-control" />
                     </div>
 
                     <div class="form-group mb-3">
                         <label class="form-label">Category</label>
-                        <select asp-for ="CateID" class="form-select">
+                        <select name="CategoryId" class="form-select">
                             @foreach (var item in ViewData["ProCategories"] as List<Category>)
                             {
                                 <option value="@item.ID">@item.Name</option>
                             }
                         </select>
-                        <span asp-validation-for="CateID" class="text-danger"></span>
                     </div>
 
                     <div class="form-group mb-3">
-                        <label asp-for="ProductDescription" class="form-label"></label>
-                        <textarea asp-for="ProductDescription" id="editor" placeholder="Enter Product Description" class="form-control"></textarea>
-                        <span asp-validation-for="ProductDescription" class="text-danger"></span>
+                        <label class="form-label"></label>
+                        <textarea name="Description" id="editor" placeholder="Enter Product Description" class="form-control"></textarea>
                     </div>
 
                     <div class="d-flex form-group mb-3">
-                        <div class="col-md-5 ">
-                            <label asp-for="ProductPrice" class="form-label fw-semibold">Price</label>
-                            <input asp-for="ProductPrice" value="@Model.ProductPrice" class="form-control" />
-                            <span asp-validation-for="ProductPrice" class="text-danger"></span>
-                        </div>
-                        <div class="col-md-2"></div>
-                        <div class="col-md-5">
-                            <label asp-for="ProductStatus" class="form-label fw-semibold"></label>
-                            <input type="checkbox" asp-for="ProductStatus" checked="@Model.ProductStatus" />
-                        </div>
+                        <label class="form-label fw-semibold">Price</label>
+                        <input name="Price" class="form-control" />
                     </div>
 
                     <div class="form-group mb-3">
-                        <label asp-for="ProductImage" class="form-label"></label>
-                        <input type="file" asp-for="ProductImage" id="productImg" class="form-control" />
-                        <span asp-validation-for="ProductImage" class="text-danger"></span>
+                        <label class="form-label">Image</label>
+                        <input type="file" name="Image" id="productImg" class="form-control" />
                     </div>
 
                     <div class="form-group mb-3 text-center">
@@ -62,13 +50,12 @@
                     </div>
 
                     <div class="form-group mb-3" hidden>
-                        <label asp-for="ProductImageBase64" class="form-label"></label>
-                        <input asp-for="ProductImageBase64" value="@Model.ProductImageBase64" id="productImg64" class="form-control" />
-                        <span asp-validation-for="ProductImage" class="text-danger"></span>
+                        <label class="form-label"></label>
+                        <input name="ImageBase64" value="ImageBase64" id="productImg64" class="form-control" />
                     </div>
 
                     <div class="d-flex justify-content-between form-group">
-                        <input type="submit" value="Create" onclick="alert(editor.getData())" asp-area="Admin" asp-controller="Product" asp-action="Create" class="btn btn-outline-success" />
+                        <input type="submit" value="Create" class="btn btn-outline-success" />
                     </div>
                 </form>
             </div>

@@ -1,7 +1,7 @@
 ﻿@model List<ProductViewModels>
 @{
     ViewData["Title"] = "List of Product";
-    var cateList = ViewBag.Category;
+    var cateList = (List<Category>)ViewBag.Category;
     var product = (ProductViewModels)ViewBag.Product;
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
@@ -26,17 +26,17 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td class="align-middle">@item.ProductID</td>
-                        <td class="align-middle">@item.ProductName</td>
+                        <td class="align-middle">@item.ID</td>
+                        <td class="align-middle">@item.Name</td>
                         <td class="align-middle">@item.CateName</td>
-                        <td class="align-middle">$@item.ProductPrice</td>
+                        <td class="align-middle">$@item.Price</td>
 
                         <td class="align-middle">
-                            <input checked="@item.ProductStatus" asp-for="@item.ProductStatus" />
+                            <input checked="@item.Status" asp-for="@item.Status" />
                         </td>
 
                         <td class="align-middle">
-                            <img src="@item.ProductImageBase64" id="displayImg" style="width: 12.5rem; height: 12.5rem; object-position: center" />
+                            <img src="@item.ImageBase64" id="displayImg" style="width: 12.5rem; height: 12.5rem; object-position: center" />
                         </td>
 
                         <td class="align-middle">
@@ -52,5 +52,3 @@
 <div class="col-md-10 offset-1">
     @Html.Partial("~/Areas/Admin/Views/Partials/Product/_CreateProductPartial.cshtml", product, new ViewDataDictionary(ViewData) {{"ProCategories", cateList}})
 </div>
-
-

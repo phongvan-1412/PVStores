@@ -1,0 +1,29 @@
+﻿@model List<ProductViewModels>
+
+@foreach (var item in Model)
+{
+    <div class="col-xl-3 col-lg-4 col-sm-6 me-3 mb-3">
+        <div class="card d-flex flex-column p-3" style="background: white; border: none">
+            <div class="d-flex align-items-center">
+                <img src="@item.ImageBase64" class="card-img-top mb-3" alt="@item.Image" style="width: 178px; height: 178px">
+            </div>
+
+            <div class="row d-flex flex-column justify-content-between">
+                <div class="d-flex align-items-center">
+                    <h5 class="card-title">@item.Name</h5>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a class="text-success" style="font-size: 16px">@item.CateName</a>
+                    <span class="ms-3 text-danger fw-semibold" style="font-size: 16px;">$@item.Price</span>
+                </div>
+
+                <a href="#" class="btn btn-primary text-white">Detail</a>
+
+                <div>
+                    <a href="#" class="btn btn-primary text-white">Add To Cart</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}

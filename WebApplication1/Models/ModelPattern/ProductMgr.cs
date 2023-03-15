@@ -8,6 +8,7 @@ namespace WebApplication1.Models.ModelPattern
         public Product Create(Product product)
         {
             PVStoresContext context = new PVStoresContext();
+            product.Status = true;
             context.Products.Add(product);
             context.SaveChanges();
             return product;

@@ -1,4 +1,4 @@
-﻿namespace WebApplication1.Models.ModelPattern
+﻿namespace WebApplication1.Utilities
 {
     public class ConvertEnum
     {

@@ -1,6 +1,6 @@
 ﻿@model ProductViewModels
 @{
-    var modelName = Model.ProductName.Replace(" ", "_");
+    var modelName = Model.Name.Replace(" ", "");
 }
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#@modelName">
@@ -17,66 +17,65 @@
             <div class="modal-body">
                 <form asp-action="Update">
                     <div class="form-group mb-3" hidden>
-                        <label asp-for="ProductID" class="form-label fw-semibold"></label>
-                        <input asp-for="ProductID" class="form-control" />
-                        <span asp-validation-for="ProductID" class=" text-danger"></span>
+                        <label asp-for="ID" class="form-label fw-semibold"></label>
+                        <input asp-for="ID" class="form-control" />
+                        <span asp-validation-for="ID" class=" text-danger"></span>
                     </div>
 
                     <div class="d-flex form-group mb-3">
                         <div class="col-md-5">
-                            <label asp-for="ProductName" class="form-label fw-semibold">Product Name</label>
-                            <input asp-for="ProductName" value="@Model.ProductName" class="form-control" />
-                            <span asp-validation-for="ProductName" class="text-danger"></span>
+                            <label asp-for="Name" class="form-label fw-semibold">Product Name</label>
+                            <input asp-for="Name" value="@Model.Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
                         <div class="col-md-2"></div>
                         <div class="col-md-5">
                             <label class="form-label fw-semibold">Category</label>
-                            <select asp-for="CateID" class="form-select">
-                                <option value="@Model.CateID" selected>@Model.CateName</option>
+                            <select asp-for="CategoryId" class="form-select">
+                                <option value="@Model.CategoryId" selected>@Model.CateName</option>
                                 @foreach (var item in ViewData["ProCategories"] as List<Category>)
                                 {
                                     <option value="@item.ID">@item.Name</option>
                                 }
                             </select>
 
-                            <span asp-validation-for="CateID" class="text-danger"></span>
+                            <span asp-validation-for="CategoryId" class="text-danger"></span>
                         </div>
                     </div>
 
                     <div class="form-group mb-3">
-                        <label asp-for="ProductDescription" class="form-label fw-semibold">Description</label>
-                        <textarea asp-for="ProductDescription" id="edit" placeholder="Enter Product Description" class="form-control"></textarea>
-                        <span asp-validation-for="ProductDescription" class="text-danger"></span>
+                        <label asp-for="Description" class="form-label fw-semibold">Description</label>
+                        <textarea asp-for="Description" id="edit" placeholder="Enter Product Description" class="form-control"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
 
                     <div class="d-flex form-group mb-3">
                         <div class="col-md-5 ">
-                            <label asp-for="ProductPrice" class="form-label fw-semibold">Price</label>
-                            <input asp-for="ProductPrice" value="@Model.ProductPrice" class="form-control" />
-                            <span asp-validation-for="ProductPrice" class="text-danger"></span>
+                            <label asp-for="Price" class="form-label fw-semibold">Price</label>
+                            <input asp-for="Price" value="@Model.Price" class="form-control" />
+                            <span asp-validation-for="Price" class="text-danger"></span>
                         </div>
                         <div class="col-md-2"></div>
                         <div class="col-md-5">
-                            <label asp-for="ProductStatus" class="form-label fw-semibold"></label>
-                            <input type="checkbox" asp-for="ProductStatus" checked="@Model.ProductStatus" />
+                            <label asp-for="Status" class="form-label fw-semibold"></label>
+                            <input type="checkbox" asp-for="Status" checked="@Model.Status" />
                         </div>
                     </div>
 
                     <div class="form-group mb-3">
-                        <label asp-for="ProductImage" class="form-label fw-semibold">Image</label>
-                        <input type="file" asp-for="ProductImage" id="updateProductImg" class="form-control" />
-                        <span asp-validation-for="ProductImage" class="text-danger"></span>
+                        <label asp-for="Image" class="form-label fw-semibold">Image</label>
+                        <input type="file" asp-for="Image" id="updateProductImg" class="form-control" />
+                        <span asp-validation-for="Image" class="text-danger"></span>
                     </div>
 
                     <div class="form-group mb-3 text-center">
-                        <img src="@Model.ProductImageBase64" style="width: 12.5rem; height: 12.5rem; object-position: center; outline: none" />
-                        <img id="updateImgUrl" hidden />
+                        <img src="@Model.ImageBase64" id="updateImgUrl" style="width: 12.5rem; height: 12.5rem; object-position: center; outline: none" />
                     </div>
 
                     <div class="form-group mb-3" hidden>
-                        <label asp-for="ProductImageBase64" class="form-label fw-semibold">Image</label>
-                        <input asp-for="ProductImageBase64" value="@Model.ProductImageBase64" id="updateProductImg64" class="form-control" />
-                        <span asp-validation-for="ProductImageBase64" class="text-danger"></span>
+                        <label asp-for="ImageBase64" class="form-label fw-semibold">Image</label>
+                        <input asp-for="ImageBase64" value="@Model.ImageBase64" id="updateProductImg64" class="form-control" />
+                        <span asp-validation-for="ImageBase64" class="text-danger"></span>
                     </div>
 
                     <div class="d-flex justify-content-between form-group">

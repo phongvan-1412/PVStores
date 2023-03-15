@@ -36,7 +36,6 @@ namespace WebApplication1.Models.entities
         ////Category
         [Column("cate_id", TypeName = "int")]
         [Required(ErrorMessage = "You must choose category")]
-        [ForeignKey("cate_id")]
         public int CategoryId { get; set; }
 
         public Product()
@@ -45,20 +44,17 @@ namespace WebApplication1.Models.entities
         }
         public Product(ProductViewModels productView)
         {
-            this.ID = productView.ProductID;
-            this.Name = productView.ProductName;
-            this.Description = productView.ProductDescription;
-            this.Status = productView.ProductStatus;
-            this.Price = productView.ProductPrice; 
-            this.Image = productView.ProductImage is null
-                ? FacadeMaker.Instance.GetProductById(productView.ProductID).Image
-                : productView.ProductImage;
-            this.ImageBase64 = productView.ProductImageBase64 is null
-                ? FacadeMaker.Instance.GetProductById(productView.ProductID).ImageBase64
-                : productView.ProductImageBase64;
-            this.CategoryId = productView.CateID;
-            //this.Category = FacadeMaker.Instance.GetCategoryById(CategoryId);
+            this.Name = productView.Name;
+            this.Description = productView.Description;
+            this.Status = productView.Status;
+            this.Price = productView.Price; 
+            this.Image = productView.Image is null
+                ? FacadeMaker.Instance.GetProductById(productView.ID).Image
+                : productView.Image;
+            this.ImageBase64 = productView.ImageBase64 is null
+                ? FacadeMaker.Instance.GetProductById(productView.ID).ImageBase64
+                : productView.ImageBase64;
+            this.CategoryId = productView.CategoryId;
         }
-
     }
 }

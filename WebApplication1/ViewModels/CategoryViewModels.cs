@@ -6,16 +6,16 @@ namespace WebApplication1.ViewModels
 {
     public class CategoryViewModels
     {
-        public int CateId { get; set; }
-        public string CateName { get; set; }
-        public bool CateStatus { get; set; }
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public bool Status { get; set; }
         public int SubCate { get; set; }
 
         public CategoryViewModels() { }
         public CategoryViewModels(Category category) {
-            this.CateId = category.ID;
-            this.CateName = category.Name;
-            this.CateStatus = category.Status;
+            this.ID = category.ID;
+            this.Name = category.Name;
+            this.Status = category.Status;
             this.SubCate = category.SubCate;
         }
 

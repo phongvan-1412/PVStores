@@ -23,22 +23,10 @@
             <h1>All</h1>
         </div>
 
-        <div class="container d-flex align-items-center text-center text-dark mb-5">
-            @foreach (var item in Model)
-            {
-                <div class="me-5 mb-5 col-xl-3 col-lg-4 col-sm-6">
-                    <div class="card d-flex flex-column align-items-center p-3" style="background: white; border: none">
-                        <img src="@item.ProductImageBase64" class="card-img-top mb-3" alt="@item.ProductImage" style="width: 178px; height: 178px">
-                        <h5 class="card-title">@item.ProductName</h5>
-
-                        <div class="d-flex align-items-center justify-content-between">
-                            <a style="font-size: 16px">@item.CateName</a>
-                            <span class="ms-3 text-danger fw-semibold" style="font-size: 16px;">$@item.ProductPrice</span>
-                        </div>
-                    </div>
-                </div>
-            }
+        <div class="row d-flex text-dark offset-2 mb-5">
+            @Html.Partial("~/Views/Shared/Partials/_ProductByCatePartial.cshtml", Model)
         </div>
+
 
         <div class="container col-md-10 offset-1">
             <p style="font-size: 16px">
@@ -48,7 +36,7 @@
             <br />
             <span style="font-size: 10px">*Weight before cooking 4 oz.</span>
 
-            <br />            
+            <br />
             <br />
             <br />
             <br />
