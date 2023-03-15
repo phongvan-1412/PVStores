@@ -1,11 +1,14 @@
 ﻿@model Category
+@{
+    var cateName = Model.Name.Replace(" ", "");
+}
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#@Model.Name">
+<button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#@cateName">
     Edit
 </button>
 
 <!-- Modal -->
-<div class="modal fade" id="@Model.Name" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="@cateName" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
