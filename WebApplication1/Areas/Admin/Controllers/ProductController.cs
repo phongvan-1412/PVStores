@@ -15,6 +15,7 @@ namespace WebApplication1.Areas.Admin.Controllers
             _context = context;
         }
 
+        [Route("")]
         public IActionResult Index()
         {
             List<ProductViewModels> productView = FacadeMaker.Instance.GetAllProducts().Select(i => new ProductViewModels(i)).ToList();

@@ -8,15 +8,24 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-var config = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-IConfiguration configuration = config.Build();
-string constring = configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
+//Sessions
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    //options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
-builder.Services.AddDbContext<PVStoresContext>(options =>
-    options.UseSqlServer(constring, options =>
-            builder.Configuration.GetConnectionString("DefaultConnection")
-    ));
+//Connect DB
+var config = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+    IConfiguration configuration = config.Build();
+    string constring = configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
+
+    builder.Services.AddDbContext<PVStoresContext>(options =>
+        options.UseSqlServer(constring, options =>
+                builder.Configuration.GetConnectionString("DefaultConnection")
+        ));
 
 
 builder.Services.AddMvc();
@@ -33,11 +42,12 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+app.UseSession();
+app.UseCookiePolicy();
 app.UseRouting();
-
 app.UseAuthorization();
 
+//Routes Pattern
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapRazorPages();
