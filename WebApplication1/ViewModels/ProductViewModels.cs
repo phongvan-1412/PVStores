@@ -23,6 +23,7 @@ namespace WebApplication1.ViewModels
         [Display(Name = "Image")]
         public string Image { get; set; }
 
+        public IFormFile ImageFile { get; set; }
         public int CategoryId { get; set; }
         public string CateName { get; set; }
 

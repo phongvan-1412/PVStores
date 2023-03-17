@@ -13,7 +13,7 @@
                 <h5 class="modal-title">Create Product</h5>
             </div>
             <div class="modal-body">
-                <form action="/Admin/Product/Create/" method="post">
+                <form action="/Admin/Product/Create/" enctype="multipart/form-data" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group mb-3">
                         <label class="form-label">Product Name</label>
@@ -42,7 +42,7 @@
 
                     <div class="form-group mb-3">
                         <label class="form-label">Image</label>
-                        <input type="file" name="Image" id="productImg" class="form-control" />
+                        <input type="file" name="ImageFile" id="productImg" class="form-control" />
                     </div>
 
                     <div class="form-group mb-3 text-center">

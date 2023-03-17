@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using WebApplication1.Models.ModelPattern;
 using WebApplication1.ViewModels;
+using System.Web;
 
 namespace WebApplication1.Models.entities
 {
@@ -30,6 +31,7 @@ namespace WebApplication1.Models.entities
         [Column("p_image", TypeName = "varchar")]
         public string Image { get; set; }
 
+
         ////Category
         [Column("cate_id", TypeName = "int")]
         [Required(ErrorMessage = "You must choose category")]
@@ -44,10 +46,7 @@ namespace WebApplication1.Models.entities
             this.Name = productView.Name;
             this.Description = productView.Description;
             this.Status = productView.Status;
-            this.Price = productView.Price; 
-            this.Image = productView.Image is null
-                ? FacadeMaker.Instance.GetProductById(productView.ID).Image
-                : productView.Image;
+            this.Price = productView.Price;
             this.CategoryId = productView.CategoryId;
         }
     }
