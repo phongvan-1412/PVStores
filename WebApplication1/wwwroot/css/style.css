@@ -27,7 +27,23 @@ a:hover {
 h1, h2, h3, h4, h5, h6 {
   font-family: "Playfair Display", serif;
 }
-
+/*--------------------------------------------------------------
+# Custome
+--------------------------------------------------------------*/
+.card-product {
+    background: transparent;
+    border: 2px solid #cda45e;
+    cursor: pointer;
+}
+.btn-add {
+    font-size: 25px;
+    border-radius: 50%;
+    border: 1px solid #cda45e;
+}
+.btn-add:hover {
+    border: transparent;
+    background: #cda45e;
+}
 /*--------------------------------------------------------------
 # Preloader
 --------------------------------------------------------------*/

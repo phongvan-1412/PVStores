@@ -23,7 +23,6 @@ namespace WebApplication1.ViewModels
         [Display(Name = "Image")]
         public string Image { get; set; }
 
-        public string ImageBase64 { get; set; }
         public int CategoryId { get; set; }
         public string CateName { get; set; }
 
@@ -36,7 +35,6 @@ namespace WebApplication1.ViewModels
             this.Price = product.Price;
             this.Status = product.Status;
             this.Image = product.Image;
-            this.ImageBase64 = product.ImageBase64;
             this.CategoryId = product.CategoryId;
             this.CateName = FacadeMaker.Instance.GetCategoryById(product.CategoryId).Name;
         }

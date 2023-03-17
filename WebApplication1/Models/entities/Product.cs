@@ -30,9 +30,6 @@ namespace WebApplication1.Models.entities
         [Column("p_image", TypeName = "varchar")]
         public string Image { get; set; }
 
-        [Column("p_image_base64", TypeName = "ntext")]
-        public string ImageBase64 { get; set; }
-
         ////Category
         [Column("cate_id", TypeName = "int")]
         [Required(ErrorMessage = "You must choose category")]
@@ -51,9 +48,6 @@ namespace WebApplication1.Models.entities
             this.Image = productView.Image is null
                 ? FacadeMaker.Instance.GetProductById(productView.ID).Image
                 : productView.Image;
-            this.ImageBase64 = productView.ImageBase64 is null
-                ? FacadeMaker.Instance.GetProductById(productView.ID).ImageBase64
-                : productView.ImageBase64;
             this.CategoryId = productView.CategoryId;
         }
     }

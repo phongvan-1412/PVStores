@@ -69,13 +69,7 @@
                     </div>
 
                     <div class="form-group mb-3 text-center">
-                        <img src="@Model.ImageBase64" id="updateImgUrl" style="width: 12.5rem; height: 12.5rem; object-position: center; outline: none" />
-                    </div>
-
-                    <div class="form-group mb-3" hidden>
-                        <label asp-for="ImageBase64" class="form-label fw-semibold">Image</label>
-                        <input asp-for="ImageBase64" value="@Model.ImageBase64" id="updateProductImg64" class="form-control" />
-                        <span asp-validation-for="ImageBase64" class="text-danger"></span>
+                        <img src="~/img/products/@Model.Image" id="updateImgUrl" style="width: 12.5rem; height: 12.5rem; object-position: center; outline: none" />
                     </div>
 
                     <div class="d-flex justify-content-between form-group">
@@ -95,7 +89,6 @@
 
     //Preview Image
     const updateFileInput = document.getElementById('updateProductImg');
-    var updateImg64 = document.getElementById('updateProductImg64');
     var updateOutput = document.getElementById('updateImgUrl')
 
     updateFileInput.addEventListener("change", e => {
@@ -103,9 +96,7 @@
         const reader = new FileReader();
 
         reader.addEventListener("load", () => {
-            console.log(reader.result);
             updateOutput.src = reader.result;
-            updateImg64.value = reader.result;
         });
 
         reader.readAsDataURL(file);
