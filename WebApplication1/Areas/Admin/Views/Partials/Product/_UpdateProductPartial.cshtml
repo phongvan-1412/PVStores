@@ -15,23 +15,23 @@
                 <h5 class="modal-title" id="exampleModalLabel">Update Product</h5>
             </div>
             <div class="modal-body">
-                <form asp-action="Update">
+                <form action="/Admin/Product/Update" method="post" enctype="multipart/form-data">
                     <div class="form-group mb-3" hidden>
-                        <label asp-for="ID" class="form-label fw-semibold"></label>
-                        <input asp-for="ID" class="form-control" />
+                        <label class="form-label fw-semibold"></label>
+                        <input name="ID" value="@Model.ID" class="form-control" />
                         <span asp-validation-for="ID" class=" text-danger"></span>
                     </div>
 
                     <div class="d-flex form-group mb-3">
                         <div class="col-md-5">
-                            <label asp-for="Name" class="form-label fw-semibold">Product Name</label>
-                            <input asp-for="Name" value="@Model.Name" class="form-control" />
+                            <label class="form-label fw-semibold">Product Name</label>
+                            <input name="Name" value="@Model.Name" class="form-control" />
                             <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
                         <div class="col-md-2"></div>
                         <div class="col-md-5">
                             <label class="form-label fw-semibold">Category</label>
-                            <select asp-for="CategoryId" class="form-select">
+                            <select name="CategoryId" class="form-select">
                                 <option value="@Model.CategoryId" selected>@Model.CateName</option>
                                 @foreach (var item in ViewData["ProCategories"] as List<Category>)
                                 {
@@ -44,15 +44,15 @@
                     </div>
 
                     <div class="form-group mb-3">
-                        <label asp-for="Description" class="form-label fw-semibold">Description</label>
-                        <textarea asp-for="Description" id="edit" placeholder="Enter Product Description" class="form-control"></textarea>
+                        <label class="form-label fw-semibold">Description</label>
+                        <textarea name="Description" id="edit" class="form-control">@Html.Raw(Model.Description)</textarea>
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
 
                     <div class="d-flex form-group mb-3">
                         <div class="col-md-5 ">
-                            <label asp-for="Price" class="form-label fw-semibold">Price</label>
-                            <input asp-for="Price" value="@Model.Price" class="form-control" />
+                            <label class="form-label fw-semibold">Price</label>
+                            <input name="Price" value="@Model.Price" class="form-control" />
                             <span asp-validation-for="Price" class="text-danger"></span>
                         </div>
                         <div class="col-md-2"></div>
@@ -63,8 +63,8 @@
                     </div>
 
                     <div class="form-group mb-3">
-                        <label asp-for="Image" class="form-label fw-semibold">Image</label>
-                        <input type="file" asp-for="Image" id="updateProductImg" class="form-control" />
+                        <label class="form-label fw-semibold">Image</label>
+                        <input type="file" name="ImageFile" id="updateProductImg" class="form-control" />
                         <span asp-validation-for="Image" class="text-danger"></span>
                     </div>
 

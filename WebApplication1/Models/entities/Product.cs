@@ -31,7 +31,6 @@ namespace WebApplication1.Models.entities
         [Column("p_image", TypeName = "varchar")]
         public string Image { get; set; }
 
-
         ////Category
         [Column("cate_id", TypeName = "int")]
         [Required(ErrorMessage = "You must choose category")]
@@ -48,6 +47,7 @@ namespace WebApplication1.Models.entities
             this.Status = productView.Status;
             this.Price = productView.Price;
             this.CategoryId = productView.CategoryId;
+            this.Image = productView.Image;
         }
     }
 }

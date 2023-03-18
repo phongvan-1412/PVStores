@@ -31,15 +31,7 @@ namespace WebApplication1.Areas.Admin.Controllers
         [Route("Create")]
         public IActionResult Create(ProductViewModels productView)
         {
-            if (productView.ImageFile != null)
-            {
-                string folder = "img/products/";
-                folder += productView.ImageFile.FileName;
-                string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folder);
-
-                productView.ImageFile.CopyTo(new FileStream(serverFolder, FileMode.Create));
-                productView.Image = productView.ImageFile.FileName;
-            }
+            productView.Image = UploadImage(productView);
             Product product = new Product(productView);
             FacadeMaker.Instance.CreateProduct(product);
             return RedirectToAction(nameof(Index));
@@ -49,40 +41,59 @@ namespace WebApplication1.Areas.Admin.Controllers
         [Route("Update")]
         public IActionResult Update(int id, ProductViewModels productView)
         {
-            ProductViewModels newProduct = new ProductViewModels
+            Product newProduct = _context.Products.Where(p => p.ID == productView.ID).FirstOrDefault();
+            try
             {
-                ID = productView.ID,
-                Name = productView.Name,
-                Description = productView.Description,
-                Price = productView.Price,
-                Status = productView.Status,
-                Image = productView.Image,
-                ImageFile = productView.ImageFile,
-                CategoryId = productView.CategoryId,
-                CateName = productView.CateName
-            };
+                Product delProduct = new Product(productView);
+                delProduct = newProduct;
+                string uniqueFileName = string.Empty;
+                if (productView.ImageFile != null)
+                {
+                    if (delProduct.Image != null)
+                    {
+                        string folder = "img/products/";
+                        string filePath = Path.Combine(_webHostEnvironment.WebRootPath, folder, delProduct.Image);
+                        if (System.IO.File.Exists(filePath))
+                        {
+                            System.IO.File.Delete(filePath);
+                        }
+                        uniqueFileName = UploadImage(productView);
+                    }
+                }
 
+                if(productView.Image != null)
+                {
+                    delProduct.Image = uniqueFileName;
+                }
+
+                if(productView.Description != null)
+                {
+                    delProduct.Description = productView.Description;
+                }
+                FacadeMaker.Instance.UpdateProduct(id, newProduct);
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        private string UploadImage(ProductViewModels productView)
+        {
+            string uniqueFileName = string.Empty;
             if (productView.ImageFile != null)
             {
                 string folder = "img/products/";
-                folder += productView.ImageFile.FileName;
-                string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folder);
+                uniqueFileName = Guid.NewGuid().ToString() + "-" + productView.ImageFile.FileName;
+                string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folder, uniqueFileName);
 
-                FileInfo fi = new FileInfo(serverFolder);
-                if (fi != null)
-                {
-                    System.IO.File.Delete(serverFolder);
-                    fi.Delete();
-                }
-
-                newProduct.ImageFile.CopyTo(new FileStream(serverFolder, FileMode.Create));
-                newProduct.Image = newProduct.ImageFile.FileName;
+                productView.ImageFile.CopyTo(new FileStream(serverFolder, FileMode.Create));
+                productView.Image = productView.ImageFile.FileName;
             }
-            
-            Product product = new Product(newProduct);
-            FacadeMaker.Instance.UpdateProduct(id, product);
-
-            return RedirectToAction(nameof(Index));
+            return uniqueFileName;
         }
     }
 }
