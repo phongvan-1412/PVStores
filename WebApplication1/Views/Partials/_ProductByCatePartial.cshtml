@@ -3,27 +3,32 @@
 @foreach (var item in Model)
 {
     <div class="col-xl-3 col-lg-4 col-sm-6 me-3 mb-5">
-        <div class="card-product card d-flex flex-column p-3" title="Click to view Detail">
-            <div class="d-flex justify-content-center">
-                <img src="~/img/products/@item.Image" class="card-img-top mb-3" alt="@item.Image" style="width: 178px; height: 178px">
+        <a type="button" asp-area="" asp-controller="Product" asp-action="ProductDetail" asp-route-id="@item.ID">
+            <div class="card-product card position-relative d-flex flex-column p-3" title="Click to view Detail">
+                <div class="d-flex justify-content-center">
+                    <img src="~/img/products/@item.Image" class="card-img-top mb-3" alt="@item.Image" style="width: 178px; height: 178px">
+                </div>
+
+                <div class="row d-flex flex-column">
+                    <div class="d-flex align-items-center">
+                        <h3 class="card-title text-white">@item.Name</h3>
+                    </div>
+
+                    <div class="position-relative d-flex mb-5">
+                        <a class="position-absolute" style="font-size: 16px; left: 12px">@item.CateName</a>
+                        <span class="position-absolute fw-semibold" style="font-size: 16px; right: 12px">$@item.Price</span>
+                    </div>
+
+                    <div class="position-absolute d-flex align-items-center mt-5" style="bottom: 8px">
+                        <a href="#" class="btn-add btn btn-outline-primary text-white me-3" title="Add To Cart">
+                            <i class="bi bi-cart-check-fill"></i>
+                        </a>
+                        <a href="#" class="btn-delete btn btn-outline-primary text-white" title="Remove From Cart">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
-
-            <div class="row d-flex flex-column justify-content-between">
-                <div class="d-flex align-items-center">
-                    <h4 class="card-title">@item.Name</h4>
-                </div>
-
-                <div class="d-flex justify-content-between mb-3">
-                    <a style="font-size: 16px">@item.CateName</a>
-                    <span class="ms-3 fw-semibold" style="font-size: 16px;">$@item.Price</span>
-                </div>
-
-                <div class="d-flex align-items-center">
-                    <a href="#" class="btn-add btn btn-outline-primary text-white">
-                        <i class="bi bi-cart-check-fill"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
+        </a>
     </div>
 }

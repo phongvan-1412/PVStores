@@ -5,10 +5,11 @@ using WebApplication1.ViewModels;
 
 namespace WebApplication1.Controllers
 {
-    public class CategoryController : Controller
+    public class ProductController : Controller
     {
         private PVStoresContext _context = new PVStoresContext();
-        public CategoryController(PVStoresContext context) { 
+        public ProductController(PVStoresContext context)
+        {
             _context = context;
         }
         public IActionResult Index()
@@ -16,7 +17,11 @@ namespace WebApplication1.Controllers
             List<ProductViewModels> productView = FacadeMaker.Instance.GetAllProducts().Select(i => new ProductViewModels(i)).ToList();
             return View(productView);
         }
-
-        
+        public IActionResult ProductDetail(int id)
+        {
+            Product productDetail = FacadeMaker.Instance.GetProductById(id);
+            ProductViewModels productView = new ProductViewModels(productDetail);
+            return View(productView);
+        }
     }
 }
