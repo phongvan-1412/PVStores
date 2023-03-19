@@ -4,10 +4,10 @@
 @inject IHttpContextAccessor HttpContextAccessor
 @{
     int count = 0;
-    List<ProductViewModels> products = HttpContextAccessor.HttpContext.Session.Get<List<ProductViewModels>>("products");
+    List<BillDetailViewModels> products = HttpContextAccessor.HttpContext.Session.Get<List<BillDetailViewModels>>("products");
     if (products == null)
     {
-        products = new List<ProductViewModels>();
+        products = new List<BillDetailViewModels>();
     }
     count = products.Count();
 }

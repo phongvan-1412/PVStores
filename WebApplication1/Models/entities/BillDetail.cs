@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using WebApplication1.ViewModels;
 
 namespace WebApplication1.Models.entities
 {
@@ -24,9 +25,14 @@ namespace WebApplication1.Models.entities
         public int BillID { get; set; }
 
 
-        public BillDetail()
+        public BillDetail(BillDetailViewModels billDetailView)
         {
-
+            this.ID = billDetailView.ID;
+            this.Quantity = billDetailView.Quantity;
+            this.Total = billDetailView.Total;
+            this.ProductID = billDetailView.ProductID;
+            this.BillID = billDetailView.BillID;
         }
+    
     }
 }

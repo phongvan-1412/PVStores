@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using WebApplication1.Utilities;
+using WebApplication1.ViewModels;
 
 namespace WebApplication1.Controllers
 {
@@ -6,7 +9,12 @@ namespace WebApplication1.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            List<ProductViewModels> lstProductView = HttpContext.Session.Get<List<ProductViewModels>>("products");
+            if (lstProductView == null)
+            {
+                lstProductView = new List<ProductViewModels>();
+            }
+            return View(lstProductView);
         }
     }
 }

@@ -8,11 +8,13 @@ namespace WebApplication1.Models.ModelPattern
         private static FacadeMaker _instance = null;
         private CategoryMgr _categoryMgr;
         private ProductMgr _productMgr;
+        private BillDetailMgr _billDetailMgr;
 
         private FacadeMaker()
         {
             _categoryMgr = new CategoryMgr();
-            _productMgr = new ProductMgr(); 
+            _productMgr = new ProductMgr();
+            _billDetailMgr = new BillDetailMgr();
         }
 
         public static FacadeMaker Instance
@@ -66,6 +68,24 @@ namespace WebApplication1.Models.ModelPattern
         {
             return _productMgr.GetById(id);
         }
-        
+
+        //BillDetail
+        public BillDetail CreateBillDetail(BillDetail billDetail)
+        {
+            _billDetailMgr.Create(billDetail);
+            return billDetail;
+        }
+        public BillDetail UpdateBillDetail(int id, BillDetail billDetail)
+        {
+            return billDetail;
+        }
+        public List<BillDetail> GetAllBillDetails()
+        {
+            return _billDetailMgr.GetAll();
+        }
+        public BillDetail GetBillDetailById(int id)
+        {
+            return _billDetailMgr.GetById(id);
+        }
     }
 }

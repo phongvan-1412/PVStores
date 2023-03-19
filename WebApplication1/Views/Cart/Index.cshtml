@@ -1,1 +1,53 @@
-﻿This is cart
+﻿@model List<ProductViewModels>
+@Html.Partial("~/Views/Shared/_HeaderInnerPagePartial.cshtml")
+
+<main id="main">
+    <section class="breadcrumbs">
+        <div class="container">
+
+            <div class="d-flex justify-content-between align-items-center">
+                <h2>Category</h2>
+                <ol>
+                    <li><a href="/Home/Index">Home</a></li>
+                    <li><a href="/Category/Index"></a>Category</li>
+                </ol>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="inner-page">
+        <table class="table text-white">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Quantity</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <th scope="row">
+                            @{
+                                var index = Model.IndexOf(item) + 1;
+                            }@index
+                        </th>
+
+                        <td>
+                            <img src="~/img/products/@item.Image" style="width: 178px; height: 178px" />
+                        </td>
+                        <td>@item.Name</td>
+                        <td>@item.Price</td>
+                        <td>@Model.Where(p => p.ID == item.ID).Count()</td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </section>
+</main>
