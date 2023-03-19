@@ -4,6 +4,9 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models.entities;
 using Microsoft.Data.SqlClient;
+using WebApplication1.Models.ModelPattern;
+using WebApplication1.Utilities;
+using WebApplication1.ViewModels;
 
 namespace WebApplication1.Controllers
 {
@@ -33,5 +36,7 @@ namespace WebApplication1.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        
     }
 }

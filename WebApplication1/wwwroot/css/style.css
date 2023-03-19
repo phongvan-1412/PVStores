@@ -42,11 +42,15 @@ h1, h2, h3, h4, h5, h6 {
     }
 
 .btn-add, .btn-delete {
+    position: absolute;
     font-size: 20px;
     border-radius: 50%;
     border: 1px solid #cda45e;
+    bottom: 10px;
 }
-
+.btn-delete{
+    left: 80px;
+}
     .btn-add:hover, .btn-delete:hover {
         border: transparent;
         background: #cda45e;

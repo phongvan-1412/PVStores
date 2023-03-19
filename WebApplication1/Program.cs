@@ -28,6 +28,7 @@ var config = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirector
 
 
 builder.Services.AddMvc();
+builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
 
 

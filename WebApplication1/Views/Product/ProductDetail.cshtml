@@ -33,14 +33,17 @@
                         @Html.Raw(Model.Description)
                     </p>
                     <div class="d-flex">
-                        <a type="button" class="btn btn-outline-primary text-white me-3">
-                            <i class="bi bi-cart-check-fill"></i>
-                            Add To Cart
-                        </a>
-                        <a type="button" class="btn btn-outline-danger text-white">
-                            <i class="bi bi-trash"></i>
-                            Remove From Cart
-                        </a>
+                        <form method="post">
+                            <button asp-controller="Product" asp-action="AddToCart" asp-route-id="@Model.ID" class="btn btn-outline-primary text-white me-3" title="Add To Cart">
+                                <i class="bi bi-cart-check-fill"></i>
+                                Add To Cart
+                            </button>
+
+                            <button asp-controller="Product" asp-action="RemoveFromCart" asp-route-id="@Model.ID" class="btn btn-outline-danger text-white" title="Remove From Cart">
+                                <i class="bi bi-trash"></i>
+                                Remove From Cart
+                            </button>
+                        </form>
                     </div>
 
                 </div>

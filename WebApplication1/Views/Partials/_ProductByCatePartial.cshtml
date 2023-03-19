@@ -3,8 +3,10 @@
 @foreach (var item in Model)
 {
     <div class="col-xl-3 col-lg-4 col-sm-6 me-3 mb-5">
-        <a type="button" asp-area="" asp-controller="Product" asp-action="ProductDetail" asp-route-id="@item.ID">
-            <div class="card-product card position-relative d-flex flex-column p-3" title="Click to view Detail">
+        <div class="card-product card position-relative d-flex flex-column p-3 mb-5">
+
+            <a type="button" asp-area="" asp-controller="Product" asp-action="ProductDetail" asp-route-id="@item.ID">
+
                 <div class="d-flex justify-content-center">
                     <img src="~/img/products/@item.Image" class="card-img-top mb-3" alt="@item.Image" style="width: 178px; height: 178px">
                 </div>
@@ -18,17 +20,26 @@
                         <a class="position-absolute" style="font-size: 16px; left: 12px">@item.CateName</a>
                         <span class="position-absolute fw-semibold" style="font-size: 16px; right: 12px">$@item.Price</span>
                     </div>
-
-                    <div class="position-absolute d-flex align-items-center mt-5" style="bottom: 8px">
-                        <a href="#" class="btn-add btn btn-outline-primary text-white me-3" title="Add To Cart">
-                            <i class="bi bi-cart-check-fill"></i>
-                        </a>
-                        <a href="#" class="btn-delete btn btn-outline-primary text-white" title="Remove From Cart">
-                            <i class="bi bi-trash"></i>
-                        </a>
-                    </div>
                 </div>
+            </a>
+
+            <div class="position-absolute d-flex align-items-center" style="bottom: 5px">
+                <form method="post">
+                    <button asp-controller="Category" asp-action="AddToCart" asp-route-id="@item.ID" class="btn-add btn btn-outline-primary text-white me-3" title="Add To Cart">
+                        <i class="bi bi-cart-check-fill"></i>
+                    </button>
+
+                    <button asp-controller="Category" asp-action="RemoveFromCart" asp-route-id="@item.ID" class="btn-delete btn btn-outline-primary text-white" title="Remove From Cart">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </form>
             </div>
-        </a>
+        </div>
     </div>
 }
+
+@*<script type="text/javascript">
+    document.getElementById("BtnAddToCart").addEventListener("click", function (event) {
+        event.preventDefault()
+    });
+</script>*@
