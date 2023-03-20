@@ -14,6 +14,7 @@ namespace WebApplication1.Controllers
         {
             _context = context;
         }
+
         public IActionResult Index()
         {
             List<ProductViewModels> productView = FacadeMaker.Instance.GetAllProducts().Select(i => new ProductViewModels(i)).ToList();
@@ -31,29 +32,45 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public IActionResult AddToCart(int id)
         {
-            List<ProductViewModels> lstProductView = HttpContext.Session.Get<List<ProductViewModels>>("products");
-            if (lstProductView == null)
+            List<BillDetailViewModels> lstBillDetailView = HttpContext.Session.Get<List<BillDetailViewModels>>("products");
+            if (lstBillDetailView == null)
             {
-                lstProductView = new List<ProductViewModels>();
+                lstBillDetailView = new List<BillDetailViewModels>();
             }
 
             Product product = FacadeMaker.Instance.GetProductById(id);
             ProductViewModels productView = new ProductViewModels(product);
 
-            lstProductView.Add(productView);
-            HttpContext.Session.Set("products", lstProductView);
+            BillDetailViewModels billDetailView = new BillDetailViewModels();
 
-            return RedirectToAction("ProductDetail", "Product", lstProductView.First(p => p.ID == id));
+            if (lstBillDetailView.Any(p => p.ProductID == id))
+            {
+                int updateQuantity = lstBillDetailView.Where(p => p.ProductID == id).FirstOrDefault().Quantity += 1;
+                lstBillDetailView.Where(p => p.ProductID == id).FirstOrDefault().Total = updateQuantity * productView.Price;
+            }
+            else
+            {
+                billDetailView.ProductID = id;
+                billDetailView.ProductName = product.Name;
+                billDetailView.ProductImage = product.Image;
+                decimal price = billDetailView.Price = product.Price;
+                int quantity = billDetailView.Quantity = 1;
+                billDetailView.Total = price * quantity;
+                lstBillDetailView.Add(billDetailView);
+            }
+            HttpContext.Session.Set("products", lstBillDetailView);
+
+            return RedirectToAction("ProductDetail", "Product", productView);
         }
 
         [HttpPost]
         public IActionResult RemoveFromCart(int id)
         {
-            List<ProductViewModels> lstProductView = HttpContext.Session.Get<List<ProductViewModels>>("products");
-            if (lstProductView.Any(p => p.ID == id))
+            List<BillDetailViewModels> lstBillDetailView = HttpContext.Session.Get<List<BillDetailViewModels>>("products");
+            if (lstBillDetailView.Any(p => p.ProductID == id))
             {
-                lstProductView.Remove(lstProductView.First(p => p.ID == id));
-                HttpContext.Session.Set("products", lstProductView);
+                int updateQuantity = lstBillDetailView.Where(p => p.ProductID == id).FirstOrDefault().Quantity -= 1;
+                HttpContext.Session.Set("products", lstBillDetailView);
             }
 
             Product productDetail = FacadeMaker.Instance.GetProductById(id);

@@ -1,4 +1,4 @@
-﻿@model List<ProductViewModels>
+﻿@model List<BillDetailViewModels>
 @Html.Partial("~/Views/Shared/_HeaderInnerPagePartial.cshtml")
 
 <main id="main">
@@ -17,37 +17,41 @@
     </section>
 
     <section class="inner-page">
-        <table class="table text-white">
-            <thead>
-                <tr>
-                    <th scope="col"></th>
-                    <th scope="col">Image</th>
-                    <th scope="col">Product Name</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Quantity</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                @foreach (var item in Model)
-                {
+        <div class="container">
+            <table class="table text-white">
+                <thead>
                     <tr>
-                        <th scope="row">
-                            @{
-                                var index = Model.IndexOf(item) + 1;
-                            }@index
-                        </th>
-
-                        <td>
-                            <img src="~/img/products/@item.Image" style="width: 178px; height: 178px" />
-                        </td>
-                        <td>@item.Name</td>
-                        <td>@item.Price</td>
-                        <td>@Model.Where(p => p.ID == item.ID).Count()</td>
+                        <th scope="col"></th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Product Name</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Total</th>
                     </tr>
-                }
+                </thead>
 
-            </tbody>
-        </table>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <th scope="row" class="align-middle">
+                                @{
+                                    var index = Model.IndexOf(item) + 1;
+                                }@index
+                            </th>
+
+                            <td>
+                                <img src="~/img/products/@item.ProductImage" style="width: 178px; height: 178px" />
+                            </td>
+                            <td class="align-middle">@item.ProductName</td>
+                            <td class="align-middle">$@item.Price</td>
+                            <td class="align-middle">@item.Quantity</td>
+                            <td class="align-middle fw-semibold" style="color: #cda45e">$@item.Total</td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
     </section>
 </main>

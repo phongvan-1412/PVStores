@@ -32,7 +32,7 @@ namespace WebApplication1.Models.ModelPattern
         public BillDetail GetById(int id)
         {
             PVStoresContext context = new PVStoresContext();
-            return context.BillDetails.FirstOrDefault(c => c.ID == id);
+            return context.BillDetails.FirstOrDefault(c => c.ProductID == id);
         }
     }
 }

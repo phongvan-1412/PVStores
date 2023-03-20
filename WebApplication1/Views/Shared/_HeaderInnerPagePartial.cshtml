@@ -9,7 +9,7 @@
     {
         products = new List<BillDetailViewModels>();
     }
-    count = products.Count();
+    count = products.Sum(p => p.Quantity);
 }
 <!-- ======= Top Bar ======= -->
 <div id="topbar" class="d-flex align-items-center fixed-top">

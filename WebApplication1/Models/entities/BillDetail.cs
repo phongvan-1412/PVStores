@@ -25,6 +25,7 @@ namespace WebApplication1.Models.entities
         public int BillID { get; set; }
 
 
+        public BillDetail() { }
         public BillDetail(BillDetailViewModels billDetailView)
         {
             this.ID = billDetailView.ID;
@@ -33,6 +34,6 @@ namespace WebApplication1.Models.entities
             this.ProductID = billDetailView.ProductID;
             this.BillID = billDetailView.BillID;
         }
-    
+
     }
 }

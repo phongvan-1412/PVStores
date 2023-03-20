@@ -9,12 +9,12 @@ namespace WebApplication1.Controllers
     {
         public IActionResult Index()
         {
-            List<ProductViewModels> lstProductView = HttpContext.Session.Get<List<ProductViewModels>>("products");
-            if (lstProductView == null)
+            List<BillDetailViewModels> lstBillDetailView = HttpContext.Session.Get<List<BillDetailViewModels>>("products");
+            if (lstBillDetailView == null)
             {
-                lstProductView = new List<ProductViewModels>();
+                lstBillDetailView = new List<BillDetailViewModels>();
             }
-            return View(lstProductView);
+            return View(lstBillDetailView);
         }
     }
 }
