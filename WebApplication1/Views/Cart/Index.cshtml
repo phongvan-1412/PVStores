@@ -1,4 +1,6 @@
 ﻿@model List<BillDetailViewModels>
+@using Microsoft.Extensions.Options
+@inject IOptions<WebApplication1.Utilities.StripeSettings> Stripe
 @Html.Partial("~/Views/Shared/_HeaderInnerPagePartial.cshtml")
 
 <main id="main">
@@ -17,8 +19,8 @@
     </section>
 
     <section class="inner-page">
-        <div class="container">
-            <table class="table text-white">
+        <div class="container position-relative">
+            <table class="table table-borderless text-white">
                 <thead>
                     <tr>
                         <th scope="col"></th>
@@ -28,6 +30,7 @@
                         <th scope="col">Quantity</th>
                         <th scope="col">Total</th>
                     </tr>
+
                 </thead>
 
                 <tbody>
@@ -49,9 +52,31 @@
                             <td class="align-middle fw-semibold" style="color: #cda45e">$@item.Total</td>
                         </tr>
                     }
-
                 </tbody>
             </table>
+
+            <form asp-controller="Cart" asp-action="CheckOut" method="post">
+                <span class="d-flex text-end fw-semibold" style="font-size: 25px">
+                    Payment:
+                    <span class="ms-5" style="color: #cda45e; font-size: 25px">
+                        $@Model.Sum(p => p.Total)
+                    </span>
+                </span>
+                <a asp-controller="Cart" asp-action="CheckOut" asp-route-id="" class="position-absolute btn btn-outline-primary text-white p-2 mb-5" style="right: .5rem">
+                    Check Out
+                </a>
+
+                <script type="text/javascript"
+                        src="//checkout.stripe.com/v2/checkout.js"
+                        class="stripe-button"
+                        data-key="@Stripe.Value.Publishablekey"
+                        data-locale="auto"
+                        data-description="Sample Charge">
+
+                </script>
+
+            </form>
+
         </div>
     </section>
 </main>
