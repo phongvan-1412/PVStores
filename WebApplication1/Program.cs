@@ -2,6 +2,13 @@ using Microsoft.EntityFrameworkCore;
 using WebApplication1.Models.ModelPattern;
 using WebApplication1.Models.entities;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Stripe;
+using WebApplication1.Utilities;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.Facebook;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,10 +33,48 @@ var config = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirector
                 builder.Configuration.GetConnectionString("DefaultConnection")
         ));
 
+//Google + Facebook Integration
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultForbidScheme = GoogleDefaults.AuthenticationScheme;
+})
+.AddCookie()
+.AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+{
+    options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+    options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+    options.ClaimActions.MapJsonKey("urn:google:picture", "picture", "url");
+});
+//.AddFacebook(FacebookDefaults.AuthenticationScheme, options =>
+//{
+//    options.AppId = builder.Configuration["Authentication:Facebook:AppId"];
+//    options.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"];
+//    options.ClaimActions.MapJsonKey("urn:facebook:picture", "picture", "url");
+//});
+
+//builder.Services.AddAuthentication(options =>
+//{
+//    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+//    options.DefaultForbidScheme = FacebookDefaults.AuthenticationScheme;
+//})
+//.AddCookie(options =>
+//{
+//    options.LoginPath = "/account/facebooklogin";
+//})
+//.AddFacebook(FacebookDefaults.AuthenticationScheme, options =>
+//{
+//    options.AppId = builder.Configuration["Authentication:Facebook:AppId"];
+//    options.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"];
+//});
 
 builder.Services.AddMvc();
 builder.Services.AddHttpContextAccessor();
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
 var app = builder.Build();
+
+//Integrate Stripe
+StripeConfiguration.SetApiKey(configuration.GetSection("Stripe")["Secretkey"]);
 
 
 // Configure the HTTP request pipeline.
@@ -44,6 +89,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseSession();
 app.UseCookiePolicy();
+app.UseAuthentication();
 app.UseRouting();
 app.UseAuthorization();
 

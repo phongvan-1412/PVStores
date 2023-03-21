@@ -1,19 +1,17 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models.entities;
-using Microsoft.Data.SqlClient;
-using WebApplication1.Models.ModelPattern;
-using WebApplication1.Utilities;
-using WebApplication1.ViewModels;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.Facebook;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication1.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
@@ -37,6 +35,63 @@ namespace WebApplication1.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        
+        //Google
+        public async Task GoogleLogin()
+        {
+            await HttpContext.ChallengeAsync(GoogleDefaults.AuthenticationScheme, new AuthenticationProperties()
+            {
+                RedirectUri = Url.Action("GoogleResponse")
+            }); ;
+        }
+
+        public async Task<IActionResult> GoogleResponse()
+        {
+            var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            var claims = result.Principal.Identities.FirstOrDefault().Claims.Select(claim => new
+            {
+                claim.Issuer,
+                claim.OriginalIssuer,
+                claim.Type,
+                claim.Value
+            });
+
+            return Json(claims);
+        }
+
+        public async Task<IActionResult> GoogleLogout()
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Index");
+        }
+
+        //////Facebook
+        //public async Task FacebookLogin()
+        //{
+        //    await HttpContext.ChallengeAsync(FacebookDefaults.AuthenticationScheme, new AuthenticationProperties()
+        //    {
+        //        RedirectUri = Url.Action("FacebookResponse")
+        //    }); ;
+        //}
+
+        //public async Task<IActionResult> FacebookResponse()
+        //{
+        //    var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        //    var claims = result.Principal.Identities.FirstOrDefault().Claims.Select(claim => new
+        //    {
+        //        claim.Issuer,
+        //        claim.OriginalIssuer,
+        //        claim.Type,
+        //        claim.Value
+        //    });
+
+        //    return Json(claims);
+        //}
+
+        //public async Task<IActionResult> FacebookLogout()
+        //{
+        //    await HttpContext.SignOutAsync();
+        //    return RedirectToAction("Index");
+        //}
+
     }
 }
