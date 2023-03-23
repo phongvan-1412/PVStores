@@ -6,12 +6,14 @@ namespace WebApplication1.Models.ModelPattern
     public sealed class FacadeMaker
     {
         private static FacadeMaker _instance = null;
+        private AccountMgr _accountMgr;
         private CategoryMgr _categoryMgr;
         private ProductMgr _productMgr;
         private BillDetailMgr _billDetailMgr;
 
         private FacadeMaker()
         {
+            _accountMgr = new AccountMgr();
             _categoryMgr = new CategoryMgr();
             _productMgr = new ProductMgr();
             _billDetailMgr = new BillDetailMgr();
@@ -86,6 +88,26 @@ namespace WebApplication1.Models.ModelPattern
         public BillDetail GetBillDetailById(int id)
         {
             return _billDetailMgr.GetById(id);
+        }
+
+        //Category
+        public Account CreateAccount(Account account)
+        {
+            _accountMgr.Create(account);
+            return account;
+        }
+        public Account UpdateAccount(int id, Account account)
+        {
+            _accountMgr.Update(id, account);
+            return account;
+        }
+        public List<Account> GetAllAccounts()
+        {
+            return _accountMgr.GetAll();
+        }
+        public Account GetAccountById(int id)
+        {
+            return _accountMgr.GetById(id);
         }
     }
 }
