@@ -61,6 +61,13 @@ namespace WebApplication1.Models.entities
 
         [Column("acc_ip", TypeName = "varchar")]
         public string IP { get; set; }
+
+        [Column("gg_id", TypeName = "varchar")]
+        public string GoogleID { get; set; }
+
+        [Column("fb_id", TypeName = "varchar")]
+        public string FacebookID { get; set; }
+
         public Account()
         {
 

@@ -34,21 +34,27 @@
             <i class="bi bi-list mobile-nav-toggle"></i>
         </nav><!-- .navbar -->
 
-        @if (Context.User.Identity.IsAuthenticated)
-        {
-            <ul>
-                <li>
-                    <a>Hello @User.Identity.Name</a>
-                </li>
-                <li>
-                    <a asp-area="" asp-controller="Home" asp-action="GoogleLogout" class="book-a-table-btn scrollto d-none d-lg-flex">Logout</a>
-                </li>
-            </ul>
-        }
-        else
-        {
-            <a asp-area="" asp-controller="Home" asp-action="GoogleLogin" class="book-a-table-btn scrollto d-none d-lg-flex">Log In</a>
-        }
+        <div class="d-flex align-items-center">
+            @if (Context.User.Identity.IsAuthenticated)
+            {
+                <ul class="d-flex flex-row align-items-center" style="list-style-type: none">
+                    <li>
+                        <a>Hello @User.Identity.Name</a>
+                    </li>
+                    @*<li class="ms-3 me-3">
+                        <img src="@Context.User.Claims.Where(n => n.Type.Equals("urn:facebook:picture")).FirstOrDefault().Value" style="width: 25px; height: 25px; border-radius: 50%" />
+                    </li>*@
+                    <li>
+                        <a asp-area="" asp-controller="Account" asp-action="Logout" class="book-a-table-btn scrollto d-none d-lg-flex">Logout</a>
+                    </li>
+                </ul>
+            }
+            else
+            {
+                <a asp-area="" asp-controller="Account" asp-action="Index" class="book-a-table-btn scrollto d-none d-lg-flex">Log In</a>
+            }
+        </div>
+        
     </div>
 </header><!-- End Header -->
 
