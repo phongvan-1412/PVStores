@@ -1,5 +1,12 @@
 ﻿@model IEnumerable<string>
+
 @Html.Partial("~/Views/Shared/_HeaderInnerPagePartial.cshtml")
+
+@using WebApplication1.Utilities
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    Account account = HttpContextAccessor.HttpContext.Session.Get<Account>("account");
+}
 
 <main id="main">
     <section class="breadcrumbs">
@@ -9,7 +16,7 @@
                 <h2>Log In</h2>
                 <ol>
                     <li><a href="/Home/Index">Home</a></li>
-                    <li><a href="/Account/Index"></a>Category</li>
+                    <li><a href="/Account/Index"></a>Login</li>
                 </ol>
             </div>
 
@@ -18,13 +25,55 @@
 
     <section class="inner-page">
         <div class="container">
-            <h1>This is login</h1>
-            @foreach (var item in Model)
-            {
-                <a asp-area="" asp-controller="Account" asp-action="Signin" asp-route-provider="@item" class="btn btn-primary">@item</a>
+            <h1 class="mb-5">Login</h1>
 
+            @if (TempData["LoginFlag"] != null)
+            {
+                <div class="form-group alert alert-danger mb-3">
+                    <strong>@TempData["LoginFlag"]</strong>
+                </div>
+
+            }
+            <form asp-action="Signin" method="post">
+                <div class="form-group mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="Email" class="form-control" placeholder="Email" required="" />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" name="Password" class="form-control" placeholder="Password" required="" />
+                </div>
+
+                <div class="form-group mb-3">
+                    <span class="text-muted" style="font-size: 12px">
+                        Don't have an account yet?
+                        <a asp-area="" asp-controller="Account" asp-action="Register" class="text-primary text-decoration-underline me-3">  Register</a>
+                    </span>
+                </div>
+
+
+                <div class="d-flex justify-content-between form-group mb-3">
+                    <input type="submit" value="Signin" asp-controller="Account" asp-action="Signin" class="btn btn-primary" />
+                </div>
+
+            </form>
+
+            <div class="form-group mb-3">
+                @foreach (var item in Model)
+                {
+                    <a asp-area="" asp-controller="Account" asp-action="Signin" asp-route-provider="@item" class="btn btn-primary me-3">@item</a>
+                }
+            </div>
+
+            @if (account.Email != "" || TempData["LoginSuccess"] != null)
+            {
+                <div class="form-group alert alert-success mb-3">
+                    <strong>@TempData["LoginSuccess"]</strong>
+                </div>
             }
         </div>
     </section>
 </main>
+
 

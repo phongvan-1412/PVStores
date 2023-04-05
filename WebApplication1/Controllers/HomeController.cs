@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using WebApplication1.Utilities;
 
 namespace WebApplication1.Controllers
 {
@@ -19,8 +20,6 @@ namespace WebApplication1.Controllers
 
         public IActionResult Index()
         {
-            //var data = _context.Categories.ToList();
-            //Console.WriteLine(data);
             return View();
         }
 

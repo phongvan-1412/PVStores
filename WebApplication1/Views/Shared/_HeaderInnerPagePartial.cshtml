@@ -10,6 +10,9 @@
         products = new List<BillDetailViewModels>();
     }
     count = products.Sum(p => p.Quantity);
+
+    Account account = HttpContextAccessor.HttpContext.Session.Get<Account>("acc");
+
 }
 <!-- ======= Top Bar ======= -->
 <div id="topbar" class="d-flex align-items-center fixed-top">
@@ -76,19 +79,19 @@
                     <a>Hello @User.Identity.Name</a>
                 </li>
 
-                @*<li class="ms-3 me-3">
-                    if(@Context.User.Claims.Where(n => n.Type.Equals("urn:google:picture")).FirstOrDefault().Value == null)
-                    {
-                    <img src="../wwwroot/img/profile/hacker.png" style="width: 25px; height: 25px; border-radius: 50%" />
-                    }
-                    else
-                    {
-                    <img src="@Context.User.Claims.Where(n => n.Type.Equals("urn:google:picture")).FirstOrDefault().Value" style="width: 25px; height: 25px; border-radius: 50%" />
-                    }
-                </li>*@
-
                 <li>
                     <a asp-area="" asp-controller="Account" asp-action="Logout" class="book-a-table-btn scrollto d-none d-lg-flex">Logout</a>
+                </li>
+            </ul>
+        }
+        else if (account != null)
+        {
+            <ul class="d-flex flex-row align-items-center" style="list-style-type: none">
+                <li>
+                    <a>Hello @account.Name</a>
+                </li>
+                <li>
+                    <a asp-area="" asp-controller="Account" asp-action="Signout" class="book-a-table-btn scrollto d-none d-lg-flex">Logout</a>
                 </li>
             </ul>
         }
