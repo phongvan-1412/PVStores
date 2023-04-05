@@ -33,38 +33,6 @@ var config = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirector
                 builder.Configuration.GetConnectionString("DefaultConnection")
         ));
 
-//Google + Facebook Integration
-//builder.Services.AddAuthentication(options =>
-//{
-//    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-//    options.DefaultForbidScheme = GoogleDefaults.AuthenticationScheme;
-//})
-//.AddCookie(options =>
-//{
-//    options.LoginPath = "/account/googlelogin";
-//})
-//.AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
-//{
-//    options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
-//    options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
-//    options.ClaimActions.MapJsonKey("urn:google:picture", "picture", "url");
-//});
-
-
-//builder.Services.AddAuthentication(options =>
-//{
-//    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-//    options.DefaultForbidScheme = FacebookDefaults.AuthenticationScheme;
-//})
-//.AddCookie(options =>
-//{
-//    options.LoginPath = "/account/facebooklogin";
-//})
-//.AddFacebook(FacebookDefaults.AuthenticationScheme, options =>
-//{
-//    options.AppId = builder.Configuration["Authentication:Facebook:AppId"];
-//    options.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"];
-//});
 
 builder.Services.AddAuthentication(options =>
 {
@@ -76,7 +44,6 @@ builder.Services.AddAuthentication(options =>
 {
     options.AppId = builder.Configuration["Authentication:Facebook:AppId"];
     options.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"];
-    options.ClaimActions.MapJsonKey("urn:google:picture", "picture", "url");
 
 })
 .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>

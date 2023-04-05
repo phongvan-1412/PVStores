@@ -34,6 +34,10 @@ namespace WebApplication1.Models.ModelPattern
             return context.Accounts.FirstOrDefault(a => a.ID == id);
         }
 
-        
+        public Account GetByEmail(string email)
+        {
+            PVStoresContext context = new PVStoresContext();
+            return context.Accounts.FirstOrDefault(a => a.Email.Equals(email));
+        }
     }
 }

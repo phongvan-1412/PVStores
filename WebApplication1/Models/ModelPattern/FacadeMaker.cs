@@ -90,7 +90,7 @@ namespace WebApplication1.Models.ModelPattern
             return _billDetailMgr.GetById(id);
         }
 
-        //Category
+        //Account
         public Account CreateAccount(Account account)
         {
             _accountMgr.Create(account);
@@ -108,6 +108,10 @@ namespace WebApplication1.Models.ModelPattern
         public Account GetAccountById(int id)
         {
             return _accountMgr.GetById(id);
+        }
+        public Account GetAccountByEmail(string email)
+        {
+            return _accountMgr.GetByEmail(email);
         }
     }
 }

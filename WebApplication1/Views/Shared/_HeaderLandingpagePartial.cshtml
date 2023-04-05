@@ -42,7 +42,14 @@
                         <a>Hello @User.Identity.Name</a>
                     </li>
                     @*<li class="ms-3 me-3">
-                        <img src="@Context.User.Claims.Where(n => n.Type.Equals("urn:facebook:picture")).FirstOrDefault().Value" style="width: 25px; height: 25px; border-radius: 50%" />
+                        if(@Context.User.Claims.Where(n => n.Type.Equals("urn:google:picture")).FirstOrDefault().Value == null)
+                        {
+                        <img src="../wwwroot/img/profile/hacker.png" style="width: 25px; height: 25px; border-radius: 50%" />
+                        }
+                        else
+                        {
+                        <img src="@Context.User.Claims.Where(n => n.Type.Equals("urn:google:picture")).FirstOrDefault().Value" style="width: 25px; height: 25px; border-radius: 50%" />
+                        }
                     </li>*@
                     <li>
                         <a asp-area="" asp-controller="Account" asp-action="Logout" class="book-a-table-btn scrollto d-none d-lg-flex">Logout</a>
@@ -54,13 +61,9 @@
                 <a asp-area="" asp-controller="Account" asp-action="Index" class="book-a-table-btn scrollto d-none d-lg-flex">Log In</a>
             }
         </div>
-        
+
     </div>
 </header><!-- End Header -->
-
-
-
-
 <!-- ======= Hero Section ======= -->
 <section id="hero" class="d-flex align-items-center">
     <div class="container position-relative text-center text-lg-start" data-aos="zoom-in" data-aos-delay="100">
