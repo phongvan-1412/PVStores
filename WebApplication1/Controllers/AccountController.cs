@@ -131,11 +131,8 @@ namespace WebApplication1.Controllers
 
         public IActionResult Signout()
         {
-            Account account = new Account();
-
-            HttpContext.Session.Set("acc", account);
+            HttpContext.Session.Remove("acc");
             return RedirectToAction("Index", "Home");
-
         }
 
     }
