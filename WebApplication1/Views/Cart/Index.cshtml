@@ -48,8 +48,23 @@
                             </td>
                             <td class="align-middle">@item.ProductName</td>
                             <td class="align-middle">$@item.Price</td>
-                            <td class="align-middle">@item.Quantity</td>
-                            <td class="align-middle fw-semibold" style="color: #cda45e">$@item.Total</td>
+                            <td class="align-middle">
+                                <div class="d-flex align-items-center">
+                                    <input id="productId" name="ProductID" value="@item.ProductID" hidden />
+
+                                    <a id="decreaseBtn" class="d-flex align-items-center justify-content-center btn btn-outline-primary text-white me-3" onclick="OnClickDecrease()">
+                                        <span class="d-flex align-items-center justify-content-center" style="width: 15px; height: 15px">-</span>
+                                    </a>
+
+                                    <span id="productQuantity">@item.Quantity</span>
+
+                                    <a id="increaseBtn" class="d-flex align-items-center justify-content-center btn btn-outline-primary text-white ms-3" onclick="OnClickIncrease()">
+                                        <span class="d-flex align-items-center justify-content-center" style="width: 15px; height: 15px">+</span>
+                                    </a>
+
+                                </div>
+                            </td>
+                            <td class="align-middle fw-semibold" style="color: #cda45e" id="productTotal">$@item.Total</td>
                         </tr>
                     }
                 </tbody>
@@ -80,3 +95,53 @@
         </div>
     </section>
 </main>
+
+<script>
+
+    function OnClickIncrease() {
+        const productId = $('#productId').attr("value");
+        const productTotal = $('#productTotal');
+        const productQuantity = $('#productQuantity');
+
+        $.ajax({
+            type: "POST",
+            data: { productId },
+            dataType: "json",
+            url: "/Cart/Increase",
+            success: function (result) {
+                result.forEach(myFunction);
+                function myFunction(item) {
+                    productTotal.get(0).innerHTML = "$" + item.total;
+                    productQuantity.get(0).innerHTML = item.quantity;
+                }
+            },
+            error: function (req, status, error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function OnClickDecrease() {
+        const productId = $('#productId').attr("value");
+        const productTotal = $('#productTotal');
+        const productQuantity = $('#productQuantity');
+
+        $.ajax({
+            type: "POST",
+            data: { productId },
+            dataType: "json",
+            url: "/Cart/Decrease",
+            success: function (result) {
+                result.forEach(myFunction);
+                function myFunction(item) {
+                    productTotal.get(0).innerHTML = "$" + item.total;
+                    productQuantity.get(0).innerHTML = item.quantity;
+                }
+            },
+            error: function (req, status, error) {
+                console.log(error);
+            }
+        });
+    }
+
+</script>
