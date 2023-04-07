@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models.entities;
 using WebApplication1.Models.ModelPattern;
 using WebApplication1.Utilities;
+using System.Text;
 
 namespace WebApplication1.Controllers
 {
@@ -79,6 +80,53 @@ namespace WebApplication1.Controllers
             return View(allSchemeProvider);
         }
 
+        public static string EncryptPassword(string password)
+        {
+            if (string.IsNullOrEmpty(password))
+            {
+                return null;
+            }
+            else
+            {
+                byte[] storePassword = ASCIIEncoding.ASCII.GetBytes(password);
+                string encryptedPassword = Convert.ToBase64String(storePassword);
+                return encryptedPassword;
+            }
+        }
+
+        public static string DecryptPassword(string password)
+        {
+            if (string.IsNullOrEmpty(password))
+            {
+                return null;
+            }
+            else
+            {
+                byte[] encryptedPassword = Convert.FromBase64String(password);
+                string decryptedPassword = ASCIIEncoding.ASCII.GetString(encryptedPassword);
+                return decryptedPassword;
+            }
+        }
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Register(Account account)
+        {
+            var data = new Account
+            {
+                Email = account.Email,
+                Password = EncryptPassword(account.Password),
+                Status = true
+            };
+
+            FacadeMaker.Instance.CreateAccount(data);
+
+            return RedirectToAction("Index", "Account");
+        }
+
         public IActionResult Signin(String provider)
         {
             return Challenge(new AuthenticationProperties { RedirectUri = "/Account" }, provider);
@@ -89,7 +137,7 @@ namespace WebApplication1.Controllers
         {
 
             Account accountExist = FacadeMaker.Instance.GetAccountByEmail(account.Email);
-            if (!accountExist.Email.Equals(account.Email) || !accountExist.Password.Equals(account.Password))
+            if (!accountExist.Email.Equals(account.Email) || !DecryptPassword(accountExist.Password).Equals(account.Password))
             {
                 TempData["LoginFlag"] = "Invalid Email or Password";
                 return RedirectToAction("Index");

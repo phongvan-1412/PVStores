@@ -69,6 +69,7 @@ namespace WebApplication1.Models.entities
         [Column("fb_id", TypeName = "varchar")]
         public string FacebookID { get; set; }
 
+        public bool IsMailConfirmed { get; set; }
         public Account()
         {
             this.Email = "";

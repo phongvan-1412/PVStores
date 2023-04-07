@@ -1,0 +1,40 @@
+﻿@Html.Partial("~/Views/Shared/_HeaderInnerPagePartial.cshtml")
+
+<main id="main">
+    <section class="breadcrumbs">
+        <div class="container">
+
+            <div class="d-flex justify-content-between align-items-center">
+                <h2>Log In</h2>
+                <ol>
+                    <li><a href="/Home/Index">Home</a></li>
+                    <li><a href="/Account/Index"></a>Login</li>
+                </ol>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="inner-page">
+        <div class="container col-md-4">
+            <h1 class="mb-5">Register</h1>
+            <form asp-action="Register" method="post">
+                <div class="form-group mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="Email" class="form-control" placeholder="Email" required="" />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" name="Password" class="form-control" placeholder="Password" required="" />
+                </div>
+
+                <div class="d-flex justify-content-between form-group mb-3">
+                    <input type="submit" value="Register" asp-controller="Account" asp-action="Register" class="btn btn-primary" />
+                </div>
+
+            </form>
+        </div>
+
+    </section>
+</main>
