@@ -25,9 +25,7 @@ namespace WebApplication1.Controllers
             return View(lstBillDetailView);
         }
 
-        [HttpPost]
-        [Route("/Cart/Increase")]
-        public JsonResult Increase(string productId)
+        public IActionResult Increase(int id)
         {
             List<BillDetailViewModels> lstBillDetailView = HttpContext.Session.Get<List<BillDetailViewModels>>("products");
             if (lstBillDetailView == null)
@@ -35,7 +33,6 @@ namespace WebApplication1.Controllers
                 lstBillDetailView = new List<BillDetailViewModels>();
             }
 
-            int.TryParse(productId, out int id);
             var product = lstBillDetailView.FirstOrDefault(p => p.ProductID == id);
 
             if (lstBillDetailView.Any(p => p.ProductID == id))
@@ -54,19 +51,14 @@ namespace WebApplication1.Controllers
 
                 decimal totalPrice = product.Total = updateQuantity * productPrice;
 
-                product.Quantity = updateQuantity;
-                product.Total = totalPrice;
-
                 HttpContext.Session.Set("products", lstBillDetailView);
             }
 
-            return Json(lstBillDetailView);
+            return RedirectToAction("Index", "Cart");
+
         }
 
-        [HttpPost]
-        [Route("/Cart/Decrease")]
-
-        public IActionResult Decrease(string productId)
+        public IActionResult Decrease(int id)
         {
             List<BillDetailViewModels> lstBillDetailView = HttpContext.Session.Get<List<BillDetailViewModels>>("products");
             if (lstBillDetailView == null)
@@ -74,7 +66,6 @@ namespace WebApplication1.Controllers
                 lstBillDetailView = new List<BillDetailViewModels>();
             }
 
-            int.TryParse(productId, out int id);
             var product = lstBillDetailView.FirstOrDefault(p => p.ProductID == id);
 
             if (lstBillDetailView.Any(p => p.ProductID == id))
@@ -93,20 +84,17 @@ namespace WebApplication1.Controllers
 
                 decimal totalPrice = product.Total = updateQuantity * productPrice;
 
-                product.Quantity = updateQuantity;
-                product.Total = totalPrice;
-
                 HttpContext.Session.Set("products", lstBillDetailView);
             }
 
-            return Json(lstBillDetailView);
+            return RedirectToAction("Index", "Cart");
         }
 
 
-        public IActionResult CheckOut()
-        {
-            return View();
-        }
+        //public IActionResult CheckOut()
+        //{
+        //    return View();
+        //}
 
         [HttpPost]
         public IActionResult CheckOut(string stripeEmail, string stripeToken, decimal total)
@@ -200,5 +188,82 @@ namespace WebApplication1.Controllers
             }
 
         }
+
+        //[HttpPost]
+        //[Route("/Cart/Increase")]
+        //public JsonResult Increase(string productId)
+        //{
+        //    List<BillDetailViewModels> lstBillDetailView = HttpContext.Session.Get<List<BillDetailViewModels>>("products");
+        //    if (lstBillDetailView == null)
+        //    {
+        //        lstBillDetailView = new List<BillDetailViewModels>();
+        //    }
+
+        //    int.TryParse(productId, out int id);
+        //    var product = lstBillDetailView.FirstOrDefault(p => p.ProductID == id);
+
+        //    if (lstBillDetailView.Any(p => p.ProductID == id))
+        //    {
+        //        decimal productPrice = product.Price;
+        //        int updateQuantity = product.Quantity;
+
+        //        if (updateQuantity >= 20)
+        //        {
+        //            updateQuantity = product.Quantity;
+        //        }
+        //        else
+        //        {
+        //            updateQuantity = product.Quantity += 1;
+        //        }
+
+        //        decimal totalPrice = product.Total = updateQuantity * productPrice;
+
+        //        product.Quantity = updateQuantity;
+        //        product.Total = totalPrice;
+
+        //        HttpContext.Session.Set("products", lstBillDetailView);
+        //    }
+
+        //    return Json(lstBillDetailView);
+        //}
+
+        //[HttpPost]
+        //[Route("/Cart/Decrease")]
+
+        //public IActionResult Decrease(string productId)
+        //{
+        //    List<BillDetailViewModels> lstBillDetailView = HttpContext.Session.Get<List<BillDetailViewModels>>("products");
+        //    if (lstBillDetailView == null)
+        //    {
+        //        lstBillDetailView = new List<BillDetailViewModels>();
+        //    }
+
+        //    int.TryParse(productId, out int id);
+        //    var product = lstBillDetailView.FirstOrDefault(p => p.ProductID == id);
+
+        //    if (lstBillDetailView.Any(p => p.ProductID == id))
+        //    {
+        //        decimal productPrice = product.Price;
+        //        int updateQuantity = product.Quantity;
+
+        //        if (updateQuantity <= 0)
+        //        {
+        //            updateQuantity = product.Quantity;
+        //        }
+        //        else
+        //        {
+        //            updateQuantity = product.Quantity -= 1;
+        //        }
+
+        //        decimal totalPrice = product.Total = updateQuantity * productPrice;
+
+        //        product.Quantity = updateQuantity;
+        //        product.Total = totalPrice;
+
+        //        HttpContext.Session.Set("products", lstBillDetailView);
+        //    }
+
+        //    return Json(lstBillDetailView);
+        //}
     }
 }

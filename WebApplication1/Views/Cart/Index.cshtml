@@ -51,17 +51,28 @@
                             <td class="align-middle">$@item.Price</td>
                             <td class="align-middle">
                                 <div class="d-flex align-items-center">
-                                    <input id="productId" name="ProductID" value="@item.ProductID" hidden />
 
-                                    <a id="decreaseBtn" class="d-flex align-items-center justify-content-center btn btn-outline-primary text-white me-3" onclick="OnClickDecrease()">
-                                        <span class="d-flex align-items-center justify-content-center" style="width: 15px; height: 15px">-</span>
-                                    </a>
+                                    @*<a id="decreaseBtn" class="d-flex align-items-center justify-content-center btn btn-outline-primary text-white me-3" onclick="OnClickDecrease()">
+                                <span class="d-flex align-items-center justify-content-center" style="width: 15px; height: 15px">-</span>
+                                </a>*@
+
+                                    @*<a id="increaseBtn" class="d-flex align-items-center justify-content-center btn btn-outline-primary text-white ms-3" onclick="OnClickIncrease()">
+                                <span class="d-flex align-items-center justify-content-center" style="width: 15px; height: 15px">+</span>
+                                </a>*@
+                                    <form>
+                                        <a class="d-flex align-items-center justify-content-center btn btn-outline-primary text-white me-3" asp-route-id="@item.ProductID" asp-action="Decrease" asp-controller="Cart">
+                                            <span class="d-flex align-items-center justify-content-center" style="width: 15px; height: 15px">-</span>
+                                        </a>
+
+                                    </form>
 
                                     <span id="productQuantity">@item.Quantity</span>
 
-                                    <a id="increaseBtn" class="d-flex align-items-center justify-content-center btn btn-outline-primary text-white ms-3" onclick="OnClickIncrease()">
-                                        <span class="d-flex align-items-center justify-content-center" style="width: 15px; height: 15px">+</span>
-                                    </a>
+                                    <form>
+                                        <a class="d-flex align-items-center justify-content-center btn btn-outline-primary text-white ms-3" asp-route-id="@item.ProductID" asp-action="Increase" asp-controller="Cart">
+                                            <span class="d-flex align-items-center justify-content-center" style="width: 15px; height: 15px">+</span>
+                                        </a>
+                                    </form>
 
                                 </div>
                             </td>
@@ -107,16 +118,15 @@
     </section>
 </main>
 
-<script>
+@*<script>
 
     function OnClickIncrease() {
         const productId = $('#productId').attr("value");
         const productTotal = $('#productTotal');
         const productQuantity = $('#productQuantity');
-
         $.ajax({
             type: "POST",
-            data: { productId },
+            data:  {productId },
             dataType: "json",
             url: "/Cart/Increase",
             success: function (result) {
@@ -155,4 +165,4 @@
         });
     }
 
-</script>
+</script>*@
