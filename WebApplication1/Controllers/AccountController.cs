@@ -117,6 +117,7 @@ namespace WebApplication1.Controllers
         {
             var data = new Account
             {
+                Name = account.Name,
                 Email = account.Email,
                 Password = EncryptPassword(account.Password),
                 Status = true
