@@ -9,6 +9,7 @@ namespace WebApplication1.Models.ModelPattern
         private AccountMgr _accountMgr;
         private CategoryMgr _categoryMgr;
         private ProductMgr _productMgr;
+        private BillMgr _billMgr;
         private BillDetailMgr _billDetailMgr;
 
         private FacadeMaker()
@@ -16,6 +17,7 @@ namespace WebApplication1.Models.ModelPattern
             _accountMgr = new AccountMgr();
             _categoryMgr = new CategoryMgr();
             _productMgr = new ProductMgr();
+            _billMgr = new BillMgr();
             _billDetailMgr = new BillDetailMgr();
         }
 
@@ -69,6 +71,25 @@ namespace WebApplication1.Models.ModelPattern
         public Product GetProductById(int id)
         {
             return _productMgr.GetById(id);
+        }
+
+        //Bill
+        public Bill CreateBill(Bill bill)
+        {
+            _billMgr.Create(bill);
+            return bill;
+        }
+        public Bill UpdateBill(int id, Bill bill)
+        {
+            return bill;
+        }
+        public List<Bill> GetAllBills()
+        {
+            return _billMgr.GetAll();
+        }
+        public Bill GetBillById(int id)
+        {
+            return _billMgr.GetById(id);
         }
 
         //BillDetail

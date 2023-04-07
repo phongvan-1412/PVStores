@@ -2,11 +2,8 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models.entities;
-using NuGet.Protocol;
 using WebApplication1.Models.ModelPattern;
-using Microsoft.IdentityModel.Tokens;
 using WebApplication1.Utilities;
-using WebApplication1.ViewModels;
 
 namespace WebApplication1.Controllers
 {
@@ -24,28 +21,9 @@ namespace WebApplication1.Controllers
             var allSchemeProvider = (await _authenticationSchemeProvider.GetAllSchemesAsync())
                 .Select(n => n.DisplayName).Where(n => !String.IsNullOrEmpty(n));
 
-            Account account = new Account
-            {
-                Email = "",
-                Password = "",
-                Name = "",
-                Birth = "",
-                Phone = "",
-                Avatar = "hacker.png",
-                AvatarBase64 = "",
-                History = "",
-                Location = "",
-                Status = false,
-                Type = (int)EnumStatus.Customer,
-                DeliAddress = "",
-                IP = "",
-                FacebookID = "",
-                GoogleID = "",
-            };
+            Account account = new Account();
 
             HttpContext.Session.Set("account", account);
-
-            //Account account = new Account();
 
             if (User.Identity.IsAuthenticated)
             {

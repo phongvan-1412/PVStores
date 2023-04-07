@@ -2,7 +2,7 @@
 
 namespace WebApplication1.Models.ModelPattern
 {
-    public class BillDetailMgr
+    public class BillDetailMgr : IFacade<BillDetail>
     {
         public BillDetailMgr()
         {

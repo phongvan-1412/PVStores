@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using WebApplication1.Utilities;
 
 namespace WebApplication1.Models.entities
 {
@@ -70,7 +71,21 @@ namespace WebApplication1.Models.entities
 
         public Account()
         {
-
+            this.Email = "";
+            this.Password = "";
+            this.Name = "";
+            this.Birth = "";
+            this.Phone = "";
+            this.Avatar = "hacker.png";
+            this.AvatarBase64 = "";
+            this.History = "";
+            this.Location = "";
+            this.Status = false;
+            this.Type = (int)EnumStatus.Customer;
+            this.DeliAddress = "";
+            this.IP = "";
+            this.FacebookID = "";
+            this.GoogleID = "";
         }
 
 

@@ -24,7 +24,7 @@ namespace WebApplication1.Models.entities
         public int PaymentId { get; set; }
 
         [Column("payment_code", TypeName = "varchar")]
-        public int PaymentCode { get; set; }
+        public string PaymentCode { get; set; }
 
 
         //Account

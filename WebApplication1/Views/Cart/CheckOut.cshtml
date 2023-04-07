@@ -1,0 +1,122 @@
+﻿@model List<BillDetailViewModels>
+@using Microsoft.Extensions.Options
+@inject IOptions<WebApplication1.Utilities.StripeSettings> Stripe
+@{
+    BillViewModels bill = new BillViewModels();
+}
+<!-- Button trigger modal -->
+@*<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createCate">
+    Create
+</button>*@
+<a class="position-absolute btn btn-outline-primary text-white p-2 mb-5" style="right: .5rem" data-bs-toggle="modal" data-bs-target="#checkOut" onclick="OnClick()">
+    Check Out
+</a>
+
+<!-- Modal -->
+<div class="modal fade" id="checkOut" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-dark">Payment Gateway</h5>
+            </div>
+
+            <div class="modal-body">
+                <script src="https://js.stripe.com/v3"></script>
+                <form method="post" id="payment-form">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <label class="text-dark">Credit Card Number</label>
+                    <div class="input-group mb-3">
+                        <span id="card-number" class="form-control"></span>
+                    </div>
+
+                    <label class="text-dark">CVC Number</label>
+                    <div class="input-group mb-3">
+                        <span id="card-cvc" class="form-control"></span>
+                    </div>
+
+                    <label class="text-dark">Expiration</label>
+                    <div class="input-group mb-3">
+                        <span id="card-exp" class="form-control"></span>
+                    </div>
+
+                    <label class="text-dark">Total</label>
+                    <div class="input-group mb-3">
+                        <input asp-for="@bill.Token" class="StripeToken" type="text" hidden />
+                        <input asp-for="@bill.Total" value="@Model.Sum(p => p.Total)" />
+                        @*<input asp-for="@bill.Email" type="email" />*@
+                    </div>
+
+                    <div class="d-flex justify-content-between form-group">
+                        <a class="btn btn-primary text-white" asp-action="CheckOut" asp-controller="Cart">Payment</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    function OnClick() {
+        //Create a Stripe client
+        var stripe = Stripe('pk_test_51MnwwHHAZk4mDgX7dH8P0zpx8RGbH2gTEtKngcAf9CkncIBggXVciKjHkjcCayX0Gt1Kw70vSbD8p8vdhTFjEOJm00zSOyQt0N');
+
+        //Create an instance of Elements
+        var elements = stripe.elements();
+
+        var style = {
+            base: {
+                'lineHeight': '1.35',
+                'fontSize': '1.11rem',
+                'color': '#495057',
+                'fontFamily': 'apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
+            }
+        };
+
+        //Card number
+        var card = elements.create('cardNumber', {
+            'placeholder': '',
+            'style': style
+        });
+        card.mount('#card-number');
+
+        //CVC
+        var cvc = elements.create('cardCvc', {
+            'placeholder': '',
+            'style': style
+        });
+        cvc.mount('#card-cvc');
+
+        //Card expiry
+        var exp = elements.create('cardExpiry', {
+            'placeholder': '',
+            'style': style
+        });
+        exp.mount('#card-exp');
+
+        //Handle form submission
+        var form = document.getElementById('payment-form');
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            stripe.createToken(card).then(function (result) {
+                if (result.error) {
+                    // Inform the user if there was an error.
+                    var errorElement = document.getElementById('card-errors');
+                    errorElement.textContent = result.error.message;
+                } else {
+                    // Send the token to your server.
+                    stripeTokenHandler(result.token);
+                }
+            });
+        });
+
+        //Submit the form with the token ID
+        function stripeTokenHandler(token) {
+            //Insert the token ID into the form so it gets submitted to the server
+            $('.StripeToken').val(token.id);
+            //Submit the form
+            form.submit();
+        }
+    };
+</script>                        

@@ -1,12 +1,6 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models.entities;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Google;
-using Microsoft.AspNetCore.Authentication.Facebook;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
-using WebApplication1.Utilities;
 
 namespace WebApplication1.Controllers
 {
@@ -19,6 +13,17 @@ namespace WebApplication1.Controllers
         }
 
         public IActionResult Index()
+        {
+            return View();
+        }
+
+        public IActionResult Success()
+        {
+            HttpContext.Session.Remove("products");
+            return View();
+        }
+
+        public IActionResult Fail()
         {
             return View();
         }

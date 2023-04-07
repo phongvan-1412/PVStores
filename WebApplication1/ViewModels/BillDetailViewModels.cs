@@ -15,7 +15,8 @@ namespace WebApplication1.ViewModels
         public string ProductName { get; set; } 
         public string ProductImage { get; set; }
         public int BillID { get; set; }
-
+        public string Token { get; set; }
+        public string Email { get; set; }
 
         public BillDetailViewModels() { }
 

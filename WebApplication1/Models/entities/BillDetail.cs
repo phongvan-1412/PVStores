@@ -28,7 +28,6 @@ namespace WebApplication1.Models.entities
         public BillDetail() { }
         public BillDetail(BillDetailViewModels billDetailView)
         {
-            this.ID = billDetailView.ID;
             this.Quantity = billDetailView.Quantity;
             this.Total = billDetailView.Total;
             this.ProductID = billDetailView.ProductID;

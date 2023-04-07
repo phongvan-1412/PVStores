@@ -6,5 +6,7 @@
         Active = 1,
         Admin = 2,
         Customer = 3,
+        Stripe = 4,
+        VNPay = 5,
     }
 }

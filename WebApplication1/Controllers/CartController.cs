@@ -5,12 +5,15 @@ using Stripe;
 using System.Text.Json;
 using WebApplication1.Utilities;
 using WebApplication1.ViewModels;
+using WebApplication1.Models.entities;
 using System.Collections.Generic;
+using WebApplication1.Models.ModelPattern;
 
 namespace WebApplication1.Controllers
 {
     public class CartController : Controller
     {
+        public static List<BillDetailViewModels> billDetail;
         public IActionResult Index()
         {
             List<BillDetailViewModels> lstBillDetailView = HttpContext.Session.Get<List<BillDetailViewModels>>("products");
@@ -22,37 +25,6 @@ namespace WebApplication1.Controllers
             return View(lstBillDetailView);
         }
 
-        //public IActionResult Increase(int id)
-        //{
-        //    List<BillDetailViewModels> lstBillDetailView = HttpContext.Session.Get<List<BillDetailViewModels>>("products");
-        //    if (lstBillDetailView == null)
-        //    {
-        //        lstBillDetailView = new List<BillDetailViewModels>();
-        //    }
-
-        //    if (lstBillDetailView.Any(p => p.ProductID == id))
-        //    {
-        //        decimal productPrice = lstBillDetailView.Where(p => p.ProductID == id).FirstOrDefault().Price;
-        //        int updateQuantity = lstBillDetailView.Where(p => p.ProductID == id).FirstOrDefault().Quantity;
-
-        //        if (updateQuantity > 19) 
-        //        {
-        //            updateQuantity = lstBillDetailView.Where(p => p.ProductID == id).FirstOrDefault().Quantity;
-        //        }
-        //        else
-        //        {
-        //            updateQuantity = lstBillDetailView.Where(p => p.ProductID == id).FirstOrDefault().Quantity += 1;
-        //        }
-
-        //        decimal totalPrice = lstBillDetailView.Where(p => p.ProductID == id).FirstOrDefault().Total = updateQuantity * productPrice;
-
-
-        //        HttpContext.Session.Set("products", lstBillDetailView);
-        //    }
-
-        //    return RedirectToAction("Index");
-        //}
-
         [HttpPost]
         [Route("/Cart/Increase")]
         public JsonResult Increase(string productId)
@@ -61,7 +33,7 @@ namespace WebApplication1.Controllers
             if (lstBillDetailView == null)
             {
                 lstBillDetailView = new List<BillDetailViewModels>();
-            } 
+            }
 
             int.TryParse(productId, out int id);
             var product = lstBillDetailView.FirstOrDefault(p => p.ProductID == id);
@@ -100,7 +72,7 @@ namespace WebApplication1.Controllers
             if (lstBillDetailView == null)
             {
                 lstBillDetailView = new List<BillDetailViewModels>();
-            } 
+            }
 
             int.TryParse(productId, out int id);
             var product = lstBillDetailView.FirstOrDefault(p => p.ProductID == id);
@@ -130,8 +102,14 @@ namespace WebApplication1.Controllers
             return Json(lstBillDetailView);
         }
 
+
+        public IActionResult CheckOut()
+        {
+            return View();
+        }
+
         [HttpPost]
-        public IActionResult CheckOut(string stripeEmail, string stripeToken)
+        public IActionResult CheckOut(string stripeEmail, string stripeToken, decimal total)
         {
             List<BillDetailViewModels> lstBillDetailView = HttpContext.Session.Get<List<BillDetailViewModels>>("products");
             if (lstBillDetailView == null)
@@ -139,12 +117,47 @@ namespace WebApplication1.Controllers
                 lstBillDetailView = new List<BillDetailViewModels>();
             }
 
+            string email = "";
+            int id = 0;
+
+            WebApplication1.Models.entities.Account acc = HttpContext.Session.Get<WebApplication1.Models.entities.Account>("acc");
+            if (acc == null)
+            {
+                acc = new WebApplication1.Models.entities.Account();
+                HttpContext.Session.Set("acc", acc);
+
+            }
+            WebApplication1.Models.entities.Account account = HttpContext.Session.Get<WebApplication1.Models.entities.Account>("account");
+            if (account == null)
+            {
+                account = new WebApplication1.Models.entities.Account();
+                HttpContext.Session.Set("account", account);
+            }
+
+            if (acc.Email.Equals("") && account.Email.Equals(""))
+            {
+                TempData["checkOutFlag"] = "Please log in before payment";
+                return RedirectToAction("Index", "Account");
+            }
+            else
+            {
+                if (account.Email.Equals(""))
+                {
+                    email = acc.Email;
+                    id = acc.ID;
+                }
+                else
+                {
+                    email = account.Email;
+                    id = account.ID;
+                }
+            }
             var customers = new CustomerService();
             var charges = new ChargeService();
 
             var customer = customers.Create(new CustomerCreateOptions
             {
-                Email = stripeEmail,
+                Email = email,
                 Source = stripeToken
             });
 
@@ -154,25 +167,38 @@ namespace WebApplication1.Controllers
                 Description = "Test Payment",
                 Currency = "usd",
                 Customer = customer.Id,
-                //ReceiptEmail = stripeEmail
-                //Metadata = new Dictionary<string, string>
-                //{
-                //    {"OrderID", "1"},
-                //    {"ReceiptNo", "1"}
-                //}
+                ReceiptEmail = stripeEmail,
+                Metadata = new Dictionary<string, string>
+            {
+                {"OrderID", "1"},
+                {"ReceiptNo", "1"}
+            }
             });
 
-            if (charge.Status.Equals("Succeeded"))
+            if (charge.Status.Equals("succeeded"))
             {
                 string BalanceTransactionID = charge.BalanceTransactionId;
-                return View();
+                billDetail = HttpContext.Session.Get<List<BillDetailViewModels>>("products");
+                WebApplication1.Models.entities.Bill bill = new Bill
+                {
+                    CreatedTime = charge.Created.Date.ToString(),
+                    Total = total,
+                    Status = (int)EnumStatus.Active,
+                    PaymentId = (int)EnumStatus.Stripe,
+                    PaymentCode = BalanceTransactionID,
+                    AccId = id
+                };
+
+                FacadeMaker.Instance.CreateBill(bill);
+
+
+                return RedirectToAction("Success", "Home");
             }
             else
             {
-
+                return RedirectToAction("Fail", "Home");
             }
 
-            return View();
         }
     }
 }
