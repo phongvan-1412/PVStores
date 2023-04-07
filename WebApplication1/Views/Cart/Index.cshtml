@@ -74,6 +74,12 @@
                                         </a>
                                     </form>
 
+                                    <form>
+                                        <a asp-controller="Cart" asp-action="Remove" asp-route-id="@item.ProductID" class="d-flex align-items-center justify-content-center btn btn-outline-primary text-white ms-3" title="Remove From Cart" style="border-radius: 50%">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </form>
+
                                 </div>
                             </td>
                             <td class="align-middle fw-semibold" style="color: #cda45e" id="productTotal">$@item.Total</td>

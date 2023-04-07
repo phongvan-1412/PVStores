@@ -90,11 +90,24 @@ namespace WebApplication1.Controllers
             return RedirectToAction("Index", "Cart");
         }
 
+        public IActionResult Remove(int id)
+        {
+            List<BillDetailViewModels> lstBillDetailView = HttpContext.Session.Get<List<BillDetailViewModels>>("products");
+            if (lstBillDetailView == null)
+            {
+                lstBillDetailView = new List<BillDetailViewModels>();
+            }
 
-        //public IActionResult CheckOut()
-        //{
-        //    return View();
-        //}
+            var product = lstBillDetailView.Find(p => p.ProductID == id);
+
+            if (lstBillDetailView.Any(p => p.ProductID == id))
+            {
+                lstBillDetailView.Remove(product);
+                HttpContext.Session.Set("products", lstBillDetailView);
+            }
+
+            return RedirectToAction("Index", "Cart");
+        }
 
         [HttpPost]
         public IActionResult CheckOut(string stripeEmail, string stripeToken, decimal total)
@@ -188,6 +201,11 @@ namespace WebApplication1.Controllers
             }
 
         }
+
+        //public IActionResult CheckOut()
+        //{
+        //    return View();
+        //}
 
         //[HttpPost]
         //[Route("/Cart/Increase")]
