@@ -51,10 +51,14 @@ h1, h2, h3, h4, h5, h6 {
 .btn-delete{
     left: 80px;
 }
-    .btn-add:hover, .btn-delete:hover {
+    .btn-add:hover, .btn-delete:hover, #btn-delete:hover {
         border: transparent;
         background: #cda45e;
     }
+
+#btn-delete {
+    border: 1px solid #cda45e;
+}
 /*--------------------------------------------------------------
 # Preloader
 --------------------------------------------------------------*/

@@ -9,10 +9,10 @@
         <div class="container">
 
             <div class="d-flex justify-content-between align-items-center">
-                <h2>Category</h2>
+                <h2>Cart</h2>
                 <ol>
                     <li><a href="/Home/Index">Home</a></li>
-                    <li><a href="/Category/Index"></a>Category</li>
+                    <li><a href="/Cart/Index"></a>Cart</li>
                 </ol>
             </div>
 
@@ -75,7 +75,7 @@
                                     </form>
 
                                     <form>
-                                        <a asp-controller="Cart" asp-action="Remove" asp-route-id="@item.ProductID" class="d-flex align-items-center justify-content-center btn btn-outline-primary text-white ms-3" title="Remove From Cart" style="border-radius: 50%">
+                                        <a asp-controller="Cart" asp-action="Remove" asp-route-id="@item.ProductID" id="btn-delete" class="d-flex align-items-center justify-content-center btn btn-outline-primary text-white ms-5" title="Remove From Cart" style="border-radius: 50%; outline-color: #cda45e">
                                             <i class="bi bi-trash"></i>
                                         </a>
                                     </form>
@@ -102,7 +102,7 @@
             </form>*@
 
             <form asp-controller="Cart" asp-action="CheckOut" asp-route-total="@Model.Sum(p => p.Total)" method="post">
-                <span class="d-flex text-end fw-semibold" style="font-size: 25px">
+                <span class="d-flex text-end fw-semibold mb-3" style="font-size: 25px">
                     Payment:
                     <span class="ms-5" style="color: #cda45e; font-size: 25px">
                         $@Model.Sum(p => p.Total)
@@ -114,8 +114,7 @@
                         class="position-absolute stripe-button"
                         data-key="@Stripe.Value.Publishablekey"
                         data-locale="auto"
-                        data-description="Sample Charge"
-                        style="right: .5rem">
+                        data-description="Payment Gateway">
 
                 </script>
             </form>
