@@ -14,9 +14,7 @@ namespace WebApplication1.ViewModels
         public int PaymentId { get; set; }
         public string PaymentCode { get; set; }
         public int AccId { get; set; }
-        public string Token { get; set; }
-        public string Email { get; set; }
-
+        public string AccName { get; set; }
         public BillViewModels() { }
 
         public BillViewModels(Bill bill)
@@ -29,5 +27,6 @@ namespace WebApplication1.ViewModels
             this.PaymentCode = bill.PaymentCode;
             this.AccId = bill.AccId;
         }
+
     }
 }

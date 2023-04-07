@@ -5,7 +5,6 @@ namespace WebApplication1.Models.ModelPattern
 {
     public class BillMgr : IFacade<Bill>
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
         public BillMgr() { }
 
         public Bill Create(Bill bill)

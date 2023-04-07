@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using WebApplication1.Models.ModelPattern;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using WebApplication1.Models.entities;
 
 namespace WebApplication1.Areas.Admin.Controllers

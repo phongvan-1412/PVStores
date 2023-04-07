@@ -41,7 +41,7 @@
 
                     <label class="text-dark">Total</label>
                     <div class="input-group mb-3">
-                        <input asp-for="@bill.Token" class="StripeToken" type="text" hidden />
+                        @*<input asp-for="@bill.Token" class="StripeToken" type="text" hidden />*@
                         <input asp-for="@bill.Total" value="@Model.Sum(p => p.Total)" />
                         @*<input asp-for="@bill.Email" type="email" />*@
                     </div>

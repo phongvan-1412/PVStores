@@ -1,0 +1,57 @@
+﻿@model BillViewModels
+@{
+    var billId = "a" + Model.ID.ToString();
+
+    PVStoresContext context = new PVStoresContext();
+    List<BillDetail> lstBD = context.BillDetails.Where(bd => bd.BillID == Model.ID).ToList();
+    List<BillDetailViewModels> lstBDVM = new List<BillDetailViewModels>();
+    foreach (var item in lstBD)
+    {
+        BillDetailViewModels bdVM = new BillDetailViewModels(item);
+        bdVM.ProductName = context.Products.FirstOrDefault(p => p.ID == item.ProductID).Name;
+        lstBDVM.Add(bdVM);
+    }
+}
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#@billId">
+    Detail
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="@billId" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Bill Details</h5>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead class="table-primary">
+                        <tr>
+                            <th class="align-middle p-2">Index</th>
+                            <th class="align-middle p-2">Quantity</th>
+                            <th class="align-middle p-2">Total</th>
+                            <th class="align-middle p-2">Product</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var bd in lstBDVM)
+                        {
+                            <tr>
+                                <td class="align-middle p-2">
+                                    @{
+                                        var index = lstBDVM.IndexOf(bd) + 1;
+                                    }@index
+                                </td>
+                                <td class="align-middle p-2">@bd.Quantity</td>
+                                <td class="align-middle p-2">$@bd.Total</td>
+                                <td class="align-middle p-2">@bd.ProductName</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

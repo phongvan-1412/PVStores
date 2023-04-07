@@ -179,9 +179,9 @@ namespace WebApplication1.Controllers
             {
                 string BalanceTransactionID = charge.BalanceTransactionId;
                 billDetail = HttpContext.Session.Get<List<BillDetailViewModels>>("products");
-                WebApplication1.Models.entities.Bill bill = new Bill
+                Bill bill = new Bill
                 {
-                    CreatedTime = charge.Created.Date.ToString(),
+                    CreatedTime = DateTime.Now.ToString(),
                     Total = total,
                     Status = (int)EnumStatus.Active,
                     PaymentId = (int)EnumStatus.Stripe,

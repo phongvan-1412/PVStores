@@ -20,6 +20,12 @@
                 case 3:
                     stt = EnumStatus.Customer.ToString();
                     break;
+                case 4:
+                    stt = EnumStatus.Stripe.ToString();
+                    break;
+                case 5:
+                    stt = EnumStatus.VNPay.ToString();
+                    break;
             }
             return stt;
         }
@@ -40,6 +46,12 @@
                     break;
                 case "Customer":
                     status = 3;
+                    break;
+                case "Stripe":
+                    status = 4;
+                    break;
+                case "VNPay":
+                    status = 5;
                     break;
             }
             return status;
