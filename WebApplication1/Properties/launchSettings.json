@@ -29,7 +29,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "Admin",
+      "launchUrl": "Admin/Account",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

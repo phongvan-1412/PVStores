@@ -13,10 +13,10 @@
         <table class="table">
             <thead class="table-primary">
                 <tr>
-                    <th></th>
-                    <th>@Html.DisplayNameFor(model => model.Name)</th>
-                    <th>@Html.DisplayNameFor(model => model.Status)</th>
-                    <th>Action</th>
+                    <th class="align-middle p-2">Index</th>
+                    <th class="align-middle p-2">@Html.DisplayNameFor(model => model.Name)</th>
+                    <th class="align-middle p-2">@Html.DisplayNameFor(model => model.Status)</th>
+                    <th class="align-middle p-2">Action</th>
                 </tr>
             </thead>
 
@@ -24,11 +24,15 @@
                 @foreach (var item in cateList)
                 {
                     <tr>
-                        <td class="align-middle">@Html.DisplayFor(m => item.ID)</td>
-                        <td class="align-middle">@Html.DisplayFor(m => item.Name)</td>
-                        <td class="align-middle">@Html.DisplayFor(m => item.Status)</td>
+                        <td class="align-middle p-2">
+                            @{
+                                var index = cateList.IndexOf(item) + 1;
+                            }@index
+                        </td>
+                        <td class="align-middle p-2">@Html.DisplayFor(m => item.Name)</td>
+                        <td class="align-middle p-2">@Html.DisplayFor(m => item.Status)</td>
 
-                        <td class="align-middle">
+                        <td class="align-middle p-2">
                             @Html.Partial("~/Areas/Admin/Views/Partials/Category/_UpdateCategoryPartial.cshtml", item)
                         </td>
                     </tr>

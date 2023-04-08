@@ -12,13 +12,13 @@
         <table class="table">
             <thead class="table-primary">
                 <tr>
-                    <th></th>
-                    <th>Product Name</th>
-                    <th>Category Name</th>
-                    <th>Price</th>
-                    <th>Status</th>
-                    <th>Image</th>
-                    <th>Action</th>
+                    <th class="align-middle p-2">Index</th>
+                    <th class="align-middle p-2">Product Name</th>
+                    <th class="align-middle p-2">Category Name</th>
+                    <th class="align-middle p-2">Price</th>
+                    <th class="align-middle p-2">Status</th>
+                    <th class="align-middle p-2">Image</th>
+                    <th class="align-middle p-2">Action</th>
                 </tr>
             </thead>
 
@@ -26,20 +26,24 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td class="align-middle">@item.ID</td>
-                        <td class="align-middle">@item.Name</td>
-                        <td class="align-middle">@item.CateName</td>
-                        <td class="align-middle">$@item.Price</td>
+                        <td class="align-middle p-2">
+                            @{
+                                var index = Model.IndexOf(item) + 1;
+                            }@index
+                        </td>
+                        <td class="align-middle p-2">@item.Name</td>
+                        <td class="align-middle p-2">@item.CateName</td>
+                        <td class="align-middle p-2">$@item.Price</td>
 
-                        <td class="align-middle">
+                        <td class="align-middle p-2">
                             <input checked="@item.Status" asp-for="@item.Status" />
                         </td>
 
-                        <td class="align-middle">
+                        <td class="align-middle p-2">
                             <img src="~/img/products/@item.Image" style="width: 12.5rem; height: 12.5rem; object-position: center" />
                         </td>
 
-                        <td class="align-middle">
+                        <td class="align-middle p-2">
                             @Html.Partial("~/Areas/Admin/Views/Partials/Product/_UpdateProductPartial.cshtml", item, new ViewDataDictionary(ViewData) {{"ProCategories", cateList}})
                         </td>
                     </tr>

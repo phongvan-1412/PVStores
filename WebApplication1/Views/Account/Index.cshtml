@@ -41,6 +41,13 @@
                 </div>
 
             }
+
+            @if (TempData["registerFlag"] != null)
+            {
+                <div class="form-group alert alert-success mb-3">
+                    <strong>@TempData["registerFlag"]</strong>
+                </div>
+            }
             <form asp-action="Signin" method="post">
                 <div class="form-group mb-3">
                     <label class="form-label">Email</label>

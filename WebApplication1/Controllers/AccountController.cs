@@ -124,6 +124,7 @@ namespace WebApplication1.Controllers
             };
 
             FacadeMaker.Instance.CreateAccount(data);
+            TempData["registerFlag"] = "Login succeeded!";
 
             return RedirectToAction("Index", "Account");
         }
@@ -138,7 +139,7 @@ namespace WebApplication1.Controllers
         {
 
             Account accountExist = FacadeMaker.Instance.GetAccountByEmail(account.Email);
-            if (!accountExist.Email.Equals(account.Email) || !DecryptPassword(accountExist.Password).Equals(account.Password))
+            if (!accountExist.Email.Equals(account.Email) || !DecryptPassword(accountExist.Password).Equals(account.Password) || accountExist.Status == false)
             {
                 TempData["LoginFlag"] = "Invalid Email or Password";
                 return RedirectToAction("Index");

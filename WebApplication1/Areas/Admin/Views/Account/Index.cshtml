@@ -1,0 +1,65 @@
+﻿@model List<Account>
+@{
+    ViewData["Title"] = "List of Account";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+@*Write Code*@
+<div class="row mt-5">
+    <div class="col-md-10 offset-1">
+        <table class="table">
+            <thead class="table-primary">
+                <tr>
+                    <th class="align-middle p-2">Index</th>
+                    <th class="align-middle p-2">Name</th>
+                    <th class="align-middle p-2">Email</th>
+                    <th class="align-middle p-2">Phone</th>
+                    <th class="align-middle p-2">Google ID</th>
+                    <th class="align-middle p-2">FacebookID</th>
+                    <th class="align-middle p-2">Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="align-middle p-2" style="margin-right: 1rem">
+                            @{
+                                var index = Model.IndexOf(item) + 1;
+                            }@index
+                        </td>
+                        <td class="align-middle p-2">@item.Name</td>
+                        <td class="align-middle p-2">@item.Email</td>
+                        <td class="align-middle p-2">@item.Phone</td>
+                        <td class="align-middle p-2">@item.GoogleID</td>
+                        <td class="align-middle p-2">@item.FacebookID</td>
+
+                        <td class="align-middle p-2">
+                            @{
+                                var status = "";
+                                if (item.Status == true)
+                                {
+                                    status = "Active";
+                                }
+                                else
+                                {
+                                    status = "Inactive";
+                                }
+                            }
+                            <form method="post" asp-action="Update">
+                                @if (item.Status == true)
+                                {
+                                    <input type="submit" value="@status" class="btn btn-outline-success" asp-route-id="@item.ID" asp-route-status="@item.Status" asp-area="Admin" asp-controller="Account" asp-action="Update" />
+                                }
+                                else
+                                {
+                                    <input type="submit" value="@status" class="btn btn-outline-danger" asp-route-id="@item.ID" asp-route-status="@item.Status" asp-area="Admin" asp-controller="Account" asp-action="Update" />
+                                }
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
