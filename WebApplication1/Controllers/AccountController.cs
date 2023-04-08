@@ -5,16 +5,20 @@ using WebApplication1.Models.entities;
 using WebApplication1.Models.ModelPattern;
 using WebApplication1.Utilities;
 using System.Text;
+using Microsoft.AspNetCore.Http;
+using WebApplication1.ViewModels;
 
 namespace WebApplication1.Controllers
 {
     public class AccountController : Controller
     {
         private readonly IAuthenticationSchemeProvider _authenticationSchemeProvider;
+        private readonly PVStoresContext _context;
 
-        public AccountController(IAuthenticationSchemeProvider authenticationSchemeProvider)
+        public AccountController(IAuthenticationSchemeProvider authenticationSchemeProvider, PVStoresContext context)
         {
             _authenticationSchemeProvider = authenticationSchemeProvider;
+            _context = context;
         }
 
         public async Task<IActionResult> Index()
@@ -57,6 +61,16 @@ namespace WebApplication1.Controllers
 
                         FacadeMaker.Instance.CreateAccount(account);
                         HttpContext.Session.Set("account", account);
+
+                        List<Bill> bill = _context.Bills.Where(b => b.AccId == account.ID).ToList();
+                        List<BillViewModels> lstBillVM = new List<BillViewModels>();
+                        foreach (var item in bill)
+                        {
+                            BillViewModels billVM = new BillViewModels(item);
+                            lstBillVM.Add(billVM);
+                        }
+                        HttpContext.Session.Set("bill", lstBillVM);
+
                         TempData["LoginSuccess"] = "Login Successfully";
                     }
                     else
@@ -72,6 +86,16 @@ namespace WebApplication1.Controllers
                         }
                         FacadeMaker.Instance.UpdateAccount(account.ID, account);
                         HttpContext.Session.Set("account", account);
+
+                        List<Bill> bill = _context.Bills.Where(b => b.AccId == account.ID).ToList();
+                        List<BillViewModels> lstBillVM = new List<BillViewModels>();
+                        foreach (var item in bill)
+                        {
+                            BillViewModels billVM = new BillViewModels(item);
+                            lstBillVM.Add(billVM);
+                        }
+                        HttpContext.Session.Set("bill", lstBillVM);
+
                         TempData["LoginSuccess"] = "Login Successfully";
                     }
                 }
@@ -124,7 +148,7 @@ namespace WebApplication1.Controllers
             };
 
             FacadeMaker.Instance.CreateAccount(data);
-            TempData["registerFlag"] = "Login succeeded!";
+            TempData["registerFlag"] = "Register succeeded! Please Log in to your account";
 
             return RedirectToAction("Index", "Account");
         }
@@ -146,6 +170,16 @@ namespace WebApplication1.Controllers
             }
 
             HttpContext.Session.Set("acc", accountExist);
+
+            List<Bill> bill = _context.Bills.Where(b => b.AccId == accountExist.ID).ToList();
+            List<BillViewModels> lstBillVM = new List<BillViewModels>();
+            foreach (var item in bill)
+            {
+                BillViewModels billVM = new BillViewModels(item);
+                lstBillVM.Add(billVM);
+            }
+            HttpContext.Session.Set("bill", lstBillVM);
+
             TempData["LoginSuccess"] = "Login Successfully";
 
             return RedirectToAction("Index");
@@ -163,5 +197,96 @@ namespace WebApplication1.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        public IActionResult Profile()
+        {
+            return View();
+        }
+
+        public IActionResult UpdatePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult UpdatePassword(Account account)
+        {
+            Account acc = FacadeMaker.Instance.GetAccountById(account.ID);
+            acc.Password = EncryptPassword(account.Password);
+
+            FacadeMaker.Instance.UpdateAccount(account.ID, acc);
+            TempData["updatePwdFlag"] = "Your password has been changed";
+
+            return RedirectToAction("Profile", "Account");
+        }
+
+        [HttpPost]
+        public IActionResult UpdateAccount(Account data)
+        {
+            Account newAcc = FacadeMaker.Instance.GetAccountById(data.ID);
+            newAcc.Email = _context.Accounts.FirstOrDefault(p => p.ID == data.ID).Email;
+            newAcc.Password = _context.Accounts.FirstOrDefault(p => p.ID == data.ID).Password;
+            if (data.Name == null)
+            {
+                newAcc.Name = "";
+            }
+            else
+            {
+                newAcc.Name = data.Name;
+            }
+            if (data.Birth == null)
+            {
+                newAcc.Birth = "";
+            }
+            else
+            {
+                newAcc.Birth = data.Birth;
+
+            }
+            if (data.Phone == null)
+            {
+                newAcc.Phone = "";
+            }
+            else
+            {
+                newAcc.Phone = data.Phone;
+            }
+            newAcc.Avatar = _context.Accounts.FirstOrDefault(p => p.ID == data.ID).Avatar;
+            newAcc.AvatarBase64 = "";
+            newAcc.History = "";
+            newAcc.Location = "";
+            newAcc.Status = true;
+            newAcc.Type= (int)EnumStatus.Customer;
+            if (data.DeliAddress == null)
+            {
+                newAcc.DeliAddress = "";
+            }
+            else
+            {
+                newAcc.DeliAddress = data.DeliAddress;
+            }
+            newAcc.IP = "";
+            newAcc.GoogleID = "";
+            newAcc.FacebookID = "";
+                
+            FacadeMaker.Instance.UpdateAccount(data.ID, newAcc);
+            TempData["updateAccFlag"] = "Your information has been saved";
+
+            Account account = HttpContext.Session.Get<Account>("account");
+            Account acc = HttpContext.Session.Get<Account>("acc");
+
+            if(account != null || account.Email.Equals(""))
+            {
+                account = new Account();
+                acc = newAcc;
+                HttpContext.Session.Set("acc", acc);
+            }
+            else
+            {
+                acc = new Account();
+                account = newAcc;
+                HttpContext.Session.Set("account", account);
+            }
+            return RedirectToAction("Profile", "Account");
+        }
     }
 }

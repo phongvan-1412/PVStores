@@ -8,5 +8,7 @@
         Customer = 3,
         Stripe = 4,
         VNPay = 5,
+        Paid = 6,
+        Unpaid = 7
     }
 }

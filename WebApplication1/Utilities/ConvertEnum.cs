@@ -26,6 +26,12 @@
                 case 5:
                     stt = EnumStatus.VNPay.ToString();
                     break;
+                case 6:
+                    stt = EnumStatus.Paid.ToString();
+                    break;
+                case 7:
+                    stt = EnumStatus.Unpaid.ToString();
+                    break;
             }
             return stt;
         }
@@ -52,6 +58,12 @@
                     break;
                 case "VNPay":
                     status = 5;
+                    break;
+                case "Paid":
+                    status = 6;
+                    break;
+                case "Unpaid":
+                    status = 7;
                     break;
             }
             return status;

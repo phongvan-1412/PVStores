@@ -8,12 +8,20 @@ using WebApplication1.ViewModels;
 using WebApplication1.Models.entities;
 using System.Collections.Generic;
 using WebApplication1.Models.ModelPattern;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApplication1.Controllers
 {
     public class CartController : Controller
     {
+        private readonly PVStoresContext _context;
         public static List<BillDetailViewModels> billDetail;
+
+        public CartController(PVStoresContext context)
+        {
+            _context = context;
+        }
+
         public IActionResult Index()
         {
             List<BillDetailViewModels> lstBillDetailView = HttpContext.Session.Get<List<BillDetailViewModels>>("products");
@@ -120,18 +128,18 @@ namespace WebApplication1.Controllers
 
             string email = "";
             int id = 0;
+            Models.entities.Account accBill = new Models.entities.Account();
 
             WebApplication1.Models.entities.Account acc = HttpContext.Session.Get<WebApplication1.Models.entities.Account>("acc");
             if (acc == null)
             {
-                acc = new WebApplication1.Models.entities.Account();
+                acc = new Models.entities.Account();
                 HttpContext.Session.Set("acc", acc);
-
             }
-            WebApplication1.Models.entities.Account account = HttpContext.Session.Get<WebApplication1.Models.entities.Account>("account");
+            Models.entities.Account account = HttpContext.Session.Get<WebApplication1.Models.entities.Account>("account");
             if (account == null)
             {
-                account = new WebApplication1.Models.entities.Account();
+                account = new Models.entities.Account();
                 HttpContext.Session.Set("account", account);
             }
 
@@ -145,11 +153,13 @@ namespace WebApplication1.Controllers
                 if (account.Email.Equals(""))
                 {
                     email = acc.Email;
+                    accBill = acc;
                     id = acc.ID;
                 }
                 else
                 {
                     email = account.Email;
+                    accBill = account;
                     id = account.ID;
                 }
             }
@@ -184,7 +194,7 @@ namespace WebApplication1.Controllers
                 {
                     CreatedTime = DateTime.Now.ToString(),
                     Total = total,
-                    Status = (int)EnumStatus.Active,
+                    Status = (int)EnumStatus.Paid,
                     PaymentId = (int)EnumStatus.Stripe,
                     PaymentCode = BalanceTransactionID,
                     AccId = id
@@ -192,6 +202,15 @@ namespace WebApplication1.Controllers
 
                 FacadeMaker.Instance.CreateBill(bill);
 
+
+                List<Bill> billView = _context.Bills.Where(b => b.AccId == accBill.ID).ToList();
+                List<BillViewModels> lstBillVM = new List<BillViewModels>();
+                foreach (var item in billView)
+                {
+                    BillViewModels billVM = new BillViewModels(item);
+                    lstBillVM.Add(billVM);
+                }
+                HttpContext.Session.Set("bill", lstBillVM);
 
                 return RedirectToAction("Success", "Home");
             }
