@@ -292,58 +292,71 @@ namespace WebApplication1.Controllers
             return RedirectToAction("Profile", "Account");
         }
 
-        //[HttpPost]
-        //public IActionResult UpdateAvatar(Account account)
-        //{
-        //    Account newAcc = _context.Accounts.FirstOrDefault(p => p.ID == account.ID);
+        [HttpPost]
+        public IActionResult UpdateAvatar(Account account, IFormFile avatar)
+        {
+            Account newAcc = _context.Accounts.FirstOrDefault(p => p.ID == account.ID);
 
-        //    try
-        //    {
-        //        Account accDel = new Account();
-        //        accDel = newAcc;
-        //        string uniqueFileName = string.Empty;
-        //        if (account.AvatarFile != null)
-        //        {
-        //            if (accDel.Avatar != null)
-        //            {
-        //                string folder = "img/profile/";
-        //                string filePath = Path.Combine(_webHostEnvironment.WebRootPath, folder, accDel.Avatar);
-        //                if (System.IO.File.Exists(filePath))
-        //                {
-        //                    System.IO.File.Delete(filePath);
-        //                }
-        //                uniqueFileName = UploadImage(account);
-        //            }
-        //        }
+            try
+            {
+                Account accDel = new Account();
+                accDel = newAcc;
+                string uniqueFileName = string.Empty;
+                if (avatar != null)
+                {
+                    if (accDel.Avatar != null)
+                    {
+                        string folder = "img/profile/";
+                        string filePath = Path.Combine(_webHostEnvironment.WebRootPath, folder, accDel.Avatar);
+                        if (System.IO.File.Exists(filePath))
+                        {
+                            System.IO.File.Delete(filePath);
+                        }
+                        uniqueFileName = UploadImage(account, avatar);
+                    }
+                }
 
-        //        if (account.Avatar != null)
-        //        {
-        //            accDel.Avatar = uniqueFileName;
-        //        }
+                if (account.Avatar != null)
+                {
+                    accDel.Avatar = uniqueFileName;
+                }
 
-        //        FacadeMaker.Instance.UpdateAccount(account.ID, newAcc);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
+                FacadeMaker.Instance.UpdateAccount(account.ID, newAcc);
 
-        //    TempData["updateAvatar"] = "Update avatar successfully!";
-        //    return RedirectToAction("Profile", "Account");
-        //}
-        //private string UploadImage(Account account)
-        //{
-        //    string uniqueFileName = string.Empty;
-        //    if (account.AvatarFile != null)
-        //    {
-        //        string folder = "img/profile/";
-        //        uniqueFileName = Guid.NewGuid().ToString() + "-" + account.AvatarFile.FileName;
-        //        string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folder, uniqueFileName);
+                Account accAvatar = HttpContext.Session.Get<Account>("account");
+                Account acc = HttpContext.Session.Get<Account>("acc");
+                if (accAvatar == null)
+                {
+                    accAvatar = new Account();
+                    HttpContext.Session.Set("acc", newAcc);
+                }
+                else
+                {
+                    acc= new Account();
+                    HttpContext.Session.Set("account", newAcc);
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
 
-        //        account.AvatarFile.CopyTo(new FileStream(serverFolder, FileMode.Create));
-        //        account.Avatar = account.AvatarFile.FileName;
-        //    }
-        //    return uniqueFileName;
-        //}
+            TempData["updateAvatar"] = "Update avatar successfully!";
+            return RedirectToAction("Profile", "Account");
+        }
+        private string UploadImage(Account account, IFormFile avatar)
+        {
+            string uniqueFileName = string.Empty;
+            if (avatar != null)
+            {
+                string folder = "img/profile/";
+                uniqueFileName = Guid.NewGuid().ToString() + "-" + avatar.FileName;
+                string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folder, uniqueFileName);
+
+                avatar.CopyTo(new FileStream(serverFolder, FileMode.Create));
+                account.Avatar = avatar.FileName;
+            }
+            return uniqueFileName;
+        }
     }
 }
