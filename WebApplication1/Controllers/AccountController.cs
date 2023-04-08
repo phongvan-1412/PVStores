@@ -7,6 +7,7 @@ using WebApplication1.Utilities;
 using System.Text;
 using Microsoft.AspNetCore.Http;
 using WebApplication1.ViewModels;
+using Microsoft.AspNetCore.Hosting;
 
 namespace WebApplication1.Controllers
 {
@@ -14,11 +15,13 @@ namespace WebApplication1.Controllers
     {
         private readonly IAuthenticationSchemeProvider _authenticationSchemeProvider;
         private readonly PVStoresContext _context;
+        private IWebHostEnvironment _webHostEnvironment;
 
-        public AccountController(IAuthenticationSchemeProvider authenticationSchemeProvider, PVStoresContext context)
+        public AccountController(IAuthenticationSchemeProvider authenticationSchemeProvider, PVStoresContext context, IWebHostEnvironment webHostEnvironment)
         {
             _authenticationSchemeProvider = authenticationSchemeProvider;
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public async Task<IActionResult> Index()
@@ -288,5 +291,59 @@ namespace WebApplication1.Controllers
             }
             return RedirectToAction("Profile", "Account");
         }
+
+        //[HttpPost]
+        //public IActionResult UpdateAvatar(Account account)
+        //{
+        //    Account newAcc = _context.Accounts.FirstOrDefault(p => p.ID == account.ID);
+
+        //    try
+        //    {
+        //        Account accDel = new Account();
+        //        accDel = newAcc;
+        //        string uniqueFileName = string.Empty;
+        //        if (account.AvatarFile != null)
+        //        {
+        //            if (accDel.Avatar != null)
+        //            {
+        //                string folder = "img/profile/";
+        //                string filePath = Path.Combine(_webHostEnvironment.WebRootPath, folder, accDel.Avatar);
+        //                if (System.IO.File.Exists(filePath))
+        //                {
+        //                    System.IO.File.Delete(filePath);
+        //                }
+        //                uniqueFileName = UploadImage(account);
+        //            }
+        //        }
+
+        //        if (account.Avatar != null)
+        //        {
+        //            accDel.Avatar = uniqueFileName;
+        //        }
+
+        //        FacadeMaker.Instance.UpdateAccount(account.ID, newAcc);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+
+        //    TempData["updateAvatar"] = "Update avatar successfully!";
+        //    return RedirectToAction("Profile", "Account");
+        //}
+        //private string UploadImage(Account account)
+        //{
+        //    string uniqueFileName = string.Empty;
+        //    if (account.AvatarFile != null)
+        //    {
+        //        string folder = "img/profile/";
+        //        uniqueFileName = Guid.NewGuid().ToString() + "-" + account.AvatarFile.FileName;
+        //        string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folder, uniqueFileName);
+
+        //        account.AvatarFile.CopyTo(new FileStream(serverFolder, FileMode.Create));
+        //        account.Avatar = account.AvatarFile.FileName;
+        //    }
+        //    return uniqueFileName;
+        //}
     }
 }

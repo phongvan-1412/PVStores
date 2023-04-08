@@ -44,12 +44,12 @@
             <div class="row d-flex align-items-center">
                 <div class="card d-flex align-items-center col-md-5 p-3" style="background: transparent; outline-color: 2px solid #cda45e; border: 2px solid #cda45e">
                     <div class="d-flex align-items-center justify-content-center text-center col-md-8 mb-3">
-                        <img src="~/img/profile/@presentAcc.Avatar" class="card-img-top" alt="Profile Image" style="border-radius: 50%; width: 200px; height: 200px; background: rgba(255, 165, 0, 0.1);">
+                        <img src="~/img/profile/@presentAcc.Avatar" class="card-img-top" id="avatarUrl" alt="Profile Image" style="border-radius: 50%; width: 200px; height: 200px; background: rgba(255, 165, 0, 0.1);">
                     </div>
 
                     <div class="card-body d-flex align-items-center justify-content-between mb-3">
                         <div>
-                            <input type="file" class="form-control" />
+                            <input type="file" id="updateAvatar" class="form-control" />
                         </div>
 
                         <div>
@@ -61,6 +61,13 @@
                     {
                         <div class="col-md-12 form-group alert alert-success">
                             <strong>@TempData["updatePwdFlag"]</strong>
+                        </div>
+                    }
+
+                    @if (TempData["updateAvatar"] != null)
+                    {
+                        <div class="col-md-12 form-group alert alert-success">
+                            <strong>@TempData["updateAvatar"]</strong>
                         </div>
                     }
                 </div>
@@ -165,3 +172,19 @@
 
     </section>
 </main>
+
+<script type="text/javascript">
+    //Preview Image
+    const updateFileInput = document.getElementById('updateAvatar');
+    var updateOutput = document.getElementById('avatarUrl')
+
+    updateFileInput.addEventListener("change", e => {
+        const file = updateFileInput.files[0];
+        const reader = new FileReader();
+
+        reader.addEventListener("load", () => {
+            updateOutput.src = reader.result;
+        });
+
+        reader.readAsDataURL(file);
+    })

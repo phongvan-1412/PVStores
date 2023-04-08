@@ -41,6 +41,8 @@ namespace WebApplication1.Models.entities
         [Display(Name = "Avatar")]
         public string Avatar { get; set; }
 
+        //public IFormFile AvatarFile { get; set; }
+
         [Column("acc_image_base64", TypeName = "ntext")]
         public string AvatarBase64 { get; set; }
 
