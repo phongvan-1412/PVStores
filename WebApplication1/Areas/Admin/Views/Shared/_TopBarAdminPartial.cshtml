@@ -1,4 +1,11 @@
-﻿<!-- ========== header start ========== -->
+﻿@using System.Net.Http
+@using WebApplication1.Utilities
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    Account admin = HttpContextAccessor.HttpContext.Session.Get<Account>("admin");
+}
+<!-- ========== header start ========== -->
 <header class="header">
     <div class="container-fluid">
         <div class="row">
@@ -90,7 +97,7 @@
                             <li>
                                 <a href="#0">
                                     <div class="image">
-                                        <img src="assets/images/lead/lead-5.png" alt="" />
+                                        <img src="img/lead/lead-5.png" alt="" />
                                     </div>
                                     <div class="content">
                                         <h6>Jacob Jones</h6>
@@ -102,7 +109,7 @@
                             <li>
                                 <a href="#0">
                                     <div class="image">
-                                        <img src="assets/images/lead/lead-3.png" alt="" />
+                                        <img src="img/lead/lead-3.png" alt="" />
                                     </div>
                                     <div class="content">
                                         <h6>John Doe</h6>
@@ -114,7 +121,7 @@
                             <li>
                                 <a href="#0">
                                     <div class="image">
-                                        <img src="assets/images/lead/lead-2.png" alt="" />
+                                        <img src="img/lead/lead-2.png" alt="" />
                                     </div>
                                     <div class="content">
                                         <h6>Anee Lee</h6>
@@ -142,12 +149,16 @@
                                 aria-expanded="false">
                             <div class="profile-info">
                                 <div class="info">
-                                    <h6>John Doe</h6>
-                                    <div class="image">
-                                        <img src="assets/images/profile/profile-image.png"
-                                             alt="" />
-                                        <span class="status"></span>
-                                    </div>
+                                    @if (admin != null)
+                                    {
+                                        <h6>@admin.Name</h6>
+
+                                        <div class="image">
+
+                                            <img src="img/profile/@admin.Avatar" alt="Avatar" />
+                                            <span class="status"></span>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                             <i class="lni lni-chevron-down"></i>

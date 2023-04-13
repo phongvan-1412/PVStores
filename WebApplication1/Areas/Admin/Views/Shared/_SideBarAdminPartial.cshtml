@@ -1,4 +1,9 @@
-﻿<aside class="sidebar-nav-wrapper">
+﻿@using System.Net.Http
+@using WebApplication1.Utilities
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+<aside class="sidebar-nav-wrapper">
     <div class="navbar-logo">
         <a href="index.html">
             <img src="~/img/logo/logo.svg" alt="logo" style="outline: none" />
@@ -119,10 +124,10 @@
                     <span class="text">Pages</span>
                 </a>
                 <ul id="ddmenu_3" class="collapse dropdown-nav">
-                    <a asp-area="" asp-controller="Account" asp-action="Index"> Login </a>
-                    <a asp-area="" asp-controller="Account" asp-action="Register"> Register </a>
-                    <a asp-area="" asp-controller="Home" asp-action="Index"> Home </a>
-                    <a asp-area="" asp-controller="Category" asp-action="Index"> Category </a>
+                    <a asp-area="" asp-controller="Account" asp-action="Index" onclick="removeAdmin()"> Login </a>
+                    <a asp-area="" asp-controller="Account" asp-action="Register" onclick="removeAdmin()"> Register </a>
+                    <a asp-area="" asp-controller="Home" asp-action="Index" onclick="removeAdmin()"> Home </a>
+                    <a asp-area="" asp-controller="Category" asp-action="Index" onclick="removeAdmin()"> Category </a>
                 </ul>
             </li>
             <span class="divider"><hr /></span>
@@ -247,3 +252,27 @@
     </nav>
 </aside>
 <div class="overlay"></div>
+
+<script src="~/js/main.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script type="text/javascript">
+    function removeAdmin() { 
+        window.history.forward(); 
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "/Admin/Home/RemoveAdmin",
+            success: function (result) {
+                console.log(result);
+            },
+            error: function (req, status, error) {
+                console.log(error);
+            }
+        });
+    }
+
+    setTimeout("removeAdmin()", 0);
+    window.onunload = function () { null };
+
+</script>

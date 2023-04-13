@@ -24,6 +24,7 @@ namespace WebApplication1.Controllers
 
         public async Task<IActionResult> Index()
         {
+
             var allSchemeProvider = (await _authenticationSchemeProvider.GetAllSchemesAsync())
                 .Select(n => n.DisplayName).Where(n => !String.IsNullOrEmpty(n));
 
@@ -179,10 +180,21 @@ namespace WebApplication1.Controllers
         {
 
             Account accountExist = FacadeMaker.Instance.GetAccountByEmail(account.Email);
+
+            if (accountExist == null)
+            {
+                accountExist = new Account();
+            }
+
             if (!accountExist.Email.Equals(account.Email) || !DecryptPassword(accountExist.Password).Equals(account.Password) || accountExist.Status == false)
             {
                 TempData["LoginFlag"] = "Invalid Email or Password";
                 return RedirectToAction("Index");
+            }
+            else if (accountExist.Email.Equals(account.Email) && DecryptPassword(accountExist.Password).Equals(account.Password) && accountExist.Type == (int)EnumStatus.Admin)
+            {
+                HttpContext.Session.Set("admin", accountExist);
+                return RedirectToAction("Index", "Home", new { Area = "Admin" });
             }
 
             HttpContext.Session.Set("account", accountExist);
