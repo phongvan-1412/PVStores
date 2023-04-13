@@ -45,19 +45,27 @@ namespace WebApplication1.Controllers
 
             if (lstBillDetailView.Any(p => p.ProductID == id))
             {
-                decimal productPrice = product.Price;
-                int updateQuantity = product.Quantity;
 
-                if (updateQuantity >= 20)
+                if (lstBillDetailView.Count() > 19 || lstBillDetailView.Sum(b => b.Total) > 50)
                 {
-                    updateQuantity = product.Quantity;
+                    TempData["cartFlag"] = "Cart reached limitation";
+                    RedirectToAction("Index", "Category");
                 }
                 else
                 {
-                    updateQuantity = product.Quantity += 1;
-                }
+                    if (product.Quantity > 4)
+                    {
+                        product.Quantity = product.Quantity;
+                        HttpContext.Session.Set("products", lstBillDetailView);
+                    }
+                    else
+                    {
+                        product.Quantity += 1;
+                        product.Total = product.Quantity * product.Price;
 
-                decimal totalPrice = product.Total = updateQuantity * productPrice;
+                    }
+                }
+                product.Total = product.Quantity * product.Price;
 
                 HttpContext.Session.Set("products", lstBillDetailView);
             }

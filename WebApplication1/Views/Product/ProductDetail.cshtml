@@ -19,7 +19,16 @@
     </section>
 
     <section class="inner-page">
+        <div class="container">
+            @if (TempData["cartFlag"] != null)
+            {
+                <div class="form-group alert alert-danger mb-3">
+                    <strong>@TempData["cartFlag"]</strong>
+                </div>
+            }
+        </div>
         <div class="container d-flex text-white">
+            
             <div class="row">
                 <div class="d-flex align-items-center justify-content-center col-lg-6 col-md-6 col-sm-12">
                     <img src="~/img/products/@Model.Image" alt="@Model.Image" style="max-width: 80%" />

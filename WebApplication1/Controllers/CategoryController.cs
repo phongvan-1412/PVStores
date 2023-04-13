@@ -30,39 +30,94 @@ namespace WebApplication1.Controllers
             {
                 lstBillDetailView = new List<BillDetailViewModels>();
             }
+            var productCart = lstBillDetailView.FirstOrDefault(p => p.ProductID == id);
 
             Product product = FacadeMaker.Instance.GetProductById(id);
             ProductViewModels productView = new ProductViewModels(product);
 
             BillDetailViewModels billDetailView = new BillDetailViewModels();
 
+
             if (lstBillDetailView.Any(p => p.ProductID == id))
             {
-                int updateQuantity = lstBillDetailView.Where(p => p.ProductID == id).FirstOrDefault().Quantity += 1;
-                lstBillDetailView.Where(p => p.ProductID == id).FirstOrDefault().Total = updateQuantity * productView.Price;
+                if (lstBillDetailView.Count() > 19 || lstBillDetailView.Sum(b => b.Total) > 50)
+                {
+                    TempData["cartFlag"] = "Cart reached limitation";
+                    RedirectToAction("Index", "Category");
+                }
+                else
+                {
+                    if (productCart.Quantity > 4)
+                    {
+                        productCart.Quantity = productCart.Quantity;
+                        HttpContext.Session.Set("products", lstBillDetailView);
+                    }
+                    productCart.Quantity += 1;
+                    productCart.Total = productCart.Quantity * productView.Price;
+                    HttpContext.Session.Set("products", lstBillDetailView);
+                }
             }
             else
             {
                 billDetailView.ProductID = id;
                 billDetailView.ProductName = product.Name;
                 billDetailView.ProductImage = product.Image;
-                decimal price = billDetailView.Price = product.Price;
-                int quantity = billDetailView.Quantity = 1;
-                billDetailView.Total = price * quantity;
+                billDetailView.Price = product.Price;
+                billDetailView.Quantity = 1;
+                billDetailView.Total = billDetailView.Price * billDetailView.Quantity;
                 lstBillDetailView.Add(billDetailView);
+                HttpContext.Session.Set("products", lstBillDetailView);
+
             }
-            HttpContext.Session.Set("products", lstBillDetailView);
 
             return RedirectToAction(nameof(Index));
         }
+        //[HttpPost]
+        //public JsonResult AddToCart(string productId)
+        //{
+        //    int.TryParse(productId, out int id);
+        //    List<BillDetailViewModels> lstBillDetailView = HttpContext.Session.Get<List<BillDetailViewModels>>("products");
+        //    if (lstBillDetailView == null)
+        //    {
+        //        lstBillDetailView = new List<BillDetailViewModels>();
+        //    }
+        //    var productCart = lstBillDetailView.FirstOrDefault(p => p.ProductID == id);
+
+        //    Product product = FacadeMaker.Instance.GetProductById(id);
+        //    ProductViewModels productView = new ProductViewModels(product);
+
+        //    BillDetailViewModels billDetailView = new BillDetailViewModels();
+
+
+        //    if (lstBillDetailView.Any(p => p.ProductID == id))
+        //    {
+        //        productCart.Quantity += 1;
+        //        productCart.Total = productCart.Quantity * productView.Price;
+        //    }
+        //    else
+        //    {
+        //        billDetailView.ProductID = id;
+        //        billDetailView.ProductName = product.Name;
+        //        billDetailView.ProductImage = product.Image;
+        //        billDetailView.Price = product.Price;
+        //        billDetailView.Quantity = 1;
+        //        billDetailView.Total = billDetailView.Price * billDetailView.Quantity;
+        //        lstBillDetailView.Add(billDetailView);
+        //    }
+
+        //    HttpContext.Session.Set("products", lstBillDetailView);
+        //    return Json(lstBillDetailView);
+        //}
 
         [HttpPost]
         public IActionResult RemoveFromCart(int id)
         {
             List<BillDetailViewModels> lstBillDetailView = HttpContext.Session.Get<List<BillDetailViewModels>>("products");
+            var productCart = lstBillDetailView.FirstOrDefault(p => p.ProductID == id);
+
             if (lstBillDetailView.Any(p => p.ProductID == id))
             {
-                int updateQuantity = lstBillDetailView.Where(p => p.ProductID == id).FirstOrDefault().Quantity -= 1;
+                productCart.Quantity -= 1;
                 HttpContext.Session.Set("products", lstBillDetailView);
             }
 
