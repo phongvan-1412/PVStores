@@ -30,7 +30,25 @@ namespace WebApplication1.Controllers
                 lstBillDetailView = new List<BillDetailViewModels>();
             }
 
-            return View(lstBillDetailView);
+            List<BillDetailViewModels> lstDelete = new List<BillDetailViewModels>();
+            List<BillDetailViewModels> lstDisplay = new List<BillDetailViewModels>();
+
+            foreach (var item in lstBillDetailView)
+            {
+                if (item.Quantity == 0)
+                {
+                    lstDelete.Add(item);
+                }
+                else
+                {
+                    lstDisplay.Add(item);
+                }
+            }
+
+            lstDelete.Clear();
+            HttpContext.Session.Set("products", lstDisplay);
+
+            return View(lstDisplay);
         }
 
         public IActionResult Increase(int id)
@@ -82,25 +100,26 @@ namespace WebApplication1.Controllers
                 lstBillDetailView = new List<BillDetailViewModels>();
             }
 
-            var product = lstBillDetailView.FirstOrDefault(p => p.ProductID == id);
+            var productCart = lstBillDetailView.FirstOrDefault(p => p.ProductID == id);
 
             if (lstBillDetailView.Any(p => p.ProductID == id))
             {
-                decimal productPrice = product.Price;
-                int updateQuantity = product.Quantity;
-
-                if (updateQuantity <= 0)
+                if (lstBillDetailView.Count() == 0 || productCart.Quantity == 0)
                 {
-                    updateQuantity = product.Quantity;
+                    productCart.Quantity = 0;
+                    HttpContext.Session.Set("products", lstBillDetailView);
                 }
                 else
                 {
-                    updateQuantity = product.Quantity -= 1;
+                    if (productCart.Quantity == 0)
+                    {
+                        lstBillDetailView.Remove(productCart);
+                        HttpContext.Session.Set("products", lstBillDetailView);
+                    }
+                    productCart.Quantity -= 1;
+                    HttpContext.Session.Set("products", lstBillDetailView);
                 }
 
-                decimal totalPrice = product.Total = updateQuantity * productPrice;
-
-                HttpContext.Session.Set("products", lstBillDetailView);
             }
 
             return RedirectToAction("Index", "Cart");

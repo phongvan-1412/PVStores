@@ -113,12 +113,31 @@ namespace WebApplication1.Controllers
         public IActionResult RemoveFromCart(int id)
         {
             List<BillDetailViewModels> lstBillDetailView = HttpContext.Session.Get<List<BillDetailViewModels>>("products");
+            if(lstBillDetailView == null)
+            {
+                lstBillDetailView = new List<BillDetailViewModels>();
+            }
+
             var productCart = lstBillDetailView.FirstOrDefault(p => p.ProductID == id);
 
             if (lstBillDetailView.Any(p => p.ProductID == id))
             {
-                productCart.Quantity -= 1;
-                HttpContext.Session.Set("products", lstBillDetailView);
+                if (lstBillDetailView.Count() == 0 || productCart.Quantity == 0)
+                {
+                    productCart.Quantity = 0;
+                    HttpContext.Session.Set("products", lstBillDetailView);
+                }
+                else
+                {
+                    if (productCart.Quantity == 0)
+                    {
+                        lstBillDetailView.Remove(productCart);
+                        HttpContext.Session.Set("products", lstBillDetailView);
+                    }
+                    productCart.Quantity -= 1;
+                    HttpContext.Session.Set("products", lstBillDetailView);
+                }
+                
             }
 
             return RedirectToAction(nameof(Index));
