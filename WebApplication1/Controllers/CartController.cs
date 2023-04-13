@@ -145,7 +145,7 @@ namespace WebApplication1.Controllers
 
             if (acc.Email.Equals("") && account.Email.Equals(""))
             {
-                TempData["checkOutFlag"] = "Please log in before payment";
+                TempData["checkOutFlag"] = "Card is valid but please log in before payment";
                 return RedirectToAction("Index", "Account");
             }
             else

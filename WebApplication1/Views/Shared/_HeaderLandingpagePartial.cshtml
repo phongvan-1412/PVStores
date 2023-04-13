@@ -1,7 +1,7 @@
 ﻿@using WebApplication1.Utilities
 @inject IHttpContextAccessor HttpContextAccessor
 @{
-    Account account = HttpContextAccessor.HttpContext.Session.Get<Account>("acc");
+    Account account = HttpContextAccessor.HttpContext.Session.Get<Account>("account");
 }
 
 <header id="header" class="fixed-top d-flex align-items-center">
@@ -41,7 +41,7 @@
         </nav><!-- .navbar -->
 
         <div class="d-flex align-items-center">
-            @if (Context.User.Identity.IsAuthenticated)
+            @if (Context.User.Identity.IsAuthenticated && account != null)
             {
                 <ul class="d-flex flex-row align-items-center" style="list-style-type: none">
                     <li>
@@ -52,7 +52,14 @@
                     </li>
                 </ul>
             }
-            else if (account != null)
+            else if (account == null)
+            {
+                {
+                    HttpContextAccessor.HttpContext.Session.Remove("account");
+                }
+                <a asp-area="" asp-controller="Account" asp-action="Index" class="book-a-table-btn scrollto d-none d-lg-flex">Log In</a>
+            }
+            else
             {
                 <ul class="d-flex flex-row align-items-center" style="list-style-type: none">
                     <li>
@@ -62,10 +69,6 @@
                         <a asp-area="" asp-controller="Account" asp-action="Signout" class="book-a-table-btn scrollto d-none d-lg-flex">Logout</a>
                     </li>
                 </ul>
-            }
-            else
-            {
-                <a asp-area="" asp-controller="Account" asp-action="Index" class="book-a-table-btn scrollto d-none d-lg-flex">Log In</a>
             }
         </div>
 

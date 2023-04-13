@@ -38,15 +38,22 @@
                 <div class="form-group alert alert-danger mb-3">
                     <strong>@TempData["checkOutFlag"]</strong>
                 </div>
-
             }
 
-            @if (TempData["registerFlag"] != null)
+            @if (TempData["registerSuccess"] != null)
             {
                 <div class="form-group alert alert-success mb-3">
-                    <strong>@TempData["registerFlag"]</strong>
+                    <strong>@TempData["registerSuccess"]</strong>
                 </div>
             }
+            
+            @if (TempData["regiterFail"] != null)
+            {
+                <div class="form-group alert alert-danger mb-3">
+                    <strong>@TempData["regiterFail"]</strong>
+                </div>
+            }
+
             <form asp-action="Signin" method="post">
                 <div class="form-group mb-3">
                     <label class="form-label">Email</label>
@@ -79,7 +86,7 @@
                 }
             </div>
 
-            @if (account.Email != "" || TempData["LoginSuccess"] != null)
+            @if (TempData["LoginSuccess"] != null)
             {
                 <div class="form-group alert alert-success mb-3">
                     <strong>@TempData["LoginSuccess"]</strong>

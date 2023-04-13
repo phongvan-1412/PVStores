@@ -51,7 +51,10 @@ builder.Services.AddAuthentication(options =>
     options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
     options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
 })
-.AddCookie();
+.AddCookie(options =>
+{
+    options.Cookie.Name = "Cookies";
+});
 
 builder.Services.AddMvc();
 builder.Services.AddHttpContextAccessor();

@@ -5,9 +5,7 @@ using WebApplication1.Models.entities;
 using WebApplication1.Models.ModelPattern;
 using WebApplication1.Utilities;
 using System.Text;
-using Microsoft.AspNetCore.Http;
 using WebApplication1.ViewModels;
-using Microsoft.AspNetCore.Hosting;
 
 namespace WebApplication1.Controllers
 {
@@ -31,11 +29,8 @@ namespace WebApplication1.Controllers
 
             Account account = new Account();
 
-            HttpContext.Session.Set("account", account);
-
             if (User.Identity.IsAuthenticated)
             {
-
                 if (User.Identity.AuthenticationType.Equals("Google") || User.Identity.AuthenticationType.Equals("Facebook"))
                 {
                     var id = User.Claims.Where(n => n.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")).FirstOrDefault().Value;
@@ -64,6 +59,11 @@ namespace WebApplication1.Controllers
 
                         FacadeMaker.Instance.CreateAccount(account);
                         HttpContext.Session.Set("account", account);
+                        var siteCookies = HttpContext.Request.Cookies.Where(n => n.Key.Equals("Cookies"));
+                        foreach (var cookie in siteCookies)
+                        {
+                            Response.Cookies.Delete(cookie.Key);
+                        }
 
                         List<Bill> bill = _context.Bills.Where(b => b.AccId == account.ID).ToList();
                         List<BillViewModels> lstBillVM = new List<BillViewModels>();
@@ -89,6 +89,12 @@ namespace WebApplication1.Controllers
                         }
                         FacadeMaker.Instance.UpdateAccount(account.ID, account);
                         HttpContext.Session.Set("account", account);
+
+                        var siteCookies = HttpContext.Request.Cookies.Where(n => n.Key.Equals("Cookies"));
+                        foreach (var cookie in siteCookies)
+                        {
+                            Response.Cookies.Delete(cookie.Key);
+                        }
 
                         List<Bill> bill = _context.Bills.Where(b => b.AccId == account.ID).ToList();
                         List<BillViewModels> lstBillVM = new List<BillViewModels>();
@@ -150,8 +156,15 @@ namespace WebApplication1.Controllers
                 Status = true
             };
 
-            FacadeMaker.Instance.CreateAccount(data);
-            TempData["registerFlag"] = "Register succeeded! Please Log in to your account";
+            if (data.Email.Equals(_context.Accounts.FirstOrDefault(a => a.Email.Equals(account.Email) && a.Type == (int)EnumStatus.Admin).Email))
+            {
+                TempData["regiterFail"] = "Your email is valid, please try another email";
+            }
+            else
+            {
+                FacadeMaker.Instance.CreateAccount(data);
+                TempData["registerSuccess"] = "Register succeeded! Please Log in to your account";
+            }
 
             return RedirectToAction("Index", "Account");
         }
@@ -172,7 +185,8 @@ namespace WebApplication1.Controllers
                 return RedirectToAction("Index");
             }
 
-            HttpContext.Session.Set("acc", accountExist);
+            HttpContext.Session.Set("account", accountExist);
+
 
             List<Bill> bill = _context.Bills.Where(b => b.AccId == accountExist.ID).ToList();
             List<BillViewModels> lstBillVM = new List<BillViewModels>();
@@ -191,12 +205,13 @@ namespace WebApplication1.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            HttpContext.Session.Remove("account");
             return RedirectToAction("Index", "Home");
         }
 
         public IActionResult Signout()
         {
-            HttpContext.Session.Remove("acc");
+            HttpContext.Session.Remove("account");
             return RedirectToAction("Index", "Home");
         }
 
@@ -258,7 +273,7 @@ namespace WebApplication1.Controllers
             newAcc.History = "";
             newAcc.Location = "";
             newAcc.Status = true;
-            newAcc.Type= (int)EnumStatus.Customer;
+            newAcc.Type = (int)EnumStatus.Customer;
             if (data.DeliAddress == null)
             {
                 newAcc.DeliAddress = "";
@@ -270,25 +285,18 @@ namespace WebApplication1.Controllers
             newAcc.IP = "";
             newAcc.GoogleID = "";
             newAcc.FacebookID = "";
-                
+
             FacadeMaker.Instance.UpdateAccount(data.ID, newAcc);
             TempData["updateAccFlag"] = "Your information has been saved";
 
             Account account = HttpContext.Session.Get<Account>("account");
-            Account acc = HttpContext.Session.Get<Account>("acc");
 
-            if(account != null || account.Email.Equals(""))
+            if (!account.Email.Equals(""))
             {
-                account = new Account();
-                acc = newAcc;
-                HttpContext.Session.Set("acc", acc);
-            }
-            else
-            {
-                acc = new Account();
                 account = newAcc;
                 HttpContext.Session.Set("account", account);
             }
+
             return RedirectToAction("Profile", "Account");
         }
 
@@ -332,7 +340,7 @@ namespace WebApplication1.Controllers
                 }
                 else
                 {
-                    acc= new Account();
+                    acc = new Account();
                     HttpContext.Session.Set("account", newAcc);
                 }
             }
