@@ -39,7 +39,14 @@
                     <form asp-action="UpdateAvatar" method="post" enctype="multipart/form-data">
                         <div class="d-flex flex-column align-items-center justify-content-center text-center col-md-12 mb-3">
                             <div class="col-md-12 mt-3 mb-5">
-                                <img src="~/img/profile/@account.Avatar" class="card-img-top" id="avatarUrl" alt="Profile Image" style="border-radius: 50%; width: 200px; height: 200px; background: rgba(255, 165, 0, 0.1);">
+                                @if (account.Avatar.Equals("hacker.png"))
+                                {
+                                    <img src="~/img/hacker.png" class="card-img-top" id="avatarUrl" alt="Profile Image" style="border-radius: 50%; width: 200px; height: 200px; background: rgba(255, 165, 0, 0.1);">
+                                }
+                                else
+                                {
+                                    <img src="~/img/profile/@account.Avatar" class="card-img-top" id="avatarUrl" alt="Profile Image" style="border-radius: 50%; width: 200px; height: 200px; background: rgba(255, 165, 0, 0.1);">
+                                }
                             </div>
 
                             <div class="d-flex align-items-center justify-content-between col-md-12 mb-3">

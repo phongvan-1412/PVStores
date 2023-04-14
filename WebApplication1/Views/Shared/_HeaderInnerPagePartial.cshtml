@@ -83,7 +83,7 @@
                 </li>
             </ul>
         }
-        else if (account == null)
+        else if (account == null || account.Email.Equals(""))
         {
             {
                 HttpContextAccessor.HttpContext.Session.Remove("account");

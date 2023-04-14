@@ -18,17 +18,17 @@
                         </button>
                     </div>
                     <div class="header-search d-none d-md-flex">
-                        <form action="#">
+                        @*<form action="#">
                             <input type="text" placeholder="Search..." />
                             <button><i class="lni lni-search-alt"></i></button>
-                        </form>
+                        </form>*@
                     </div>
                 </div>
             </div>
             <div class="col-lg-7 col-md-7 col-6">
                 <div class="header-right">
                     <!-- notification start -->
-                    <div class="notification-box ml-15 d-none d-md-flex">
+                    @*<div class="notification-box ml-15 d-none d-md-flex">
                         <button class="dropdown-toggle"
                                 type="button"
                                 id="notification"
@@ -80,10 +80,10 @@
                                 </a>
                             </li>
                         </ul>
-                    </div>
+                    </div>*@
                     <!-- notification end -->
                     <!-- message start -->
-                    <div class="header-message-box ml-15 d-none d-md-flex">
+                   @* <div class="header-message-box ml-15 d-none d-md-flex">
                         <button class="dropdown-toggle"
                                 type="button"
                                 id="message"
@@ -131,14 +131,14 @@
                                 </a>
                             </li>
                         </ul>
-                    </div>
+                    </div>*@
                     <!-- message end -->
                     <!-- filter start -->
-                    <div class="filter-box ml-15 d-none d-md-flex">
+                    @*<div class="filter-box ml-15 d-none d-md-flex">
                         <button class="" type="button" id="filter">
                             <i class="lni lni-funnel"></i>
                         </button>
-                    </div>
+                    </div>*@
                     <!-- filter end -->
                     <!-- profile start -->
                     <div class="profile-box ml-15">
@@ -154,8 +154,14 @@
                                         <h6>@admin.Name</h6>
 
                                         <div class="image">
-
-                                            <img src="img/profile/@admin.Avatar" alt="Avatar" />
+                                            @if (admin.Avatar.Equals("hacker.png"))
+                                            {
+                                                <img src="img/hacker.png" alt="Avatar" />
+                                            }
+                                            else
+                                            {
+                                                <img src="img/profile/@admin.Avatar" alt="Avatar" />
+                                            }
                                             <span class="status"></span>
                                         </div>
                                     }
@@ -165,7 +171,7 @@
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end"
                             aria-labelledby="profile">
-                            <li>
+                            @*<li>
                                 <a href="#0">
                                     <i class="lni lni-user"></i> View Profile
                                 </a>
@@ -180,7 +186,7 @@
                             </li>
                             <li>
                                 <a href="#0"> <i class="lni lni-cog"></i> Settings </a>
-                            </li>
+                            </li>*@
                             <li>
                                 <form>
                                     <a asp-area="Admin" asp-controller="Home" asp-action="Logout"> <i class="lni lni-exit"></i> Sign Out </a>
