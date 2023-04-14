@@ -88,7 +88,7 @@ namespace WebApplication1.Controllers
                     {
                         item.Price = price;
 
-                        if(item.Quantity > 4 || mainList.Sum(p => p.Total) > 50)
+                        if(item.Quantity > 4 || mainList.Sum(p => p.Total) > 50 || mainList.Sum(p => p.Quantity) > 19)
                         {
                             item.Quantity = item.Quantity;
                         }
@@ -113,7 +113,7 @@ namespace WebApplication1.Controllers
                     BillDetailViewModels obj = new BillDetailViewModels();
                     obj.ID = id;
 
-                    if (mainList.Sum(p => p.Total) > 50)
+                    if (mainList.Sum(p => p.Total) > 50 || mainList.Sum(p => p.Quantity) > 19)
                     {
                         obj.Price = obj.Price;
                         obj.Quantity = obj.Quantity;
@@ -140,7 +140,7 @@ namespace WebApplication1.Controllers
                 obj.ID = id;
                 
 
-                if (firstList.Sum(p => p.Total) > 50)
+                if (firstList.Sum(p => p.Total) > 50 || firstList.Sum(p => p.Quantity) > 19)
                 {
                     obj.Price = obj.Price;
                     obj.Quantity = obj.Quantity;
@@ -187,37 +187,146 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public IActionResult RemoveFromCart(int id)
+        public JsonResult RemoveFromCart(int id, decimal price)
         {
             List<BillDetailViewModels> lstBillDetailView = HttpContext.Session.Get<List<BillDetailViewModels>>("products");
-            if (lstBillDetailView == null)
-            {
-                lstBillDetailView = new List<BillDetailViewModels>();
-            }
 
-            var productCart = lstBillDetailView.FirstOrDefault(p => p.ProductID == id);
-
-            if (lstBillDetailView.Any(p => p.ProductID == id))
+            if (lstBillDetailView != null)
             {
-                if (lstBillDetailView.Count() == 0 || productCart.Quantity == 0)
+                List<BillDetailViewModels> mainList = lstBillDetailView;
+                int check = 0;
+                foreach (var item in mainList)
                 {
-                    productCart.Quantity = 0;
-                    HttpContext.Session.Set("products", lstBillDetailView);
+                    if (item.ID == id)
+                    {
+                        item.Price = price;
+
+                        if (item.Quantity < 1)
+                        {
+                            if(item.Quantity == 0)
+                            {
+                                mainList.Remove(item);
+                            }
+                            else
+                            {
+                                item.Quantity = item.Quantity;
+                            }
+                        }
+                        else
+                        { 
+                            item.Quantity -= 1;
+                        }
+
+                        item.Total = item.Price * item.Quantity;
+
+                        check = 0;
+                        break;
+                    }
+                    else
+                    {
+                        check = 1;
+                    }
+                }
+
+                if (check == 1)
+                {
+                    BillDetailViewModels obj = new BillDetailViewModels();
+                    obj.ID = id;
+
+                    if (obj.Quantity < 1)
+                    {
+                        if (obj.Quantity == 0)
+                        {
+                            mainList.Remove(obj);
+                        }
+                        else
+                        {
+                            obj.Price = obj.Price;
+                            obj.Quantity = obj.Quantity;
+                            obj.Total = obj.Price * obj.Quantity;
+                        }
+                    }
+                    else
+                    {
+                        obj.Price = price;
+                        obj.Quantity = 1;
+                        obj.Total = obj.Price * obj.Quantity;
+
+                        mainList.Add(obj);
+                    }
+
+                }
+
+
+                HttpContext.Session.Set("products", mainList);
+            }
+            else
+            {
+                List<BillDetailViewModels> firstList = new List<BillDetailViewModels>();
+                BillDetailViewModels obj = new BillDetailViewModels();
+                obj.ID = id;
+
+
+                if (obj.Quantity < 1)
+                {
+                    if (obj.Quantity == 0)
+                    {
+                        firstList.Remove(obj);
+                    }
+                    else
+                    {
+                        obj.Price = obj.Price;
+                        obj.Quantity = obj.Quantity;
+                        obj.Total = obj.Price * obj.Quantity;
+                    }
                 }
                 else
                 {
-                    if (productCart.Quantity == 0)
-                    {
-                        lstBillDetailView.Remove(productCart);
-                        HttpContext.Session.Set("products", lstBillDetailView);
-                    }
-                    productCart.Quantity -= 1;
-                    HttpContext.Session.Set("products", lstBillDetailView);
+                    obj.Price = price;
+                    obj.Quantity = 1;
+                    obj.Total = obj.Price * obj.Quantity;
+
+                    firstList.Add(obj);
                 }
 
+                HttpContext.Session.Set("products", firstList);
             }
 
-            return RedirectToAction(nameof(Index));
+            return Json(HttpContext.Session.Get<List<BillDetailViewModels>>("products"));
         }
+
+        //[HttpPost]
+        //public IActionResult RemoveFromCart(int id)
+        //{
+        //    List<BillDetailViewModels> lstBillDetailView = HttpContext.Session.Get<List<BillDetailViewModels>>("products");
+        //    if (lstBillDetailView == null)
+        //    {
+        //        lstBillDetailView = new List<BillDetailViewModels>();
+        //    }
+
+        //    var productCart = lstBillDetailView.FirstOrDefault(p => p.ProductID == id);
+
+        //    if (lstBillDetailView.Any(p => p.ProductID == id))
+        //    {
+        //        if (lstBillDetailView.Count() == 0 || productCart.Quantity == 0)
+        //        {
+        //            productCart.Quantity = 0;
+        //            HttpContext.Session.Set("products", lstBillDetailView);
+        //        }
+        //        else
+        //        {
+        //            if (productCart.Quantity == 0)
+        //            {
+        //                lstBillDetailView.Remove(productCart);
+        //                HttpContext.Session.Set("products", lstBillDetailView);
+        //            }
+        //            productCart.Quantity -= 1;
+        //            HttpContext.Session.Set("products", lstBillDetailView);
+        //        }
+
+        //    }
+
+        //    return RedirectToAction(nameof(Index));
+        //}
     }
 }

@@ -39,7 +39,7 @@
                     <i class="bi bi-cart-check-fill"></i>
                 </a>
 
-                <a class="btn-delete btn btn-outline-primary text-white" title="Remove From Cart">
+                <a class="btn-delete btn btn-outline-primary text-white" title="Remove From Cart" onclick="Decrease(@item.ID, @item.Price)">
                     <i class="bi bi-trash"></i>
                 </a>
             </div>
@@ -66,9 +66,45 @@
                     sumTotal += item.total;
                 }
                 
-                if (sumTotal > 50) {
+                if (sumTotal > 50 || sumQuantity > 19) {
                     $('#cartFlagContainer').get(0).style.visibility = 'visible';
                     $('#cartFlag').get(0).innerHTML = "Cart reached limitation";
+                }else{
+                    $('#cartFlagContainer').get(0).style.visibility = 'hidden';
+                }
+
+                $('#cartQuantity').get(0).innerHTML
+                    = "<li><a href=" + "'" + "/Cart/Index" + "' " + "id =" + "'" + "cartQuantity" + "'> <i class=" + "'" + "bi bi-cart" + "'></i>&nbsp; " + "(" + sumQuantity + ")" + "</a></li>";
+            },
+            error: function (req, status, error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function Decrease(productId, productPrice) {
+        $.ajax({
+            type: "POST",
+            data: { id: productId, price: productPrice },
+            dataType: "json",
+            url: "/Category/RemoveFromCart",
+            success: function (result) {
+                console.log(result);
+
+                var sumQuantity = 0;
+                var sumTotal = 0;
+                result.forEach(myFunction);
+
+                function myFunction(item) {
+                    sumQuantity += item.quantity;
+                    sumTotal += item.total;
+                }
+
+                if (sumTotal > 50 || sumQuantity > 19) {
+                    $('#cartFlagContainer').get(0).style.visibility = 'visible';
+                    $('#cartFlag').get(0).innerHTML = "Cart reached limitation";
+                } else {
+                    $('#cartFlagContainer').get(0).style.visibility = 'hidden';
                 }
 
                 $('#cartQuantity').get(0).innerHTML
