@@ -20,15 +20,12 @@
 
     <section class="inner-page">
         <div class="container">
-            @if (TempData["cartFlag"] != null)
-            {
-                <div class="form-group alert alert-danger mb-3">
-                    <strong>@TempData["cartFlag"]</strong>
-                </div>
-            }
+            <div id="cartFlagContainer" class="row form-group alert alert-danger mb-3" style="visibility: hidden">
+                <strong id="cartFlag"></strong>
+            </div>
         </div>
+
         <div class="container d-flex text-white">
-            
             <div class="row">
                 <div class="d-flex align-items-center justify-content-center col-lg-6 col-md-6 col-sm-12">
                     <img src="~/img/products/@Model.Image" alt="@Model.Image" style="max-width: 80%" />
@@ -42,17 +39,27 @@
                         @Html.Raw(Model.Description)
                     </p>
                     <div class="d-flex">
-                        <form method="post">
-                            <button asp-controller="Product" asp-action="AddToCart" asp-route-id="@Model.ID" class="btn btn-outline-primary text-white me-3" title="Add To Cart">
-                                <i class="bi bi-cart-check-fill"></i>
-                                Add To Cart
-                            </button>
+                        @*<form method="post">
+                        <button asp-controller="Product" asp-action="AddToCart" asp-route-id="@Model.ID" class="btn btn-outline-primary text-white me-3" title="Add To Cart">
+                        <i class="bi bi-cart-check-fill"></i>
+                        Add To Cart
+                        </button>
 
-                            <button asp-controller="Product" asp-action="RemoveFromCart" asp-route-id="@Model.ID" class="btn btn-outline-danger text-white" title="Remove From Cart">
-                                <i class="bi bi-trash"></i>
-                                Remove From Cart
-                            </button>
-                        </form>
+                        <button asp-controller="Product" asp-action="RemoveFromCart" asp-route-id="@Model.ID" class="btn btn-outline-danger text-white" title="Remove From Cart">
+                        <i class="bi bi-trash"></i>
+                        Remove From Cart
+                        </button>
+                        </form>*@
+
+                        <button class="btn btn-outline-primary text-white me-3" title="Add To Cart" onclick="Increase(@Model.ID, @Model.Price)">
+                            <i class="bi bi-cart-check-fill"></i>
+                            Add To Cart
+                        </button>
+
+                        <button asp-controller="Product" asp-action="RemoveFromCart" asp-route-id="@Model.ID" class="btn btn-outline-danger text-white" title="Remove From Cart">
+                            <i class="bi bi-trash"></i>
+                            Remove From Cart
+                        </button>
                     </div>
 
                 </div>
@@ -61,3 +68,37 @@
         </div>
     </section>
 </main>
+
+<script type="text/javascript">
+    function Increase(productId, productPrice) {
+        $.ajax({
+            type: "POST",
+            data: { id: productId, price: productPrice },
+            dataType: "json",
+            url: "/Category/AddToCart",
+            success: function (result) {
+                console.log(result);
+
+                var sumQuantity = 0;
+                var sumTotal = 0;
+                result.forEach(myFunction);
+
+                function myFunction(item) {
+                    sumQuantity += item.quantity;
+                    sumTotal += item.total;
+                }
+
+                if (sumTotal > 50) {
+                    $('#cartFlagContainer').get(0).style.visibility = 'visible';
+                    $('#cartFlag').get(0).innerHTML = "Cart reached limitation";
+                }
+
+                $('#cartQuantity').get(0).innerHTML
+                    = "<li><a href=" + "'" + "/Cart/Index" + "' " + "id =" + "'" + "cartQuantity" + "'> <i class=" + "'" + "bi bi-cart" + "'></i>&nbsp; " + "(" + sumQuantity + ")" + "</a></li>";
+            },
+            error: function (req, status, error) {
+                console.log(error);
+            }
+        });
+    }
+</script>

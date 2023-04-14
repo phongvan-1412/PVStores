@@ -26,7 +26,7 @@
             </a>
 
             <div class="position-absolute d-flex align-items-center" style="bottom: 5px">
-                <form method="post">
+                @*<form method="post">
                     <button asp-controller="Category" asp-action="AddToCart" asp-route-id="@item.ID" class="btn-add btn btn-outline-primary text-white me-3" title="Add To Cart">
                         <i class="bi bi-cart-check-fill"></i>
                     </button>
@@ -34,35 +34,45 @@
                     <button asp-controller="Category" asp-action="RemoveFromCart" asp-route-id="@item.ID" class="btn-delete btn btn-outline-primary text-white" title="Remove From Cart">
                         <i class="bi bi-trash"></i>
                     </button>
-                </form>
-                @*<a class="btn-add btn btn-outline-primary text-white me-3" title="Add To Cart" onclick="Increase()">
+                </form>*@
+                <a class="btn-add btn btn-outline-primary text-white me-3" title="Add To Cart" onclick="Increase(@item.ID, @item.Price)">
                     <i class="bi bi-cart-check-fill"></i>
                 </a>
 
                 <a class="btn-delete btn btn-outline-primary text-white" title="Remove From Cart">
                     <i class="bi bi-trash"></i>
-                </a>*@
+                </a>
             </div>
         </div>
     </div>
 }
 
 <script type="text/javascript">
-    function Increase() {
-        const productId = $('#productId').attr("value");
-
+    function Increase(productId, productPrice) {
         $.ajax({
             type: "POST",
-            data: { productId },
+            data: { id: productId, price: productPrice },
             dataType: "json",
             url: "/Category/AddToCart",
             success: function (result) {
-                console.log();
+                console.log(result);
+
+                var sumQuantity = 0;
+                var sumTotal = 0;
                 result.forEach(myFunction);
-                //function myFunction(item) {
-                //    productTotal.get(0).innerHTML = "$" + item.total;
-                //    productQuantity.get(0).innerHTML = item.quantity;
-                //}
+
+                function myFunction(item) {
+                    sumQuantity += item.quantity;
+                    sumTotal += item.total;
+                }
+                
+                if (sumTotal > 50) {
+                    $('#cartFlagContainer').get(0).style.visibility = 'visible';
+                    $('#cartFlag').get(0).innerHTML = "Cart reached limitation";
+                }
+
+                $('#cartQuantity').get(0).innerHTML
+                    = "<li><a href=" + "'" + "/Cart/Index" + "' " + "id =" + "'" + "cartQuantity" + "'> <i class=" + "'" + "bi bi-cart" + "'></i>&nbsp; " + "(" + sumQuantity + ")" + "</a></li>";
             },
             error: function (req, status, error) {
                 console.log(error);
