@@ -10,7 +10,7 @@ namespace WebApplication1.Areas.Admin.Controllers
         public IActionResult Index()
         {
             Account admin = HttpContext.Session.Get<Account>("admin");
-            if(admin == null)
+            if (admin == null)
             {
                 return RedirectToAction("Index", "Account", new { Area = "" });
             }
@@ -22,6 +22,12 @@ namespace WebApplication1.Areas.Admin.Controllers
         {
             HttpContext.Session.Remove("admin");
             return Json("Success");
+        }
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Remove("admin");
+            return RedirectToAction("Index", "Account", new { Area = "" }); ;
         }
     }
 }
