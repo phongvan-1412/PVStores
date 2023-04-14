@@ -51,7 +51,7 @@
     function Increase(productId, productPrice) {
         $.ajax({
             type: "POST",
-            data: { id: productId, price: productPrice },
+            data: { id: productId, price: productPrice},
             dataType: "json",
             url: "/Category/AddToCart",
             success: function (result) {

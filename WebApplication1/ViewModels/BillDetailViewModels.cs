@@ -18,7 +18,19 @@ namespace WebApplication1.ViewModels
         public string Token { get; set; }
         public string Email { get; set; }
 
-        public BillDetailViewModels() { }
+        public BillDetailViewModels() {
+            this.ID = 0;
+            this.Quantity = 0;
+            this.Price = 0;
+            this.Total = 0;
+            this.ProductID = 0;
+            this.ProductName = "";
+            this.ProductImage = "";
+            this.Total = 0;
+            this.BillID = 0;
+            this.Token = "";
+            this.Email = "";
+        }
 
         public BillDetailViewModels(BillDetail billDetail)
         {

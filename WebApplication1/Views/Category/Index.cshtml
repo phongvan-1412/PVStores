@@ -24,9 +24,10 @@
         </div>
 
         <div class="row d-flex text-white offset-2 mb-5">
-            <div id="cartFlagContainer" class="row form-group alert alert-danger mb-3" style="visibility: hidden">
+            <div id="cartFlagContainer" class="form-group alert alert-danger mb-3" style="visibility: hidden">
                 <strong id="cartFlag"></strong>
             </div>
+
             @Html.Partial("~/Views/Partials/_ProductByCatePartial.cshtml", Model)
         </div>
 

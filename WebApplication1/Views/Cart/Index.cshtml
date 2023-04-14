@@ -21,12 +21,10 @@
 
     <section class="inner-page">
         <div class="container position-relative">
-            @if (TempData["cartFlag"] != null)
-            {
-                <div class="form-group alert alert-danger mb-3">
-                    <strong>@TempData["cartFlag"]</strong>
-                </div>
-            }
+            <div id="cartFlagContainer" class="row form-group alert alert-danger mb-3" style="visibility: hidden">
+                <strong id="cartFlag"></strong>
+            </div>
+
             <table class="table table-borderless text-white">
                 <thead>
                     <tr>
@@ -40,7 +38,7 @@
 
                 </thead>
 
-                <tbody>
+                <tbody id="data-output">
                     @foreach (var item in Model)
                     {
                         <tr>
@@ -58,27 +56,17 @@
                             <td class="align-middle">
                                 <div class="d-flex align-items-center">
 
-                                    @*<a id="decreaseBtn" class="d-flex align-items-center justify-content-center btn btn-outline-primary text-white me-3" onclick="OnClickDecrease()">
-                                <span class="d-flex align-items-center justify-content-center" style="width: 15px; height: 15px">-</span>
-                                </a>*@
+                                    <a id="decreaseBtn" class="d-flex align-items-center justify-content-center btn btn-outline-primary text-white me-3" onclick="DecreaseCart(@item.ProductID, @item.Price)">
+                                        <span class="d-flex align-items-center justify-content-center" style="width: 15px; height: 15px">-</span>
+                                    </a>
 
-                                    @*<a id="increaseBtn" class="d-flex align-items-center justify-content-center btn btn-outline-primary text-white ms-3" onclick="OnClickIncrease()">
-                                <span class="d-flex align-items-center justify-content-center" style="width: 15px; height: 15px">+</span>
-                                </a>*@
-                                    <form>
-                                        <a class="d-flex align-items-center justify-content-center btn btn-outline-primary text-white me-3" asp-route-id="@item.ProductID" asp-action="Decrease" asp-controller="Cart">
-                                            <span class="d-flex align-items-center justify-content-center" style="width: 15px; height: 15px">-</span>
-                                        </a>
-
-                                    </form>
 
                                     <span id="productQuantity">@item.Quantity</span>
 
-                                    <form>
-                                        <a class="d-flex align-items-center justify-content-center btn btn-outline-primary text-white ms-3" asp-route-id="@item.ProductID" asp-action="Increase" asp-controller="Cart">
-                                            <span class="d-flex align-items-center justify-content-center" style="width: 15px; height: 15px">+</span>
-                                        </a>
-                                    </form>
+
+                                    <a id="increaseBtn" class="d-flex align-items-center justify-content-center btn btn-outline-primary text-white ms-3" onclick="IncreaseCart(@item.ProductID, @item.Price)">
+                                        <span class="d-flex align-items-center justify-content-center" style="width: 15px; height: 15px">+</span>
+                                    </a>
 
                                     <form>
                                         <a asp-controller="Cart" asp-action="Remove" asp-route-id="@item.ProductID" id="btn-delete" class="d-flex align-items-center justify-content-center btn btn-outline-primary text-white ms-5" title="Remove From Cart" style="border-radius: 50%; outline-color: #cda45e">
@@ -110,7 +98,7 @@
             <form asp-controller="Cart" asp-action="CheckOut" asp-route-total="@Model.Sum(p => p.Total)" method="post">
                 <span class="d-flex text-end fw-semibold mb-3" style="font-size: 25px">
                     Payment:
-                    <span class="ms-5" style="color: #cda45e; font-size: 25px">
+                    <span class="ms-5" style="color: #cda45e; font-size: 25px" id="cartTotal">
                         $@Model.Sum(p => p.Total)
                     </span>
                 </span>
@@ -129,23 +117,80 @@
     </section>
 </main>
 
-@*<script>
+<script type="text/javascript">
 
-    function OnClickIncrease() {
-        const productId = $('#productId').attr("value");
-        const productTotal = $('#productTotal');
-        const productQuantity = $('#productQuantity');
+    function IncreaseCart(productId, productPrice) {
         $.ajax({
             type: "POST",
-            data:  {productId },
+            data: { id: productId, price: productPrice },
             dataType: "json",
             url: "/Cart/Increase",
             success: function (result) {
-                result.forEach(myFunction);
-                function myFunction(item) {
-                    productTotal.get(0).innerHTML = "$" + item.total;
-                    productQuantity.get(0).innerHTML = item.quantity;
+                console.log(result);
+
+                var sumQuantity = 0;
+                var sumTotal = 0;
+                let out = "";
+
+                result.forEach(myFunction)
+
+                function myFunction(item, index) {
+                    var row =  `
+                            <tr>
+                                <th scope="row" class="align-middle">
+                                        ${index + 1}
+                                </th>
+
+                                <td>
+                                        <img src="/img/products/${item.productImage}" style="width: 178px; height: 178px" />
+                                </td>
+                                <td class="align-middle">${item.productName}</td>
+                                    <td class="align-middle">$${item.price}</td>
+                                <td class="align-middle">
+                                    <div class="d-flex align-items-center">
+
+                                                    <a id="decreaseBtn" class="d-flex align-items-center justify-content-center btn btn-outline-primary text-white me-3" onclick="DecreaseCart(${item.productID}, ${item.price})">
+                                                    <span class="d-flex align-items-center justify-content-center" style="width: 15px; height: 15px">-</span>
+                                            </a>
+
+                                                <span id="productQuantity">${item.quantity}</span>
+
+
+                                                    <a id="increaseBtn" class="d-flex align-items-center justify-content-center btn btn-outline-primary text-white ms-3" onclick="IncreaseCart(${item.productID}, ${item.price})">
+                                                <span class="d-flex align-items-center justify-content-center" style="width: 15px; height: 15px">+</span>
+                                            </a>
+
+                                        <form>
+                                                <a href="/Cart/Remove/${item.productID}" id="btn-delete" class="d-flex align-items-center justify-content-center btn btn-outline-primary text-white ms-5" title="Remove From Cart" style="border-radius: 50%; outline-color: #cda45e">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </form>
+
+                                    </div>
+                                </td>
+                                    <td class="align-middle fw-semibold" style="color: #cda45e" id="productTotal">$${item.total}</td>
+                            </tr>`;
+
+                    out += row;
+                    sumQuantity += item.quantity;
+                    sumTotal += item.total;
                 }
+
+                if (sumTotal > 50 || sumQuantity > 19) {
+                    $('#cartFlagContainer').get(0).style.visibility = 'visible';
+                    $('#cartFlag').get(0).innerHTML = "Cart reached limitation";
+                }else{
+                    $('#cartFlagContainer').get(0).style.visibility = 'hidden';
+                }
+               
+
+                let table = document.getElementById('data-output');
+                table.innerHTML = out;
+
+                $('#cartQuantity').get(0).innerHTML
+                    = "<li><a href=" + "'" + "/Cart/Index" + "' " + "id =" + "'" + "cartQuantity" + "'> <i class=" + "'" + "bi bi-cart" + "'></i>&nbsp; " + "(" + sumQuantity + ")" + "</a></li>";
+                $('#cartTotal').get(0).innerHTML = "$" + sumTotal;
+
             },
             error: function (req, status, error) {
                 console.log(error);
@@ -153,22 +198,78 @@
         });
     }
 
-    function OnClickDecrease() {
-        const productId = $('#productId').attr("value");
-        const productTotal = $('#productTotal');
-        const productQuantity = $('#productQuantity');
-
+    function DecreaseCart(productId, productPrice) {
         $.ajax({
             type: "POST",
-            data: { productId },
+            data: { id: productId, price: productPrice },
             dataType: "json",
             url: "/Cart/Decrease",
             success: function (result) {
-                result.forEach(myFunction);
-                function myFunction(item) {
-                    productTotal.get(0).innerHTML = "$" + item.total;
-                    productQuantity.get(0).innerHTML = item.quantity;
+                console.log(result);
+
+                var sumQuantity = 0;
+                var sumTotal = 0;
+                let out = "";
+
+                result.forEach(myFunction)
+
+                function myFunction(item, index) {
+                    var row = `
+                                <tr>
+                                    <th scope="row" class="align-middle">
+                                            ${index}
+                                    </th>
+
+                                    <td>
+                                            <img src="/img/products/${item.productImage}" style="width: 178px; height: 178px" />
+                                    </td>
+                                    <td class="align-middle">${item.productName}</td>
+                                        <td class="align-middle">$${item.price}</td>
+                                    <td class="align-middle">
+                                        <div class="d-flex align-items-center">
+
+                                                        <a id="decreaseBtn" class="d-flex align-items-center justify-content-center btn btn-outline-primary text-white me-3" onclick="DecreaseCart(${item.productID}, ${item.price})">
+                                                        <span class="d-flex align-items-center justify-content-center" style="width: 15px; height: 15px">-</span>
+                                                </a>
+
+                                                    <span id="productQuantity">${item.quantity}</span>
+
+
+                                                        <a id="increaseBtn" class="d-flex align-items-center justify-content-center btn btn-outline-primary text-white ms-3" onclick="IncreaseCart(${item.productID}, ${item.price})">
+                                                    <span class="d-flex align-items-center justify-content-center" style="width: 15px; height: 15px">+</span>
+                                                </a>
+
+                                            <form>
+                                                <a href="/Cart/Remove/${item.productID}" id="btn-delete" class="d-flex align-items-center justify-content-center btn btn-outline-primary text-white ms-5" title="Remove From Cart" style="border-radius: 50%; outline-color: #cda45e">
+                                                    <i class="bi bi-trash"></i>
+                                                </a>
+                                            </form>
+
+                                        </div>
+                                    </td>
+                                        <td class="align-middle fw-semibold" style="color: #cda45e" id="productTotal">$${item.total}</td>
+                                </tr>`;
+
+                    out += row;
+                    sumQuantity += item.quantity;
+                    sumTotal += item.total;
                 }
+
+                if (sumTotal > 50 || sumQuantity > 19) {
+                    $('#cartFlagContainer').get(0).style.visibility = 'visible';
+                    $('#cartFlag').get(0).innerHTML = "Cart reached limitation";
+                } else {
+                    $('#cartFlagContainer').get(0).style.visibility = 'hidden';
+                }
+
+
+                let table = document.getElementById('data-output');
+                table.innerHTML = out;
+
+                $('#cartQuantity').get(0).innerHTML
+                    = "<li><a href=" + "'" + "/Cart/Index" + "' " + "id =" + "'" + "cartQuantity" + "'> <i class=" + "'" + "bi bi-cart" + "'></i>&nbsp; " + "(" + sumQuantity + ")" + "</a></li>";
+                $('#cartTotal').get(0).innerHTML = "$" + sumTotal;
+
             },
             error: function (req, status, error) {
                 console.log(error);
@@ -176,4 +277,4 @@
         });
     }
 
-</script>*@
+</script>

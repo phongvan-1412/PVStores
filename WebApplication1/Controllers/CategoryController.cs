@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.IdentityModel.Tokens;
 using NuGet.Protocol;
 using System.Collections.Generic;
 using WebApplication1.Models.entities;
@@ -77,6 +78,7 @@ namespace WebApplication1.Controllers
         public JsonResult AddToCart(int id, decimal price)
         {
             List<BillDetailViewModels> lstBillDetailView = HttpContext.Session.Get<List<BillDetailViewModels>>("products");
+            Product product = FacadeMaker.Instance.GetProductById(id);
 
             if (lstBillDetailView != null)
             {
@@ -84,11 +86,13 @@ namespace WebApplication1.Controllers
                 int check = 0;
                 foreach (var item in mainList)
                 {
-                    if (item.ID == id)
+                    if (item.ProductID == id)
                     {
                         item.Price = price;
+                        item.ProductImage = product.Image;
+                        item.ProductName = product.Name;
 
-                        if(item.Quantity > 4 || mainList.Sum(p => p.Total) > 50 || mainList.Sum(p => p.Quantity) > 19)
+                        if (item.Quantity > 4 || mainList.Sum(p => p.Total) > 50 || mainList.Sum(p => p.Quantity) > 19)
                         {
                             item.Quantity = item.Quantity;
                         }
@@ -100,6 +104,8 @@ namespace WebApplication1.Controllers
                         item.Total = item.Price * item.Quantity;
 
                         check = 0;
+                        HttpContext.Session.Set("products", mainList);
+
                         break;
                     }
                     else
@@ -111,7 +117,10 @@ namespace WebApplication1.Controllers
                 if (check == 1)
                 {
                     BillDetailViewModels obj = new BillDetailViewModels();
-                    obj.ID = id;
+                    obj.ProductID = id;
+                    obj.ProductImage = product.Image;
+                    obj.ProductName = product.Name;
+                    obj.Price = price;
 
                     if (mainList.Sum(p => p.Total) > 50 || mainList.Sum(p => p.Quantity) > 19)
                     {
@@ -128,17 +137,33 @@ namespace WebApplication1.Controllers
                         mainList.Add(obj);
                     }
 
+                    HttpContext.Session.Set("products", mainList);
+                }
+
+                if (lstBillDetailView.Count == 0)
+                {
+                    List<BillDetailViewModels> newList = new List<BillDetailViewModels>();
+                    BillDetailViewModels newObj = new BillDetailViewModels();
+                    newObj.ProductImage = product.Image;
+                    newObj.ProductName = product.Name;
+                    newObj.ProductID = id;
+                    newObj.Quantity = 1;
+                    newObj.Price = price;
+
+                    newList.Add(newObj);
+                    HttpContext.Session.Set("products", newList);
                 }
 
 
-                HttpContext.Session.Set("products", mainList);
             }
             else
             {
                 List<BillDetailViewModels> firstList = new List<BillDetailViewModels>();
                 BillDetailViewModels obj = new BillDetailViewModels();
-                obj.ID = id;
-                
+                obj.ProductImage = product.Image;
+                obj.ProductName = product.Name;
+                obj.ProductID = id;
+                obj.Price = price;
 
                 if (firstList.Sum(p => p.Total) > 50 || firstList.Sum(p => p.Quantity) > 19)
                 {
@@ -156,33 +181,20 @@ namespace WebApplication1.Controllers
                 }
 
                 HttpContext.Session.Set("products", firstList);
+
             }
 
-            //var productCart = lstBillDetailView.FirstOrDefault(p => p.ProductID == id);
+            //List<BillDetail> a = _context.BillDetails.Where(b => b.ProductID == id).ToList();
+            //List<BillDetailViewModels> finalLst = new List<BillDetailViewModels>();
 
-            //Product product = FacadeMaker.Instance.GetProductById(id);
-            //ProductViewModels productView = new ProductViewModels(product);
-
-            //BillDetailViewModels billDetailView = new BillDetailViewModels();
-
-
-            //if (lstBillDetailView.Any(p => p.ProductID == id))
+            //foreach (var item in a)
             //{
-            //    productCart.Quantity += 1;
-            //    productCart.Total = productCart.Quantity * productView.Price;
-            //}
-            //else
-            //{
-            //    billDetailView.ProductID = id;
-            //    billDetailView.ProductName = product.Name;
-            //    billDetailView.ProductImage = product.Image;
-            //    billDetailView.Price = product.Price;
-            //    billDetailView.Quantity = 1;
-            //    billDetailView.Total = billDetailView.Price * billDetailView.Quantity;
-            //    lstBillDetailView.Add(billDetailView);
-            //}
+            //    BillDetailViewModels billDetailView = new BillDetailViewModels(item);
 
-            //HttpContext.Session.Set("products", lstBillDetailView);
+            //    finalLst.Add(billDetailView);
+            //}
+            //HttpContext.Session.Set("products", finalLst);
+
             return Json(HttpContext.Session.Get<List<BillDetailViewModels>>("products"));
         }
 
@@ -190,106 +202,37 @@ namespace WebApplication1.Controllers
         public JsonResult RemoveFromCart(int id, decimal price)
         {
             List<BillDetailViewModels> lstBillDetailView = HttpContext.Session.Get<List<BillDetailViewModels>>("products");
+            Product product = FacadeMaker.Instance.GetProductById(id);
 
             if (lstBillDetailView != null)
             {
                 List<BillDetailViewModels> mainList = lstBillDetailView;
-                int check = 0;
+
+
                 foreach (var item in mainList)
                 {
-                    if (item.ID == id)
+                    if (item.ProductID == id)
                     {
                         item.Price = price;
+                        item.ProductImage = product.Image;
+                        item.ProductName = product.Name;
 
                         if (item.Quantity < 1)
                         {
-                            if(item.Quantity == 0)
-                            {
-                                mainList.Remove(item);
-                            }
-                            else
-                            {
-                                item.Quantity = item.Quantity;
-                            }
+                            item.Quantity = item.Quantity;
                         }
                         else
-                        { 
+                        {
                             item.Quantity -= 1;
                         }
 
                         item.Total = item.Price * item.Quantity;
-
-                        check = 0;
                         break;
                     }
-                    else
-                    {
-                        check = 1;
-                    }
-                }
-
-                if (check == 1)
-                {
-                    BillDetailViewModels obj = new BillDetailViewModels();
-                    obj.ID = id;
-
-                    if (obj.Quantity < 1)
-                    {
-                        if (obj.Quantity == 0)
-                        {
-                            mainList.Remove(obj);
-                        }
-                        else
-                        {
-                            obj.Price = obj.Price;
-                            obj.Quantity = obj.Quantity;
-                            obj.Total = obj.Price * obj.Quantity;
-                        }
-                    }
-                    else
-                    {
-                        obj.Price = price;
-                        obj.Quantity = 1;
-                        obj.Total = obj.Price * obj.Quantity;
-
-                        mainList.Add(obj);
-                    }
 
                 }
-
-
                 HttpContext.Session.Set("products", mainList);
-            }
-            else
-            {
-                List<BillDetailViewModels> firstList = new List<BillDetailViewModels>();
-                BillDetailViewModels obj = new BillDetailViewModels();
-                obj.ID = id;
 
-
-                if (obj.Quantity < 1)
-                {
-                    if (obj.Quantity == 0)
-                    {
-                        firstList.Remove(obj);
-                    }
-                    else
-                    {
-                        obj.Price = obj.Price;
-                        obj.Quantity = obj.Quantity;
-                        obj.Total = obj.Price * obj.Quantity;
-                    }
-                }
-                else
-                {
-                    obj.Price = price;
-                    obj.Quantity = 1;
-                    obj.Total = obj.Price * obj.Quantity;
-
-                    firstList.Add(obj);
-                }
-
-                HttpContext.Session.Set("products", firstList);
             }
 
             return Json(HttpContext.Session.Get<List<BillDetailViewModels>>("products"));
