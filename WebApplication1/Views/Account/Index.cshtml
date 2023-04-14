@@ -15,7 +15,7 @@
 
     setTimeout("preventBack()", 0);
     window.onunload = function () { null };
-    
+
 </script>
 
 <main id="main">
@@ -43,6 +43,7 @@
                     <strong>@TempData["LoginFlag"]</strong>
                 </div>
             }
+
             @if (TempData["checkOutFlag"] != null)
             {
                 <div class="form-group alert alert-danger mb-3">
@@ -64,6 +65,19 @@
                 </div>
             }
 
+            @if (TempData["socialFlag"] != null)
+            {
+                <div class="form-group alert alert-danger mb-3">
+                    <strong>@TempData["socialFlag"]</strong>
+                </div>
+            }
+
+            @if (TempData["LoginSuccess"] != null)
+            {
+                <div class="form-group alert alert-success mb-3">
+                    <strong>@TempData["LoginSuccess"]</strong>
+                </div>
+            }
             <form asp-action="Signin" method="post">
                 <div class="form-group mb-3">
                     <label class="form-label">Email</label>
@@ -95,13 +109,6 @@
                     <a asp-area="" asp-controller="Account" asp-action="Signin" asp-route-provider="@item" class="btn btn-primary me-3">@item</a>
                 }
             </div>
-
-            @if (TempData["LoginSuccess"] != null)
-            {
-                <div class="form-group alert alert-success mb-3">
-                    <strong>@TempData["LoginSuccess"]</strong>
-                </div>
-            }
         </div>
 
     </section>

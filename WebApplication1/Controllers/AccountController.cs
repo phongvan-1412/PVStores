@@ -6,6 +6,8 @@ using WebApplication1.Models.ModelPattern;
 using WebApplication1.Utilities;
 using System.Text;
 using WebApplication1.ViewModels;
+using System.Net.NetworkInformation;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 
 namespace WebApplication1.Controllers
 {
@@ -24,12 +26,10 @@ namespace WebApplication1.Controllers
 
         public async Task<IActionResult> Index()
         {
-
             var allSchemeProvider = (await _authenticationSchemeProvider.GetAllSchemesAsync())
                 .Select(n => n.DisplayName).Where(n => !String.IsNullOrEmpty(n));
 
             Account account = new Account();
-
             if (User.Identity.IsAuthenticated)
             {
                 if (User.Identity.AuthenticationType.Equals("Google") || User.Identity.AuthenticationType.Equals("Facebook"))
@@ -40,12 +40,12 @@ namespace WebApplication1.Controllers
 
                     Account accountExist = FacadeMaker.Instance.GetAccountByEmail(email);
 
+
                     if (accountExist == null)
                     {
                         account.Email = email;
                         account.Name = name;
                         account.Status = true;
-                        account.GoogleID = id;
 
                         if (User.Identity.AuthenticationType.Equals("Google"))
                         {
@@ -58,8 +58,10 @@ namespace WebApplication1.Controllers
                             account.FacebookID = id;
                         }
 
+                        account.Password = EncryptPassword(account.Password);   
                         FacadeMaker.Instance.CreateAccount(account);
                         HttpContext.Session.Set("account", account);
+
                         var siteCookies = HttpContext.Request.Cookies.Where(n => n.Key.Equals("Cookies"));
                         foreach (var cookie in siteCookies)
                         {
@@ -80,33 +82,43 @@ namespace WebApplication1.Controllers
                     else
                     {
                         account = accountExist;
-                        if (User.Identity.AuthenticationType.Equals("Google"))
+
+                        if (accountExist.Status)
                         {
-                            account.GoogleID = id;
+                            if (User.Identity.AuthenticationType.Equals("Google"))
+                            {
+                                account.GoogleID = id;
+                                
+                            }
+                            else
+                            {
+                                account.FacebookID = id;
+                            }
+
+                            FacadeMaker.Instance.UpdateAccount(account.ID, account);
+                            HttpContext.Session.Set("account", account);
+
+                            var siteCookies = HttpContext.Request.Cookies.Where(n => n.Key.Equals("Cookies"));
+                            foreach (var cookie in siteCookies)
+                            {
+                                Response.Cookies.Delete(cookie.Key);
+                            }
+
+                            List<Bill> bill = _context.Bills.Where(b => b.AccId == account.ID).ToList();
+                            List<BillViewModels> lstBillVM = new List<BillViewModels>();
+                            foreach (var item in bill)
+                            {
+                                BillViewModels billVM = new BillViewModels(item);
+                                lstBillVM.Add(billVM);
+                            }
+                            HttpContext.Session.Set("bill", lstBillVM);
+
+                            TempData["LoginSuccess"] = "Login Successfully";
                         }
                         else
                         {
-                            account.FacebookID = id;
+                            TempData["socialFlag"] = "Your email has been blocked. Please try another email!";
                         }
-                        FacadeMaker.Instance.UpdateAccount(account.ID, account);
-                        HttpContext.Session.Set("account", account);
-
-                        var siteCookies = HttpContext.Request.Cookies.Where(n => n.Key.Equals("Cookies"));
-                        foreach (var cookie in siteCookies)
-                        {
-                            Response.Cookies.Delete(cookie.Key);
-                        }
-
-                        List<Bill> bill = _context.Bills.Where(b => b.AccId == account.ID).ToList();
-                        List<BillViewModels> lstBillVM = new List<BillViewModels>();
-                        foreach (var item in bill)
-                        {
-                            BillViewModels billVM = new BillViewModels(item);
-                            lstBillVM.Add(billVM);
-                        }
-                        HttpContext.Session.Set("bill", lstBillVM);
-
-                        TempData["LoginSuccess"] = "Login Successfully";
                     }
                 }
             }
@@ -157,7 +169,7 @@ namespace WebApplication1.Controllers
                 Status = true
             };
 
-            if (data.Email.Equals(_context.Accounts.FirstOrDefault(a => a.Email.Equals(account.Email) && a.Type == (int)EnumStatus.Admin).Email))
+            if (data.Email.Equals(_context.Accounts.FirstOrDefault(a => a.Email.Equals(account.Email) && a.Type == (int)EnumStatus.Admin).Email) || data.Email.Equals(_context.Accounts.FirstOrDefault(a => a.Email.Equals(account.Email))))
             {
                 TempData["regiterFail"] = "Your email is valid, please try another email";
             }
@@ -186,7 +198,7 @@ namespace WebApplication1.Controllers
                 accountExist = new Account();
             }
 
-            if (!accountExist.Email.Equals(account.Email) || !DecryptPassword(accountExist.Password).Equals(account.Password) || accountExist.Status == false)
+            if (!accountExist.Email.Equals(account.Email) || !DecryptPassword(accountExist.Password).Equals(account.Password) || accountExist.Status == false || DecryptPassword(accountExist.Password).Equals(""))
             {
                 TempData["LoginFlag"] = "Invalid Email or Password";
                 return RedirectToAction("Index");

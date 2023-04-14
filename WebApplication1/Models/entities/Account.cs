@@ -74,7 +74,7 @@ namespace WebApplication1.Models.entities
         public Account()
         {
             this.Email = "";
-            this.Password = "";
+            this.Password = "111111";
             this.Name = "";
             this.Birth = "";
             this.Phone = "";
