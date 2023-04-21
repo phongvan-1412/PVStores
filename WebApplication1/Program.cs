@@ -23,17 +23,23 @@ builder.Services.AddSession(options =>
 });
 
 //Connect DB
-var config = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-    IConfiguration configuration = config.Build();
-    string constring = configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
 
-    builder.Services.AddDbContext<PVStoresContext>(options =>
-        options.UseSqlServer(constring, options =>
-                builder.Configuration.GetConnectionString("DefaultConnection")
-        ));
+//string constring = configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
+
+builder.Services.AddDbContext<PVStoresContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+        sqlServerOptionsAction: sqlOptions =>
+        {
+            sqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 10,
+                maxRetryDelay: TimeSpan.FromSeconds(5),
+                errorNumbersToAdd: null);
+        });
+});
 
 
+//Intergrate FB+GG
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -62,6 +68,9 @@ builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Str
 var app = builder.Build();
 
 //Integrate Stripe
+var config = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+IConfiguration configuration = config.Build();
 StripeConfiguration.SetApiKey(configuration.GetSection("Stripe")["Secretkey"]);
 
 

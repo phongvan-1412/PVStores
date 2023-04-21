@@ -166,10 +166,14 @@ namespace WebApplication1.Controllers
                 Name = account.Name,
                 Email = account.Email,
                 Password = EncryptPassword(account.Password),
-                Status = true
+                Status = true,
+                Type = (int)EnumStatus.Customer
             };
 
-            if (data.Email.Equals(_context.Accounts.FirstOrDefault(a => a.Email.Equals(account.Email) && a.Type == (int)EnumStatus.Admin).Email) || data.Email.Equals(_context.Accounts.FirstOrDefault(a => a.Email.Equals(account.Email))))
+            //FacadeMaker.Instance.CreateAccount(data);
+            //TempData["registerSuccess"] = "Register succeeded! Please Log in to your account";
+
+            if (data.Email.Equals(_context.Accounts.FirstOrDefault(a => a.Email.Equals(account.Email) != null && a.Type == (int)EnumStatus.Admin).Email) || data.Email.Equals(_context.Accounts.FirstOrDefault(a => a.Email.Equals(account.Email))))
             {
                 TempData["regiterFail"] = "Your email is valid, please try another email";
             }
