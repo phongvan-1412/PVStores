@@ -18,9 +18,9 @@ namespace WebApplication1.Models.entities
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseSqlServer(
-                //"Data Source=DESKTOP-SKVUP1L\\PHONGVAN;Initial Catalog=PVStores;Persist Security Info=True;; TrustServerCertificate=True");
-                "Data Source=DESKTOP-SKVUP1L\\PHONGVAN;Initial Catalog=PVStores;User ID=sa; Password=21112804Kid;TrustServerCertificate=True;",
-                sqlServerOptionsAction: sqlOptions =>
+                "Data Source=PVStores.mssql.somee.com;Initial Catalog=PVStores;User ID=phongvan21112804_SQLLogin_1;Password=f4oj2qbqrb;Persist Security Info=True;; TrustServerCertificate=True",
+            //"Data Source=DESKTOP-SKVUP1L\\PHONGVAN;Initial Catalog=PVStores;User ID=sa; Password=21112804Kid;TrustServerCertificate=True;",
+            sqlServerOptionsAction: sqlOptions =>
                 {
                     sqlOptions.EnableRetryOnFailure();
                 });

@@ -39,5 +39,6 @@ namespace WebApplication1.Models.ModelPattern
             PVStoresContext context = new PVStoresContext();
             return context.Accounts.FirstOrDefault(a => a.Email.Equals(email));
         }
+
     }
 }

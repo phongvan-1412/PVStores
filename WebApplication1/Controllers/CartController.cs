@@ -76,7 +76,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public IActionResult Decrease(int id, decimal price)
+        public JsonResult Decrease(int id, decimal price)
         {
             List<BillDetailViewModels> lstBillDetailView = HttpContext.Session.Get<List<BillDetailViewModels>>("products");
             List<BillDetailViewModels> finalLst = new List<BillDetailViewModels>();
