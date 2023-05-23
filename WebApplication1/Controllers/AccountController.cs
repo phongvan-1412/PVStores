@@ -9,6 +9,7 @@ using WebApplication1.ViewModels;
 using System.Net.NetworkInformation;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using System.Security.Policy;
+using Microsoft.IdentityModel.Tokens;
 
 namespace WebApplication1.Controllers
 {
@@ -369,47 +370,59 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateAvatar(Account account, IFormFile avatar)
+        public IActionResult UpdateAvatar(Account account, IFormFile avatar, string resultUpload)
         {
             Account newAcc = _context.Accounts.FirstOrDefault(p => p.ID == account.ID);
 
             try
             {
-                Account accDel = new Account();
-                accDel = newAcc;
-                string uniqueFileName = string.Empty;
-                if (avatar != null)
+                if (String.IsNullOrEmpty(resultUpload))
                 {
-                    if (accDel.Avatar != null)
-                    {
-                        string folder = "img/profile/";
-                        string filePath = Path.Combine(_webHostEnvironment.WebRootPath, folder, accDel.Avatar);
-                        if (System.IO.File.Exists(filePath))
-                        {
-                            System.IO.File.Delete(filePath);
-                        }
-                        uniqueFileName = UploadImage(account, avatar);
-                    }
+                    TempData["updateAvatarFlag"] = "You haven't chose image";
                 }
-
-                if (account.Avatar != null)
+                else if (resultUpload.Equals("falseType"))
                 {
-                    accDel.Avatar = uniqueFileName;
-                }
-
-                FacadeMaker.Instance.UpdateAccount(account.ID, newAcc);
-
-                Account accAvatar = HttpContext.Session.Get<Account>("account");
-                Account acc = HttpContext.Session.Get<Account>("acc");
-                if (accAvatar == null)
-                {
-                    accAvatar = new Account();
-                    HttpContext.Session.Set("acc", newAcc);
+                    TempData["updateAvatarFailed"] = "Please choose right type of image!";
                 }
                 else
                 {
-                    acc = new Account();
-                    HttpContext.Session.Set("account", newAcc);
+                    Account accDel = new Account();
+                    accDel = newAcc;
+                    string uniqueFileName = string.Empty;
+                    if (avatar != null)
+                    {
+                        if (accDel.Avatar != null)
+                        {
+                            string folder = "img/profile/";
+                            string filePath = Path.Combine(_webHostEnvironment.WebRootPath, folder, accDel.Avatar);
+                            if (System.IO.File.Exists(filePath))
+                            {
+                                System.IO.File.Delete(filePath);
+                            }
+                            uniqueFileName = UploadImage(account, avatar);
+                        }
+                    }
+
+                    if (account.Avatar != null)
+                    {
+                        accDel.Avatar = uniqueFileName;
+                    }
+
+                    FacadeMaker.Instance.UpdateAccount(account.ID, newAcc);
+
+                    Account accAvatar = HttpContext.Session.Get<Account>("account");
+                    Account acc = HttpContext.Session.Get<Account>("acc");
+                    if (accAvatar == null)
+                    {
+                        accAvatar = new Account();
+                        HttpContext.Session.Set("acc", newAcc);
+                    }
+                    else
+                    {
+                        acc = new Account();
+                        HttpContext.Session.Set("account", newAcc);
+                    }
+                    TempData["updateAvatarSuccess"] = "Update avatar successfully!";
                 }
             }
             catch (Exception)
@@ -417,7 +430,6 @@ namespace WebApplication1.Controllers
                 throw;
             }
 
-            TempData["updateAvatar"] = "Update avatar successfully!";
             return RedirectToAction("Profile", "Account");
         }
         private string UploadImage(Account account, IFormFile avatar)

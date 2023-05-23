@@ -3,7 +3,7 @@
 @inject IHttpContextAccessor HttpContextAccessor
 @{
     Account account = HttpContextAccessor.HttpContext.Session.Get<Account>("account");
-    if(account == null)
+    if (account == null)
     {
         account = new Account();
     }
@@ -51,6 +51,7 @@
 
                             <div class="d-flex align-items-center justify-content-between col-md-12 mb-3">
                                 <input type="file" id="updateAvatar" class="form-control" name="avatar" />
+                                <input id="resultUpload" name="resultUpload" hidden />
                                 <input type="submit" asp-action="UpdateAvatar" asp-controller="Account" asp-route-id="@account.ID" class="btn btn-primary ms-3" />
                             </div>
                         </div>
@@ -68,13 +69,26 @@
                         </div>
                     }
 
-                    @if (TempData["updateAvatar"] != null)
+                    @if (TempData["updateAvatarSuccess"] != null)
                     {
                         <div class="col-md-12 form-group alert alert-success">
-                            <strong>@TempData["updateAvatar"]</strong>
+                            <strong>@TempData["updateAvatarSuccess"]</strong>
                         </div>
                     }
 
+                    @if (TempData["updateAvatarFailed"] != null)
+                    {
+                        <div class="col-md-12 form-group alert alert-danger">
+                            <strong>@TempData["updateAvatarFailed"]</strong>
+                        </div>
+                    }
+
+                    @if (TempData["updateAvatarFlag"] != null)
+                    {
+                        <div class="col-md-12 form-group alert alert-danger">
+                            <strong>@TempData["updateAvatarFlag"]</strong>
+                        </div>
+                    }
                 </div>
 
                 <div class="col-md-1"></div>
@@ -181,16 +195,25 @@
 <script type="text/javascript">
     //Preview Image
     const updateFileInput = document.getElementById('updateAvatar');
-    var updateOutput = document.getElementById('avatarUrl')
+    var updateOutput = document.getElementById('avatarUrl');
+    const result = document.getElementById('resultUpload');
 
     updateFileInput.addEventListener("change", e => {
         const file = updateFileInput.files[0];
-        const reader = new FileReader();
+        const type = updateFileInput.files[0].type.substring(6);
 
-        reader.addEventListener("load", () => {
-            updateOutput.src = reader.result;
-        });
+        if (type.localeCompare("png") === 0 || type.localeCompare("jpeg") === 0 || type.localeCompare("jpg") === 0) {
+            const reader = new FileReader();
 
-        reader.readAsDataURL(file);
+            reader.addEventListener("load", () => {
+                updateOutput.src = reader.result;
+            });
+
+            reader.readAsDataURL(file);
+            result.value = 'rightType';
+        }
+        else {
+            result.value = 'falseType';
+        }
     })
 </script>
