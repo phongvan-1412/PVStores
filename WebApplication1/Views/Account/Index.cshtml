@@ -72,6 +72,19 @@
                 </div>
             }
 
+            @if (TempData["activateSuccess"] != null)
+            {
+                <div class="form-group alert alert-success mb-3">
+                    <strong>@TempData["activateSuccess"]</strong>
+                </div>
+            }
+            @if (TempData["activateFailed"] != null)
+            {
+                <div class="form-group alert alert-danger mb-3">
+                    <strong>@TempData["activateFailed"]</strong>
+                </div>
+            }
+
             @if (TempData["LoginSuccess"] != null)
             {
                 <div class="form-group alert alert-success mb-3">

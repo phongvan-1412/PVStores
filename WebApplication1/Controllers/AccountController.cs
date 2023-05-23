@@ -8,6 +8,7 @@ using System.Text;
 using WebApplication1.ViewModels;
 using System.Net.NetworkInformation;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+using System.Security.Policy;
 
 namespace WebApplication1.Controllers
 {
@@ -161,17 +162,18 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public IActionResult Register(Account account)
         {
+            Guid theVerificationCode;
+            theVerificationCode = Guid.NewGuid();
+
             var data = new Account
             {
                 Name = account.Name,
                 Email = account.Email,
                 Password = EncryptPassword(account.Password),
-                Status = true,
+                Token = EncryptPassword(theVerificationCode.ToString()),
+                Status = false,
                 Type = (int)EnumStatus.Customer
             };
-
-            //FacadeMaker.Instance.CreateAccount(data);
-            //TempData["registerSuccess"] = "Register succeeded! Please Log in to your account";
 
             if (data.Email.Equals(_context.Accounts.FirstOrDefault(a => a.Email.Equals(account.Email) != null && a.Type == (int)EnumStatus.Admin).Email) || data.Email.Equals(_context.Accounts.FirstOrDefault(a => a.Email.Equals(account.Email))))
             {
@@ -179,13 +181,51 @@ namespace WebApplication1.Controllers
             }
             else
             {
+                SendMail pvFoodService = new SendMail () {};
+                pvFoodService.MailTo.Add(account.Email);
+                pvFoodService.UserName = "PHẠM VÂN";
+                pvFoodService.Password = "wbnasaszuhrmyuhu";
+                pvFoodService.MessageBody.Subject = "test demo";
+                pvFoodService.MessageBody.Priority = System.Net.Mail.MailPriority.High;
+                pvFoodService.MessageBody.IsBodyHtml = true;
+                pvFoodService.MessageBody.Body = 
+                    "Please click on this link to activate your account"
+                    + " https://localhost:44374/Account/Activate?token=" + EncryptPassword(theVerificationCode.ToString());
+
+                string kq = pvFoodService.SendMailCredential();
+
                 FacadeMaker.Instance.CreateAccount(data);
-                TempData["registerSuccess"] = "Register succeeded! Please Log in to your account";
+                TempData["registerSuccess"] = "Register succeeded! Please check your email to activate account";
             }
 
             return RedirectToAction("Index", "Account");
         }
 
+        public IActionResult Activate()
+        {
+            string token = HttpContext.Request.QueryString.Value.Substring(7);
+            Account account = FacadeMaker.Instance.GetAccountByToken(token);
+
+            try
+            {
+                if (account.Token.Equals(token))
+                {
+                    account.Status = true;
+                    FacadeMaker.Instance.UpdateAccount(account.ID, account);
+                    TempData["activateSuccess"] = "Activate succeeded!";
+                }
+                else
+                {
+                    TempData["activateFailed"] = "Activate Failed!";
+                }
+            }
+            catch (Exception ex)
+            {
+                string err = ex.Message;
+            }
+            
+            return RedirectToAction("Index", "Account");
+        }
         public IActionResult Signin(String provider)
         {
             return Challenge(new AuthenticationProperties { RedirectUri = "/Account" }, provider);

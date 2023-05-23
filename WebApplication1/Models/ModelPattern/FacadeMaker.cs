@@ -134,5 +134,9 @@ namespace WebApplication1.Models.ModelPattern
         {
             return _accountMgr.GetByEmail(email);
         }
+        public Account GetAccountByToken(string token)
+        {
+            return _accountMgr.GetByToken(token);
+        }
     }
 }

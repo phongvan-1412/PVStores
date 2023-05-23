@@ -71,6 +71,8 @@ namespace WebApplication1.Models.entities
         [Column("fb_id", TypeName = "varchar")]
         public string FacebookID { get; set; }
 
+        [Column("activate_token", TypeName = "varchar")]
+        public string Token { get; set; }
         public Account()
         {
             this.Email = "";
@@ -88,6 +90,7 @@ namespace WebApplication1.Models.entities
             this.IP = "";
             this.FacebookID = "";
             this.GoogleID = "";
+            this.Token = "";
         }
 
 
