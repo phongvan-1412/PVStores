@@ -1,48 +1,67 @@
 ﻿@model List<ProductViewModels>
 
-
-@foreach (var item in Model)
-{
-    <div class="col-xl-3 col-lg-4 col-sm-6 me-3 mb-5">
-        <div class="card-product card position-relative d-flex flex-column p-3 mb-5">
-
-            <a type="button" asp-area="" asp-controller="Product" asp-action="ProductDetail" asp-route-id="@item.ID">
-
-                <div class="d-flex justify-content-center">
-                    <img src="~/img/products/@item.Image" class="card-img-top mb-3" alt="@item.Image" style="width: 178px; height: 178px">
-                </div>
-
-                <div class="row d-flex flex-column">
-                    <div class="d-flex align-items-center">
-                        <h3 class="card-title text-white">@item.Name</h3>
-                    </div>
-
-                    <div class="position-relative d-flex mb-5">
-                        <a class="position-absolute" style="font-size: 16px; left: 12px">@item.CateName</a>
-                        <input id="productId" value="@item.ID" hidden />
-                        <span class="position-absolute fw-semibold" style="font-size: 16px; right: 12px">$@item.Price</span>
-                    </div>
-                </div>
-            </a>
-
-            <div class="position-absolute d-flex align-items-center" style="bottom: 5px">
-                <a class="btn-add btn btn-outline-primary text-white me-3" title="Add To Cart" onclick="Increase(@item.ID, @item.Price)">
-                    <i class="bi bi-cart-check-fill"></i>
-                </a>
-
-                <a class="btn-delete btn btn-outline-primary text-white" title="Remove From Cart" onclick="Decrease(@item.ID, @item.Price)">
-                    <i class="bi bi-trash"></i>
-                </a>
-            </div>
+<div class="d-flex flex-column p-2">
+    <div class="row d-flex text-white p-4">
+        <div id="cartFlagContainer" class="form-group alert alert-danger mb-3" style="visibility: hidden">
+            <strong id="cartFlag"></strong>
         </div>
     </div>
-}
+
+
+    <div class="d-flex align-items-center justify-content-center mb-3">
+        <h1>All</h1>
+    </div>
+
+   
+    <div class="productDisplayContainer d-flex col-xl-9 col-md-12 col-sm-12 p-2">
+
+        @foreach (var item in Model)
+        {
+
+            <div class="productWrapper col-xl-4 col-lg-6 col-sm-12 col-xs-12 me-5 mb-5">
+                <div class="card-product card position-relative d-flex flex-column p-3 mb-5">
+
+                    <a type="button" asp-area="" asp-controller="Product" asp-action="ProductDetail" asp-route-id="@item.ID">
+
+                        <div class="d-flex justify-content-center">
+                            <img src="~/img/products/@item.Image" class="card-img-top mb-3" alt="@item.Image" style="width: 178px; height: 178px">
+                        </div>
+
+                        <div class="row d-flex flex-column">
+                            <div class="d-flex align-items-center">
+                                <h3 class="card-title text-white">@item.Name</h3>
+                            </div>
+
+                            <div class="position-relative d-flex mb-5">
+                                <a class="position-absolute" style="font-size: 16px; left: 12px">@item.CateName</a>
+                                <input id="productId" value="@item.ID" hidden />
+                                <span class="position-absolute fw-semibold" style="font-size: 16px; right: 12px">$@item.Price</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <div class="position-absolute d-flex align-items-center" style="bottom: 5px">
+                        <a class="btn-add btn btn-outline-primary text-white me-3" title="Add To Cart" onclick="Increase(@item.ID, @item.Price)">
+                            <i class="bi bi-cart-check-fill"></i>
+                        </a>
+
+                        <a class="btn-delete btn btn-outline-primary text-white" title="Remove From Cart" onclick="Decrease(@item.ID, @item.Price)">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
 
 <script type="text/javascript">
     function Increase(productId, productPrice) {
         $.ajax({
             type: "POST",
-            data: { id: productId, price: productPrice},
+            data: { id: productId, price: productPrice },
             dataType: "json",
             url: "/Cart/AddToCart",
             success: function (result) {
@@ -56,11 +75,11 @@
                     sumQuantity += item.quantity;
                     sumTotal += item.total;
                 }
-                
+
                 if (sumTotal > 50 || sumQuantity > 19) {
                     $('#cartFlagContainer').get(0).style.visibility = 'visible';
                     $('#cartFlag').get(0).innerHTML = "Cart reached limitation";
-                }else{
+                } else {
                     $('#cartFlagContainer').get(0).style.visibility = 'hidden';
                 }
 

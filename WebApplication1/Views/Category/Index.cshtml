@@ -1,5 +1,7 @@
-﻿@model List<ProductViewModels>
-
+﻿@model List<CategoryViewModels>
+@{
+    var lstProductView = (List<ProductViewModels>)ViewData["lstCategories"];
+}
 @Html.Partial("~/Views/Shared/_HeaderInnerPagePartial.cshtml")
 
 <main id="main">
@@ -18,17 +20,32 @@
     </section>
 
     <section class="inner-page">
+        <div class="container mb-5">
+            <div class="productContainer container d-flex col-12">
+                <div class="productFilterContainer col-xl-3">
+                    <ul class="productFilterList p-2 mb-5">
+                        <li>
+                            <a class="d-flex align-items-center">
+                                <img src="~/img/allproducts.png" class="card-img-top mb-3" alt="allproducts" style="width: 80px; height: 80px">
+                                <span class="text-white ms-3">All</span>
+                            </a>
+                        </li>
+                    </ul>
 
-        <div class="d-flex align-items-center justify-content-center col-md-8 offset-2 mb-5">
-            <h1>All</h1>
-        </div>
-
-        <div class="row d-flex text-white offset-2 mb-5">
-            <div id="cartFlagContainer" class="form-group alert alert-danger mb-3" style="visibility: hidden">
-                <strong id="cartFlag"></strong>
+                    <ul class="productFilterList p-2">
+                        @foreach (var item in Model)
+                        {
+                            <li>
+                                <a class="d-flex align-items-center">
+                                    <img src="~/img/allproducts.png" class="card-img-top mb-3" style="width: 80px; height: 80px">
+                                    <span class="text-white ms-3">@item.Name</span>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+                @Html.Partial("~/Views/Partials/_ProductByCatePartial.cshtml", lstProductView)
             </div>
-
-            @Html.Partial("~/Views/Partials/_ProductByCatePartial.cshtml", Model)
         </div>
 
 

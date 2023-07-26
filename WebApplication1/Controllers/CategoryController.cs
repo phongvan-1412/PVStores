@@ -20,8 +20,9 @@ namespace WebApplication1.Controllers
         }
         public IActionResult Index()
         {
-            List<ProductViewModels> productView = FacadeMaker.Instance.GetAllProducts().Select(i => new ProductViewModels(i)).ToList();
-            return View(productView);
+            List<CategoryViewModels> categoryView = FacadeMaker.Instance.GetAllCategories().Select(i => new CategoryViewModels(i)).ToList();
+            ViewData["lstCategories"] = FacadeMaker.Instance.GetAllProducts().Select(i => new ProductViewModels(i)).ToList();
+            return View(categoryView);
         }
     }
 }
