@@ -12,6 +12,7 @@
     count = products.Sum(p => p.Quantity);
 
     Account account = HttpContextAccessor.HttpContext.Session.Get<Account>("account");
+    List<CategoryViewModels> categories = HttpContextAccessor.HttpContext.Session.Get<List<CategoryViewModels>>("lstCate");
 }
 <!-- ======= Top Bar ======= -->
 <div id="topbar" class="d-flex align-items-center fixed-top">
@@ -45,7 +46,6 @@
                 <li class="dropdown">
                     <a href="/Category/Index">Category<i class="bi bi-chevron-down"></i></a>
                     <ul>
-                        <li><a href="#">Breakfast</a></li>
                         @*<li class="dropdown">
                         <a href="#">Burgers
                         <span>Deep Drop Down</span>
@@ -59,19 +59,17 @@
                         <li><a href="#">Deep Drop Down 5</a></li>
                         </ul>
                         </li>*@
-                        <li><a href="#">Burgers</a></li>
-                        <li><a href="#">Chicken & Fish Sandwiches</a></li>
-                        <li><a href="#">Fries & Sides</a></li>
-                        <li><a href="#">PvCafé® Coffees</a></li>
-                        <li><a href="#">Sweets & Treats</a></li>
-                        <li><a href="#">Beverages</a></li>
+                        @foreach (var item in categories)
+                        {
+                            <li><a asp-area="" asp-controller="Category" asp-action="Index" asp-route-cateID="@item.ID">@item.Name</a></li>
+                        }
                     </ul>
                 </li>
                 <li><a href="/Cart/Index" id="cartQuantity"><i class="bi bi-cart"></i>&nbsp; (@count)</a></li>
             </ul>
             <i class="bi bi-list mobile-nav-toggle"></i>
         </nav><!-- .navbar -->
-        @if (Context.User.Identity.IsAuthenticated && account!= null)
+        @if (Context.User.Identity.IsAuthenticated && account != null)
         {
             <ul class="d-flex flex-row align-items-center" style="list-style-type: none">
                 <li>

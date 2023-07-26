@@ -1,6 +1,9 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models.entities;
+using WebApplication1.Models.ModelPattern;
+using WebApplication1.Utilities;
+using WebApplication1.ViewModels;
 
 namespace WebApplication1.Controllers
 {
@@ -15,6 +18,8 @@ namespace WebApplication1.Controllers
 
         public IActionResult Index()
         {
+            List<CategoryViewModels> categoryView = FacadeMaker.Instance.GetAllCategories().Select(i => new CategoryViewModels(i)).ToList();
+            HttpContext.Session.Set("lstCate", categoryView);
             return View();
         }
 

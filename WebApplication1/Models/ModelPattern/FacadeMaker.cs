@@ -72,7 +72,11 @@ namespace WebApplication1.Models.ModelPattern
         {
             return _productMgr.GetById(id);
         }
-
+        public List<Product> GetProductByCateId(int id)
+        {
+            return _productMgr.GetProductByCateId(id);
+        }
+       
         //Bill
         public Bill CreateBill(Bill bill)
         {

@@ -18,11 +18,20 @@ namespace WebApplication1.Controllers
         {
             _context = context;
         }
-        public IActionResult Index()
+        public IActionResult Index(int cateID)
         {
+            if(cateID == null)
+            {
+                ViewData["lstAllProducts"] = FacadeMaker.Instance.GetAllProducts().Select(i => new ProductViewModels(i)).ToList();
+            }
+            ViewData["lstAllProducts"] = FacadeMaker.Instance.GetProductByCateId(cateID).Select(i => new ProductViewModels(i)).ToList();
             List<CategoryViewModels> categoryView = FacadeMaker.Instance.GetAllCategories().Select(i => new CategoryViewModels(i)).ToList();
-            ViewData["lstCategories"] = FacadeMaker.Instance.GetAllProducts().Select(i => new ProductViewModels(i)).ToList();
             return View(categoryView);
+        }
+        [HttpPost]
+        public JsonResult FilterProduct(int cateID)
+        {
+            return Json(FacadeMaker.Instance.GetProductByCateId(cateID).Select(i => new ProductViewModels(i)).ToList());
         }
     }
 }

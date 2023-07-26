@@ -33,5 +33,10 @@ namespace WebApplication1.Models.ModelPattern
             return context.Products.Where(p => p.ID == id).FirstOrDefault();
         }
 
+        public List<Product> GetProductByCateId(int id)
+        {
+            PVStoresContext context = new PVStoresContext();
+            return context.Products.Where(p => p.CategoryId == id).ToList();
+        }
     }
 }

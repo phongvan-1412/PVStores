@@ -1,6 +1,6 @@
 ﻿@model List<CategoryViewModels>
 @{
-    var lstProductView = (List<ProductViewModels>)ViewData["lstCategories"];
+    var lstAllProductView = (List<ProductViewModels>)ViewData["lstAllProducts"];
 }
 @Html.Partial("~/Views/Shared/_HeaderInnerPagePartial.cshtml")
 
@@ -36,7 +36,7 @@
                         @foreach (var item in Model)
                         {
                             <li>
-                                <a class="d-flex align-items-center">
+                                <a class="d-flex align-items-center" onclick="filterProduct(@item.ID)">
                                     <img src="~/img/allproducts.png" class="card-img-top mb-3" style="width: 80px; height: 80px">
                                     <span class="text-white ms-3">@item.Name</span>
                                 </a>
@@ -44,7 +44,9 @@
                         }
                     </ul>
                 </div>
-                @Html.Partial("~/Views/Partials/_ProductByCatePartial.cshtml", lstProductView)
+                <div id="productWrapper">
+                    @Html.Partial("~/Views/Partials/_ProductByCatePartial.cshtml", lstAllProductView);
+                </div>
             </div>
         </div>
 
@@ -81,5 +83,22 @@
 
 </main>
 
-@Html.Partial("~/Views/Shared/_ScriptsPartial.cshtml")
+<script type="text/javascript">
+    function filterProduct(cateID){
+        var productWrapper = document.getElementById("productWrapper");
+        console.log(cateID)
+        $.ajax({
+            type: "GET",
+            data: { cateID: cateID },
+            dataType: "json",
+            url: "/Category/Index",
+            success: function (result) {
+                console.log(result);
+            },
+            error: function (req, status, error) {
+                console.log(error);
+            }
+        });
+    }
+</script>
 
