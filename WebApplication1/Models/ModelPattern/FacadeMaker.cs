@@ -48,6 +48,10 @@ namespace WebApplication1.Models.ModelPattern
         {
             return _categoryMgr.GetAll();
         }
+        public List<Category> GetAllCategoriesAdmin()
+        {
+            return _categoryMgr.GetAllCategories();
+        }
         public Category GetCategoryById(int id)
         {
             return _categoryMgr.GetById(id);

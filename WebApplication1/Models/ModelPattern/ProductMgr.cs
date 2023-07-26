@@ -24,7 +24,7 @@ namespace WebApplication1.Models.ModelPattern
         public List<Product> GetAll()
         {
             PVStoresContext context = new PVStoresContext();
-            return context.Products.Where(p => p.Status==true).ToList();
+            return context.Products.Where(p => (p.Status==true && context.Categories.Where(c => c.ID == p.CategoryId).FirstOrDefault().Status == true)).ToList();
         }
 
         public List<Product> GetAllProducts()

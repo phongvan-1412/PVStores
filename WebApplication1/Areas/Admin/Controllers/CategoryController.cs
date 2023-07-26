@@ -19,7 +19,7 @@ namespace WebApplication1.Areas.Admin.Controllers
         public IActionResult Index()
         {
             Category category = new Category();
-            ViewData["Categories"] = FacadeMaker.Instance.GetAllCategories();
+            ViewData["Categories"] = FacadeMaker.Instance.GetAllCategoriesAdmin();
             ViewData["Cate"] = category;
             return View();
         }

@@ -29,6 +29,11 @@ namespace WebApplication1.Models.ModelPattern
             PVStoresContext context = new PVStoresContext();
             return context.Categories.Where(c => c.Status==true).ToList();
         }
+        public List<Category> GetAllCategories()
+        {
+            PVStoresContext context = new PVStoresContext();
+            return context.Categories.ToList();
+        }
 
         public Category GetById(int id)
         {
