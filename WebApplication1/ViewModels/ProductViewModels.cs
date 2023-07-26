@@ -37,7 +37,14 @@ namespace WebApplication1.ViewModels
             this.Status = product.Status;
             this.Image = product.Image;
             this.CategoryId = product.CategoryId;
-            this.CateName = FacadeMaker.Instance.GetCategoryById(product.CategoryId).Name;
+            if (!FacadeMaker.Instance.GetCategoryById(product.CategoryId).Status)
+            {
+                this.CateName = "";
+            }
+            else
+            {
+                this.CateName = FacadeMaker.Instance.GetCategoryById(product.CategoryId).Name;
+            }
         }
     }
 }
