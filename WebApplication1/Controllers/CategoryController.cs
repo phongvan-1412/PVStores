@@ -20,18 +20,45 @@ namespace WebApplication1.Controllers
         }
         public IActionResult Index(int cateID)
         {
-            if(cateID == null)
+            var products = FacadeMaker.Instance.GetProductByCateId(cateID).Select(i => new ProductViewModels(i)).ToList();
+
+            if (cateID == 0)
             {
+                ViewData["cateName"] = "All";
                 ViewData["lstAllProducts"] = FacadeMaker.Instance.GetAllProducts().Select(i => new ProductViewModels(i)).ToList();
             }
-            ViewData["lstAllProducts"] = FacadeMaker.Instance.GetProductByCateId(cateID).Select(i => new ProductViewModels(i)).ToList();
+            else
+            {
+                ViewData["cateName"] = FacadeMaker.Instance.GetCategoryById(cateID).Name;
+                if (products.Count() == 0)
+                {
+                    TempData["filterProductFlag"] = "No product found";
+                }
+                else
+                {
+                    ViewData["lstAllProducts"] = products;
+                }
+            }
+
             List<CategoryViewModels> categoryView = FacadeMaker.Instance.GetAllCategories().Select(i => new CategoryViewModels(i)).ToList();
+
             return View(categoryView);
         }
         [HttpPost]
         public JsonResult FilterProduct(int cateID)
         {
-            return Json(FacadeMaker.Instance.GetProductByCateId(cateID).Select(i => new ProductViewModels(i)).ToList());
+            var products = FacadeMaker.Instance.GetProductByCateId(cateID).Select(i => new ProductViewModels(i)).ToList();
+            if(products.Count() == 0)
+            {
+                var cateName = FacadeMaker.Instance.GetCategoryById(cateID).Name;
+                return Json(cateName);
+            }
+            if(cateID == 0)
+            {
+                products = FacadeMaker.Instance.GetAllProducts().Select(i => new ProductViewModels(i)).ToList();
+                return Json(products);
+            }
+            return Json(products);
         }
     }
 }

@@ -138,27 +138,27 @@
                     var row =  `
                             <tr>
                                 <th scope="row" class="align-middle">
-                                        ${index + 1}
+                                    ${index + 1}
                                 </th>
 
                                 <td>
-                                        <img src="/img/products/${item.productImage}" style="width: 178px; height: 178px" />
+                                    <img src="/img/products/${item.productImage}" style="width: 178px; height: 178px" />
                                 </td>
                                 <td class="align-middle">${item.productName}</td>
-                                    <td class="align-middle">$${item.price}</td>
+                                <td class="align-middle">$${item.price}</td>
                                 <td class="align-middle">
                                     <div class="d-flex align-items-center">
 
-                                                    <a id="decreaseBtn" class="d-flex align-items-center justify-content-center btn btn-outline-primary text-white me-3" onclick="DecreaseCart(${item.productID}, ${item.price})">
-                                                    <span class="d-flex align-items-center justify-content-center" style="width: 15px; height: 15px">-</span>
-                                            </a>
+                                        <a id="decreaseBtn" class="d-flex align-items-center justify-content-center btn btn-outline-primary text-white me-3" onclick="DecreaseCart(${item.productID}, ${item.price})">
+                                            <span class="d-flex align-items-center justify-content-center" style="width: 15px; height: 15px">-</span>
+                                        </a>
 
-                                                <span id="productQuantity">${item.quantity}</span>
+                                            <span id="productQuantity">${item.quantity}</span>
 
 
-                                                    <a id="increaseBtn" class="d-flex align-items-center justify-content-center btn btn-outline-primary text-white ms-3" onclick="IncreaseCart(${item.productID}, ${item.price})">
-                                                <span class="d-flex align-items-center justify-content-center" style="width: 15px; height: 15px">+</span>
-                                            </a>
+                                        <a id="increaseBtn" class="d-flex align-items-center justify-content-center btn btn-outline-primary text-white ms-3" onclick="IncreaseCart(${item.productID}, ${item.price})">
+                                            <span class="d-flex align-items-center justify-content-center" style="width: 15px; height: 15px">+</span>
+                                        </a>
 
                                         <form>
                                                 <a href="/Cart/Remove/${item.productID}" id="btn-delete" class="d-flex align-items-center justify-content-center btn btn-outline-primary text-white ms-5" title="Remove From Cart" style="border-radius: 50%; outline-color: #cda45e">
@@ -168,7 +168,7 @@
 
                                     </div>
                                 </td>
-                                    <td class="align-middle fw-semibold" style="color: #cda45e" id="productTotal">$${item.total}</td>
+                                <td class="align-middle fw-semibold" style="color: #cda45e" id="productTotal">$${item.total}</td>
                             </tr>`;
 
                     out += row;

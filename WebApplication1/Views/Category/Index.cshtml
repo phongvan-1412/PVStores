@@ -44,8 +44,8 @@
                         }
                     </ul>
                 </div>
-                <div id="productWrapper">
-                    @Html.Partial("~/Views/Partials/_ProductByCatePartial.cshtml", lstAllProductView);
+                <div class="col-xl-9" id="productWrapper">
+                    @Html.Partial("~/Views/Partials/_ProductByCatePartial.cshtml", lstAllProductView)
                 </div>
             </div>
         </div>
@@ -84,21 +84,151 @@
 </main>
 
 <script type="text/javascript">
-    function filterProduct(cateID){
+    function filterProduct(cateID) {
         var productWrapper = document.getElementById("productWrapper");
-        console.log(cateID)
+
         $.ajax({
-            type: "GET",
+            type: "POST",
             data: { cateID: cateID },
             dataType: "json",
-            url: "/Category/Index",
+            url: "/Category/FilterProduct",
             success: function (result) {
                 console.log(result);
+                if (typeof result === 'string') {
+                    productWrapper.innerHTML = `
+                        <div class="d-flex flex-column align-items-center justify-content-center text-center">
+                            <h1 class="d-flex justify-content-center text-center mb-3">${result}</h1>
+                            <span class="text-white">No product found</span>
+                        </div>
+                    `;
+                }
+                else {
+                    let out = "";
+                    let cName = "";
+
+                    result.forEach(myFunction)
+                    function myFunction(item, index) {
+                        var cate = `${item.cateName}`;
+                        var row = `
+                            <div class="productWrapper col-xl-3 col-lg-3 col-sm-12 col-xs-12 me-5 mb-5">
+                                <div class="card-product card position-relative d-flex flex-column p-3 mb-5">
+
+                                    <a type="button" href="/Product/ProductDetail/${item.id}">
+
+                                        <div class="d-flex justify-content-center">
+                                            <img src="img/products/${item.image}" class="card-img-top mb-3" alt="${item.image}" style="width: 178px; height: 178px">
+                                        </div>
+
+                                        <div class="row d-flex flex-column">
+                                            <div class="d-flex align-items-center">
+                                                 <h3 class="card-title text-white">${item.name}</h3>
+                                            </div>
+
+                                            <div class="position-relative d-flex mb-5">
+                                                <a class="position-absolute" style="font-size: 16px; left: 12px">${item.cateName}</a>
+                                                <input id="productId" value="${item.id}" hidden />
+                                                <span class="position-absolute fw-semibold" style="font-size: 16px; right: 12px">$${item.price}</span>
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                    <div class="position-absolute d-flex align-items-center" style="bottom: 5px">
+                                        <a class="btn-add btn btn-outline-primary text-white me-3" title="Add To Cart" onclick="Increase(${item.id}, ${item.price})">
+                                            <i class="bi bi-cart-check-fill"></i>
+                                        </a>
+
+                                        <a class="btn-delete btn btn-outline-primary text-white" title="Remove From Cart" onclick="Decrease(${item.id}, ${item.price})">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        out += row;
+                        cName = cate;
+                    }
+                    productWrapper.innerHTML = 
+                        `<div class="row d-flex flex-column justify-content-center p-2">
+                            <div class="row d-flex text-white p-4">
+                                <div id="cartFlagContainer" class="form-group alert alert-danger mb-3" style="visibility: hidden">
+                                    <strong id="cartFlag"></strong>
+                                </div>
+                            </div>` 
+                        + `<div class="d-flex align-items-center justify-content-center text-center mb-3"><h1 class="d-flex justify-content-center text-center">` + cName + `</h1> </div>`
+                        +`<div class="productDisplayContainer d-flex justify-content-center">` + out + `</div> </div>`;
+                }
+
             },
             error: function (req, status, error) {
                 console.log(error);
             }
         });
+    }
+    function Increase(productId, productPrice) {
+        $.ajax({
+            type: "POST",
+            data: { id: productId, price: productPrice },
+            dataType: "json",
+            url: "/Cart/AddToCart",
+            success: function (result) {
+                console.log(result);
+
+                var sumQuantity = 0;
+                var sumTotal = 0;
+                result.forEach(myFunction);
+
+                function myFunction(item) {
+                    sumQuantity += item.quantity;
+                    sumTotal += item.total;
+                }
+
+                if (sumTotal > 50 || sumQuantity > 19) {
+                    $('#cartFlagContainer').get(0).style.visibility = 'visible';
+                    $('#cartFlag').get(0).innerHTML = "Cart reached limitation";
+                } else {
+                    $('#cartFlagContainer').get(0).style.visibility = 'hidden';
+                }
+
+                $('#cartQuantity').get(0).innerHTML
+                    = "<li><a href=" + "'" + "/Cart/Index" + "' " + "id =" + "'" + "cartQuantity" + "'> <i class=" + "'" + "bi bi-cart" + "'></i>&nbsp; " + "(" + sumQuantity + ")" + "</a></li>";
+            },
+            error: function (req, status, error) {
+                console.log(error);
+            }
+        })
+    }
+    function Decrease(productId, productPrice) {
+        $.ajax({
+            type: "POST",
+            data: { id: productId, price: productPrice },
+            dataType: "json",
+            url: "/Cart/RemoveFromCart",
+            success: function (result) {
+                console.log(result);
+
+                var sumQuantity = 0;
+                var sumTotal = 0;
+                result.forEach(myFunction);
+
+                function myFunction(item) {
+                    sumQuantity += item.quantity;
+                    sumTotal += item.total;
+                }
+
+                if (sumTotal > 50 || sumQuantity > 19) {
+                    $('#cartFlagContainer').get(0).style.visibility = 'visible';
+                    $('#cartFlag').get(0).innerHTML = "Cart reached limitation";
+                } else {
+                    $('#cartFlagContainer').get(0).style.visibility = 'hidden';
+                }
+
+                $('#cartQuantity').get(0).innerHTML
+                    = "<li><a href=" + "'" + "/Cart/Index" + "' " + "id =" + "'" + "cartQuantity" + "'> <i class=" + "'" + "bi bi-cart" + "'></i>&nbsp; " + "(" + sumQuantity + ")" + "</a></li>";
+            },
+            error: function (req, status, error) {
+                console.log(error);
+            }
+        })
     }
 </script>
 
