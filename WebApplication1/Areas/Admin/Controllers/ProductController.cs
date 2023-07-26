@@ -20,7 +20,7 @@ namespace WebApplication1.Areas.Admin.Controllers
         [Route("")]
         public IActionResult Index()
         {
-            List<ProductViewModels> productView = FacadeMaker.Instance.GetAllProducts().Select(i => new ProductViewModels(i)).ToList();
+            List<ProductViewModels> productView = FacadeMaker.Instance.GetAllProductAdmin().Select(i => new ProductViewModels(i)).ToList();
             ProductViewModels singleProductView = new ProductViewModels();
             ViewBag.Category = _context.Categories.Where(c => c.Status == true).ToList();
             ViewBag.Product = singleProductView;
@@ -42,6 +42,7 @@ namespace WebApplication1.Areas.Admin.Controllers
         public IActionResult Update(int id, ProductViewModels productView)
         {
             Product newProduct = _context.Products.Where(p => p.ID == productView.ID).FirstOrDefault();
+            newProduct.Status = productView.Status;
             try
             {
                 Product delProduct = new Product(productView);
