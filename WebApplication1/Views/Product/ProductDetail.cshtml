@@ -39,18 +39,6 @@
                         @Html.Raw(Model.Description)
                     </p>
                     <div class="d-flex">
-                        @*<form method="post">
-                        <button asp-controller="Product" asp-action="AddToCart" asp-route-id="@Model.ID" class="btn btn-outline-primary text-white me-3" title="Add To Cart">
-                        <i class="bi bi-cart-check-fill"></i>
-                        Add To Cart
-                        </button>
-
-                        <button asp-controller="Product" asp-action="RemoveFromCart" asp-route-id="@Model.ID" class="btn btn-outline-danger text-white" title="Remove From Cart">
-                        <i class="bi bi-trash"></i>
-                        Remove From Cart
-                        </button>
-                        </form>*@
-
                         <button class="btn btn-outline-primary text-white me-3" title="Add To Cart" onclick="Increase(@Model.ID, @Model.Price)">
                             <i class="bi bi-cart-check-fill"></i>
                             Add To Cart
@@ -75,7 +63,7 @@
             type: "POST",
             data: { id: productId, price: productPrice },
             dataType: "json",
-            url: "/Category/AddToCart",
+            url: "/Cart/AddToCart",
             success: function (result) {
                 console.log(result);
 
@@ -107,7 +95,7 @@
             type: "POST",
             data: { id: productId, price: productPrice },
             dataType: "json",
-            url: "/Category/RemoveFromCart",
+            url: "/Cart/RemoveFromCart",
             success: function (result) {
                 console.log(result);
 

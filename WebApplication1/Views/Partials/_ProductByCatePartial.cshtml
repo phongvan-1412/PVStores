@@ -26,15 +26,6 @@
             </a>
 
             <div class="position-absolute d-flex align-items-center" style="bottom: 5px">
-                @*<form method="post">
-                    <button asp-controller="Category" asp-action="AddToCart" asp-route-id="@item.ID" class="btn-add btn btn-outline-primary text-white me-3" title="Add To Cart">
-                        <i class="bi bi-cart-check-fill"></i>
-                    </button>
-
-                    <button asp-controller="Category" asp-action="RemoveFromCart" asp-route-id="@item.ID" class="btn-delete btn btn-outline-primary text-white" title="Remove From Cart">
-                        <i class="bi bi-trash"></i>
-                    </button>
-                </form>*@
                 <a class="btn-add btn btn-outline-primary text-white me-3" title="Add To Cart" onclick="Increase(@item.ID, @item.Price)">
                     <i class="bi bi-cart-check-fill"></i>
                 </a>
@@ -53,7 +44,7 @@
             type: "POST",
             data: { id: productId, price: productPrice},
             dataType: "json",
-            url: "/Category/AddToCart",
+            url: "/Cart/AddToCart",
             success: function (result) {
                 console.log(result);
 
@@ -87,7 +78,7 @@
             type: "POST",
             data: { id: productId, price: productPrice },
             dataType: "json",
-            url: "/Category/RemoveFromCart",
+            url: "/Cart/RemoveFromCart",
             success: function (result) {
                 console.log(result);
 
