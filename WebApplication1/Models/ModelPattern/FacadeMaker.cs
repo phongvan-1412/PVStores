@@ -68,6 +68,10 @@ namespace WebApplication1.Models.ModelPattern
         {
             return _productMgr.GetAll();
         }
+        public List<Product> GetAllProductAdmin()
+        {
+            return _productMgr.GetAllProducts();
+        }
         public Product GetProductById(int id)
         {
             return _productMgr.GetById(id);

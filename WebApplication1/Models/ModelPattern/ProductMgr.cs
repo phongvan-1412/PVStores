@@ -24,19 +24,25 @@ namespace WebApplication1.Models.ModelPattern
         public List<Product> GetAll()
         {
             PVStoresContext context = new PVStoresContext();
+            return context.Products.Where(p => p.Status==true).ToList();
+        }
+
+        public List<Product> GetAllProducts()
+        {
+            PVStoresContext context = new PVStoresContext();
             return context.Products.ToList();
         }
 
         public Product GetById(int id)
         {
             PVStoresContext context = new PVStoresContext();
-            return context.Products.Where(p => p.ID == id).FirstOrDefault();
+            return context.Products.Where(p => (p.ID == id && p.Status==true)).FirstOrDefault();
         }
 
         public List<Product> GetProductByCateId(int id)
         {
             PVStoresContext context = new PVStoresContext();
-            return context.Products.Where(p => p.CategoryId == id).ToList();
+            return context.Products.Where(p => (p.CategoryId == id && p.Status==true)).ToList();
         }
     }
 }

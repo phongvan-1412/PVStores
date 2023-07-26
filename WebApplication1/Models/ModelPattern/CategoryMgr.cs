@@ -27,13 +27,13 @@ namespace WebApplication1.Models.ModelPattern
         public List<Category> GetAll()
         {
             PVStoresContext context = new PVStoresContext();
-            return context.Categories.ToList();
+            return context.Categories.Where(c => c.Status==true).ToList();
         }
 
         public Category GetById(int id)
         {
             PVStoresContext context = new PVStoresContext();
-            return context.Categories.FirstOrDefault(c => c.ID == id);
+            return context.Categories.FirstOrDefault(c => (c.ID == id && c.Status==true));
         }
     }
 }
